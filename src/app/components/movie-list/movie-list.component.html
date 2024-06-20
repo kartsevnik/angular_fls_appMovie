@@ -1,0 +1,29 @@
+<div class="movie-list-cards">
+    <h3>All films</h3>
+    <div class="allFilms">
+        <ng-container *ngFor="let movie of movies">
+            <app-movie-card [movie]="movie" (addFavoritesList)="updateFavoriteMovies($event)"
+                (addWatchList)="updateWatchMovies($event)"></app-movie-card>
+        </ng-container>
+    </div>
+</div>
+
+<div class="movie-list-cards Favorite">
+    <h3>Favorite</h3>
+    <div class="allFilms">
+        <ng-container *ngFor="let movie of favoriteMovies">
+            <app-movie-card [movie]="movie" (addFavoritesList)="updateFavoriteMovies($event)"
+                (addWatchList)="updateWatchMovies($event)"></app-movie-card>
+        </ng-container>
+    </div>
+</div>
+
+<div class="movie-list-cards ToWatch">
+    <h3>To watch</h3>
+    <div class="allFilms">
+        <ng-container *ngFor="let movie of toWatchMovies">
+            <app-movie-card [movie]="movie" (addFavoritesList)="updateFavoriteMovies($event)"
+                (addWatchList)="updateWatchMovies($event)"></app-movie-card>
+        </ng-container>
+    </div>
+</div>

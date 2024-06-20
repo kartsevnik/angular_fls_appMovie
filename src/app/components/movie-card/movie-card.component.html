@@ -1,0 +1,24 @@
+<div class="movie-card" *ngIf="movie">
+    <div class="movie-card__container">
+        <div class="movie-card__image">
+            <img [src]="movie.imgPath" [alt]="movie.title">
+        </div>
+        <div class="movie-card__text">
+            <div class="movie-card__titleAndYear">
+                <h5 class="movie-card__title">{{ movie.title }}</h5>
+                <span class="movie-card__year">{{ movie.year }}</span>
+            </div>
+            <div class="movie-card__items">
+                <div class="movie-card__item-quality">{{ movie.quality }}</div>
+                <div class="movie-card__item-icons">
+                    <div class="movie-card__item-duration">{{ movie.duration }} mins</div>
+                    <div class="movie-card__item-rating">{{ movie.rating }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="movie-card__buttons">
+            <button class="movie-card__addToFavorite" (click)="toggleFavoritesList()">Favorite</button>
+            <button class="movie-card__addToWatch" (click)="toggleWatchList()">To Watch</button>
+        </div>
+    </div>
+</div>

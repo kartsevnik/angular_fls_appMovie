@@ -1,0 +1,10 @@
+.movie-list-cards {
+    display: flex;
+    flex-direction: column;
+}
+
+.allFilms {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}

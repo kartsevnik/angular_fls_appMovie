@@ -1,0 +1,133 @@
+.movie-card {
+
+    // .movie-card__container
+    &__container {
+        width: 300px;
+        border: #4e4e4e 1px solid;
+        border-radius: 10px;
+    }
+
+    // .movie-card__image
+    &__image {
+
+        height: 400px;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 10px 10px 0 0;
+        }
+    }
+
+    // .movie-card__text
+    &__text {
+        padding: 5px;
+    }
+
+    // .movie-card__titleAndYear
+    &__titleAndYear {
+        display: flex;
+        padding: 0 5px;
+        align-items: center;
+    }
+
+    // .movie-card__title
+    &__title {
+        font-size: 18px;
+        width: 100%;
+    }
+
+    // .movie-card__year
+    &__year {
+        color: #CCFF00;
+        font-size: 18px;
+    }
+
+    // .movie-card__items
+    &__items {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 5px;
+        justify-content: space-between;
+    }
+
+    &__item-icons {
+        display: flex;
+        gap: 25px;
+    }
+
+    // .movie-card__item-quality
+    &__item-quality {
+        padding: 2px 4px;
+        border: #fff 1px solid;
+        // width: 100%;
+
+    }
+
+    // .movie-card__item-duration
+    &__item-duration {
+        position: relative;
+    }
+
+    // .movie-card__item-rating
+    &__item-rating {
+        position: relative;
+    }
+
+    // .movie-card__buttons
+    &__buttons {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border: #000000 2px solid;
+        border-radius: 0 0 10px 10px;
+
+        button {
+            padding: 15px 5px;
+
+
+        }
+    }
+
+    // .movie-card__addToFavorite
+    &__addToFavorite {
+        background-color: hsla(36, 100%, 50%, 0.7);
+        color: #000000;
+        font-weight: 700;
+        font-size: 20px;
+        border-radius: 0 0 0px 10px;
+        border-right: #000000 1px solid;
+    }
+
+    // .movie-card__addToWatch
+    &__addToWatch {
+        background-color: hsla(0, 100%, 50%, 0.7);
+        color: #ffffff;
+        font-weight: 700;
+        font-size: 20px;
+        border-radius: 0 0 10px 0px;
+        border-left: #000000 1px solid;
+    }
+}
+
+.movie-card__item-duration::before {
+    content: url(../../../assets/icons/clock.svg);
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    left: -15px;
+    z-index: 5;
+}
+
+.movie-card__item-rating::before {
+    content: url(../../../assets/icons/Star\ 1.svg);
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    left: -15px;
+    z-index: 5;
+}
