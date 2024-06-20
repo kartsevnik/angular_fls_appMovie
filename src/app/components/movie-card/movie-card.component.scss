@@ -86,14 +86,13 @@
 
         button {
             padding: 15px 5px;
-
-
+            // opacity: 0.5;
         }
     }
 
     // .movie-card__addToFavorite
     &__addToFavorite {
-        background-color: hsla(36, 100%, 50%, 0.7);
+        background-color: hsla(36, 100%, 50%, 0.5);
         color: #000000;
         font-weight: 700;
         font-size: 20px;
@@ -103,7 +102,7 @@
 
     // .movie-card__addToWatch
     &__addToWatch {
-        background-color: hsla(0, 100%, 50%, 0.7);
+        background-color: hsla(0, 100%, 50%, 0.5);
         color: #ffffff;
         font-weight: 700;
         font-size: 20px;
@@ -130,4 +129,12 @@
     top: 0;
     left: -15px;
     z-index: 5;
+}
+
+.selected-favorite {
+    background-color: hsla(36, 100%, 50%, 1.0);
+}
+
+.selected-toWatch {
+    background-color: hsla(0, 100%, 50%, 1.0);
 }

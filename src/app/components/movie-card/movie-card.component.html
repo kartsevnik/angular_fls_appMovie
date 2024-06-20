@@ -17,8 +17,10 @@
             </div>
         </div>
         <div class="movie-card__buttons">
-            <button class="movie-card__addToFavorite" (click)="toggleFavoritesList()">Favorite</button>
-            <button class="movie-card__addToWatch" (click)="toggleWatchList()">To Watch</button>
+            <button class="movie-card__addToFavorite" [ngClass]="{'selected-favorite' : movie.favorite == true}"
+                (click)="toggleFavoritesList()">Favorite</button>
+            <button class="movie-card__addToWatch" [ngClass]="{'selected-toWatch' : movie.toWatch == true}"
+                (click)="toggleWatchList()">To Watch</button>
         </div>
     </div>
 </div>
