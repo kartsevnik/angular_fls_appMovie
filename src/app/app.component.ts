@@ -7,4 +7,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'fls-course-project';
+
+  selectedCategory = 'All Movies';  // default category
+
+  onCategoryChange(event: { nameOfCategory: string }) {
+    this.selectedCategory = event.nameOfCategory;
+  }
 }

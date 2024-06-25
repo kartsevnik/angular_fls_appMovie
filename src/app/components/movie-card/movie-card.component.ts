@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { movie } from '../../model/movie';
+import { TimeOfMoviePipe } from '../../pipes/time-of-movie.pipe';
 
 @Component({
   selector: 'app-movie-card',

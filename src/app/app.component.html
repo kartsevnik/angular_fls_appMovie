@@ -1,2 +1,5 @@
-<app-movie-list></app-movie-list>
+<div class="wrapper">
+    <app-header (exportNameOfCategory)="onCategoryChange($event)"></app-header>
+    <app-movie-list [selectedCategory]="selectedCategory"></app-movie-list>
+</div>
 <!-- <router-outlet /> -->

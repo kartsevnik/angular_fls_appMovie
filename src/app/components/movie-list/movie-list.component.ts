@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { movie } from '../../model/movie';
 
 @Component({
@@ -7,6 +7,8 @@ import { movie } from '../../model/movie';
   styleUrl: './movie-list.component.scss'
 })
 export class MovieListComponent {
+  
+  @Input() selectedCategory = ''
 
   movies: movie[] = [
     new movie(1, "The Shawshank Redemption", 1994, 142, "../../../assets/img-movies/The Shawshank Redemption.jpg", false, false, 9.3, "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.", "HD"),
@@ -44,4 +46,5 @@ export class MovieListComponent {
       this.toWatchMovies = this.toWatchMovies.filter(m => m.id !== event.movie.id);
     }
   }
+
 }

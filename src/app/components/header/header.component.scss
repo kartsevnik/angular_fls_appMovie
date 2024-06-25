@@ -1,0 +1,65 @@
+/* Reset styles for ul and li elements */
+ul,
+li {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+}
+
+
+.header {
+    // width: 100vw;
+
+
+    // .header__container
+    &__container {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        align-content: center;
+
+    }
+
+    // .header__logo
+    &__logo {
+        display: flex;
+        gap: 10px;
+
+    }
+
+    // .header__menu
+    &__menu {}
+
+    // .header__icon-block
+    &__icon-block {}
+}
+
+.menu-header {
+    font-size: 24px;
+
+    // .menu-header__items
+    &__items {
+        display: flex;
+        gap: 20px;
+    }
+
+    // .menu-header__item
+    &__item {}
+
+    &__item:hover {
+        color: #FF7A00;
+        transition: 300ms ease;
+    }
+}
+
+.header-icon-block {
+
+    // .header-icon-block__search
+    &__search {}
+
+    // .header-icon-block__language
+    &__language {}
+
+    // .header-icon-block__login
+    &__login {}
+}

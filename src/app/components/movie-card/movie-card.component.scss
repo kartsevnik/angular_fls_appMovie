@@ -2,7 +2,7 @@
 
     // .movie-card__container
     &__container {
-        width: 300px;
+        width: 290px;
         border: #4e4e4e 1px solid;
         border-radius: 10px;
     }
@@ -31,6 +31,7 @@
         display: flex;
         padding: 0 5px;
         align-items: center;
+        max-height: 82px;
     }
 
     // .movie-card__title
