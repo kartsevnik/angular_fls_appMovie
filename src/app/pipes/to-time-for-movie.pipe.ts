@@ -1,9 +1,9 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-  name: 'timeOfMovie'
+  name: 'ToTimeForMovie'
 })
-export class TimeOfMoviePipe implements PipeTransform {
+export class ToTimeForMovie implements PipeTransform {
 
   transform(value: number): string {
     let hours = Math.floor(value / 60);
