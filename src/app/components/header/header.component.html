@@ -1,24 +1,28 @@
 <header class="header">
     <div class="header__container">
-        <div class="header__logo"><img src="../../../assets/icons/logo.svg" alt="Logo">
+        <div class="header__logo"><img src="assets/icons/logo.svg" alt="Logo">
             <h3>MoviePulse</h3>
         </div>
         <div class="header__menu">
             <nav class="menu-header">
                 <ul class="menu-header__items">
-                    <li class="menu-header__item"><button (click)="changeCategory('Home')">Home</button></li>
+                    <!-- <li class="menu-header__item"><button (click)="changeCategory('Home')">Home</button></li>
                     <li class="menu-header__item"><button (click)="changeCategory('All Movies')">All Movies</button>
                     </li>
                     <li class="menu-header__item"><button (click)="changeCategory('Favorites')">Favorites</button></li>
-                    <li class="menu-header__item"><button (click)="changeCategory('To Watch')">To Watch</button></li>
+                    <li class="menu-header__item"><button (click)="changeCategory('To Watch')">To Watch</button></li> -->
+                    @for (category of categoryList; track category.key) {
+                    <li class="menu-header__item"><button
+                            (click)="changeCategory(category.key)">{{category.name}}</button></li>
+                    }
                 </ul>
             </nav>
         </div>
-        <div class="header__icon-block header-icon-block">
+        <!-- <div class="header__icon-block header-icon-block">
             <div class="header-icon-block__search"></div>
             <div class="header-icon-block__language"></div>
             <div class="header-icon-block__login"></div>
-        </div>
+        </div> -->
     </div>
 
 </header>
