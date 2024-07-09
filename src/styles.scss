@@ -1,12 +1,25 @@
 /* You can add global styles to this file, and also import other style files */
+@import "primeicons/primeicons.css";
 @import url(https://fonts.googleapis.com/css?family=Imprima:regular);
+
+
+:root {
+    --maincolor: #FF7A00;
+    --subMainColor: #f1a156;
+}
+
+.main-color {
+    color: var(--maincolor);
+}
 
 body {
     font-family: Imprima;
     background-image: linear-gradient(195deg, #242323 0%, #000 100%);
     color: #fff;
-    height: 100vh;
-    padding: 1rem;
+    // height: 100vh;
+    // padding: 0rem 1rem 1rem 1rem;
+    padding: 1rem 1rem 1rem 1rem;
+    margin: 0;
 }
 
 
@@ -28,4 +41,46 @@ button {
     -webkit-appearance: none;
     -moz-appearance: none;
     appearance: none;
+}
+
+//rewrite stylies
+
+.dropdown-categories__item .p-dropdown {
+    width: 200px;
+    background-color: var(--subMainColor);
+    border: var(--maincolor) 2px solid;
+    border-radius: 6px;
+    max-height: 300px;
+}
+
+.dropdown-categories__item .p-dropdown-label {
+    font-size: 16px;
+    color: var(--subMainColor);
+    background-color: #242323;
+}
+
+.dropdown-categories__item .p-dropdown-items {
+    font-size: 20px;
+    color: var(--subMainColor);
+    // background-color: #f1a156;
+    background-color: #242323;
+}
+
+.dropdown-categories__item .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+    color: var(--subMainColor);
+}
+
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:not(.p-highlight):not(.p-disabled).p-focus {
+    background: #123049;
+    color: #ffffff;
+}
+
+.p-dropdown-panel .p-dropdown-items .p-dropdown-item:hover {
+    background: #123049;
+    color: #ffffff;
+}
+
+.dropdown-categories__item .p-dropdown-panel .p-dropdown-items-wrapper {
+    max-height: 300px !important;
 }

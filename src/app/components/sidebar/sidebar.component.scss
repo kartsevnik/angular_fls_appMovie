@@ -1,0 +1,32 @@
+.sidebar {
+    // height: 100%;
+    // background-color: var(--maincolor);
+    z-index: 2;
+    color: black;
+
+    // .sidebar__container
+    &__container {
+        // width: 300px;
+    }
+
+    // .sidebar__nav
+    &__nav {}
+
+    // .sidebar__items
+    &__items {}
+
+    // .sidebar__item
+    &__item {}
+}
+
+.header {
+
+
+
+    // .header__logo
+    &__logo {
+        display: flex;
+        // gap: 10px;
+        cursor: pointer;
+    }
+}

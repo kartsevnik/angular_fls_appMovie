@@ -9,6 +9,8 @@ export class movie {
     rating: number
     description: string
     quality: string
+    genres: string[]
+    imgLargePath?: string
 
     constructor(id: number,
         title: string,
@@ -19,7 +21,10 @@ export class movie {
         toWatch: boolean,
         rating: number,
         description: string,
-        quality: string) {
+        quality: string,
+        genres: string[],
+        imgLargePath?: string,
+    ) {
         this.id = id
         this.title = title
         this.year = year
@@ -30,5 +35,7 @@ export class movie {
         this.rating = rating
         this.description = description
         this.quality = quality
+        this.genres = genres
+        this.imgLargePath = imgLargePath
     }
 }

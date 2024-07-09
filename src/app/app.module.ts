@@ -7,6 +7,12 @@ import { MovieListComponent } from './components/movie-list/movie-list.component
 import { MovieCardComponent } from './components/movie-card/movie-card.component';
 import { TrasformTimeDuration } from './pipes/trasformTimeDuration.pipe';
 import { HeaderComponent } from './components/header/header.component';
+import { TooltipModule } from 'primeng/tooltip';
+import { AnimateOnScrollModule } from 'primeng/animateonscroll';
+import { FormsModule } from '@angular/forms';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { DropdownModule } from 'primeng/dropdown';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 @NgModule({
   declarations: [
@@ -14,11 +20,18 @@ import { HeaderComponent } from './components/header/header.component';
     MovieListComponent,
     MovieCardComponent,
     TrasformTimeDuration,
-    HeaderComponent
+    HeaderComponent,
+    SidebarComponent,
+
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    TooltipModule,
+    AnimateOnScrollModule,
+    FormsModule,
+    DropdownModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

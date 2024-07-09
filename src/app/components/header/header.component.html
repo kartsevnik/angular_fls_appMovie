@@ -1,28 +1,38 @@
 <header class="header">
     <div class="header__container">
-        <div class="header__logo"><img src="assets/icons/logo.svg" alt="Logo">
-            <h3>MoviePulse</h3>
+        <div class="header__left-block">
+            <div (click)="changeCategory(categoryList[0].code)" class="header__logo"><img src="assets/icons/logo.svg"
+                    alt="Logo">
+                <h3>MoviePulse</h3>
+            </div>
         </div>
-        <div class="header__menu">
-            <nav class="menu-header">
-                <ul class="menu-header__items">
-                    <!-- <li class="menu-header__item"><button (click)="changeCategory('Home')">Home</button></li>
-                    <li class="menu-header__item"><button (click)="changeCategory('All Movies')">All Movies</button>
-                    </li>
-                    <li class="menu-header__item"><button (click)="changeCategory('Favorites')">Favorites</button></li>
-                    <li class="menu-header__item"><button (click)="changeCategory('To Watch')">To Watch</button></li> -->
-                    @for (category of categoryList; track category.key) {
-                    <li class="menu-header__item"><button
-                            (click)="changeCategory(category.key)">{{category.name}}</button></li>
-                    }
-                </ul>
-            </nav>
+        <div class="header-icon-block__search search">
+            <div>
+                <input (keyup)="search(filterText)" [(ngModel)]="filterText" placeholder="Search..." type="text"
+                    class="search-input" name="search" id="search"
+                    [ngClass]="{'fadeinleft': isSearchVisible, 'fadeoutleft': !isSearchVisible}"
+                    [style.display]="isSearchVisible ? 'block' : 'none'">
+            </div>
+            <div> <label for="search" (click)="toggleSearch()" class="ramka-3"><span
+                        class="pi pi-search "></span></label></div>
         </div>
-        <!-- <div class="header__icon-block header-icon-block">
-            <div class="header-icon-block__search"></div>
-            <div class="header-icon-block__language"></div>
-            <div class="header-icon-block__login"></div>
-        </div> -->
-    </div>
+        <div class="header__icon-block header-icon-block">
 
+            <!-- <div class="header-icon-block__language"></div> -->
+            <div class="card flex justify-content-center dropdown-categories">
+                <p-dropdown [options]="categoryList" [(ngModel)]="selectedCategory" optionLabel="name"
+                    placeholder="Select a Category" class="dropdown-categories__item" />
+            </div>
+            <button class="header-icon-block__icon favorites-icons" (click)="changeCategory('Favorites')"><img
+                    src="/assets/icons/favorites.png" alt=""></button>
+
+            <button class="header-icon-block__icon favorites-icons" (click)="changeCategory('To Watch')"><img
+                    src="/assets/icons/play.png" alt=""></button>
+            <div class="header-icon-block__login">
+                <button class="btn_sign-in" tooltipPosition="bottom" pTooltip="This feature is coming soon!">Sign
+                    in</button>
+
+            </div>
+        </div>
+    </div>
 </header>
