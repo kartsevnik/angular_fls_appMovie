@@ -9,7 +9,8 @@
 
     // .movie-card__image
     &__image {
-
+        position: relative;
+        cursor: pointer;
         height: 400px;
         overflow: hidden;
 
@@ -150,4 +151,42 @@
 
 .selected-toWatch {
     background-color: var(--maincolor);
+}
+
+.movie-card__image::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: radial-gradient(circle, rgba(0, 0, 0, 0.459) 50%, rgba(0, 0, 0, 0) 90%);
+    transition: opacity 300ms;
+    opacity: 0;
+    z-index: 5;
+}
+
+.movie-card__image:hover::before {
+    opacity: 1;
+}
+
+.movie-card__image::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 55%;
+    width: 0;
+    height: 0;
+    transform: translate(-50%, -50%);
+    z-index: 5;
+    background: no-repeat center center;
+    background-size: contain;
+    transition: width 400ms, height 400ms, background-color 400ms;
+}
+
+.movie-card__image:hover::after {
+    content: '';
+    width: 100px;
+    height: 100px;
+    background-image: url('../../../assets/icons/play.png');
 }
