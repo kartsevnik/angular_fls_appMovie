@@ -1,3 +1,7 @@
+.home-block {
+    // height: 100vh;
+}
+
 .movie-list-cards {
     display: flex;
     flex-direction: column;
@@ -8,4 +12,133 @@
     gap: 20px;
     flex-wrap: wrap;
     justify-content: center;
+}
+
+.home-block {
+
+    // .home-block__container
+    &__container {
+        margin-top: 15px;
+        // width: 96vw;
+        height: 90vh;
+        border: var(--maincolor) 1px solid;
+        position: relative;
+        overflow: hidden;
+        display: flex;
+        padding: 10px;
+
+    }
+
+    // .home-block__image
+    &__image {
+        flex: 0 0 50%;
+        overflow: hidden;
+
+        img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            object-position: center;
+            box-shadow: inset 0px 0px 50px 22px #000000;
+        }
+    }
+
+    // .home-block__titles
+    &__titles {
+        flex: 0 0 50%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        padding: 20px;
+        transform: translateY(-10%);
+    }
+
+
+    // .home-block__sub-title
+    &__sub-title {
+        color: var(--maincolor);
+        font-size: 26px;
+        letter-spacing: 3px;
+    }
+
+    // .home-block__title
+    &__title {
+        font-size: 60px;
+        letter-spacing: 1px;
+    }
+
+    // .home-block__icons
+    &__icons {}
+
+    // .home-block__button
+    &__button {
+        margin-top: 20px;
+    }
+}
+
+.btn {
+
+    // .btn_sign-in
+    &_sign-in {
+        border: var(--maincolor) 1px solid;
+        border-radius: 5px;
+        padding: 10px 10px;
+    }
+}
+
+
+// .home-block__items
+.home-block__items {
+    display: flex;
+    align-items: center;
+    gap: 30px;
+    padding: 5px;
+
+}
+
+.home-block__item-icons {
+    display: flex;
+    gap: 25px;
+}
+
+// .home-block__item-quality
+.home-block__item-quality {
+    padding: 2px 4px;
+    border: var(--maincolor) 1px solid;
+    // width: 100%;
+
+}
+
+// .home-block__item-duration
+.home-block__item-duration {
+    position: relative;
+}
+
+// .home-block__item-genres
+.home-block__item-genres {}
+
+// .home-block__item-rating
+.home-block__item-rating {
+    position: relative;
+}
+
+
+.home-block__item-duration::before {
+    content: url(../../../assets/icons/clock.svg);
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    left: -15px;
+    z-index: 5;
+}
+
+.home-block__item-rating::before {
+    content: url(../../../assets/icons/Star.svg);
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 0;
+    left: -15px;
+    z-index: 5;
 }

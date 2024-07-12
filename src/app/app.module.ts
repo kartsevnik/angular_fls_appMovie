@@ -7,18 +7,41 @@ import { MovieListComponent } from './components/movie-list/movie-list.component
 import { MovieCardComponent } from './components/movie-card/movie-card.component';
 import { TrasformTimeDuration } from './pipes/trasformTimeDuration.pipe';
 import { HeaderComponent } from './components/header/header.component';
-
+import { TooltipModule } from 'primeng/tooltip';
+import { AnimateOnScrollModule } from 'primeng/animateonscroll';
+import { FormsModule } from '@angular/forms';
+import { DropdownModule } from 'primeng/dropdown';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NowPlayingComponent } from './components/now-playing/now-playing.component';
+import { PopularComponent } from './components/popular/popular.component';
+import { TopRateComponent } from './components/top-rate/top-rate.component';
+import { UpcomingComponent } from './components/upcoming/upcoming.component';
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 @NgModule({
   declarations: [
     AppComponent,
     MovieListComponent,
     MovieCardComponent,
     TrasformTimeDuration,
-    HeaderComponent
+    HeaderComponent,
+    NowPlayingComponent,
+    PopularComponent,
+    TopRateComponent,
+    UpcomingComponent,
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    AppRoutingModule,
+    TooltipModule,
+    AnimateOnScrollModule,
+    FormsModule,
+    DropdownModule,
+    BrowserAnimationsModule,
+    DialogModule,
+    ButtonModule,
+    InputTextModule
   ],
   providers: [],
   bootstrap: [AppComponent]
