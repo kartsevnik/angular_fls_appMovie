@@ -16,7 +16,9 @@ import { NowPlayingComponent } from './components/now-playing/now-playing.compon
 import { PopularComponent } from './components/popular/popular.component';
 import { TopRateComponent } from './components/top-rate/top-rate.component';
 import { UpcomingComponent } from './components/upcoming/upcoming.component';
-
+import { DialogModule } from 'primeng/dialog';
+import { ButtonModule } from 'primeng/button';
+import { InputTextModule } from 'primeng/inputtext';
 @NgModule({
   declarations: [
     AppComponent,
@@ -36,7 +38,10 @@ import { UpcomingComponent } from './components/upcoming/upcoming.component';
     AnimateOnScrollModule,
     FormsModule,
     DropdownModule,
-    BrowserAnimationsModule
+    BrowserAnimationsModule,
+    DialogModule,
+    ButtonModule,
+    InputTextModule
   ],
   providers: [],
   bootstrap: [AppComponent]

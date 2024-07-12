@@ -1,8 +1,13 @@
 <div class="movie-card" *ngIf="movie">
     <div class="movie-card__container">
-        <div class="movie-card__image">
-            <img [src]="movie.imgPath" [alt]="movie.title">
-        </div>
+
+        <p-button (onClick)="showDialog()">
+            <div class="movie-card__image">
+                <img [src]="movie.imgPath" [alt]="movie.title">
+            </div>
+        </p-button>
+
+
         <div class="movie-card__text">
             <div class="movie-card__titleAndYear">
                 <h5 class="movie-card__title">{{ movie.title }}</h5>
@@ -17,10 +22,34 @@
             </div>
         </div>
         <div class="movie-card__buttons">
-            <button class="movie-card__addToFavorite btn-card" [ngClass]="{'selected-favorite' : movie.favorite == true}"
+            <button class="movie-card__addToFavorite btn-card"
+                [ngClass]="{'selected-favorite' : movie.favorite == true}"
                 (click)="toggleFavoritesList()">Favorite</button>
             <button class="movie-card__addToWatch btn-card" [ngClass]="{'selected-toWatch' : movie.toWatch == true}"
                 (click)="toggleWatchList()">To Watch</button>
         </div>
+
     </div>
+</div>
+
+<!-- <div class="card flex justify-content-center"> -->
+<div class="movie-detail-card">
+    <p-dialog header="Movie Details" [modal]="true" [(visible)]="visible" [style]="{ width: '90rem'}">
+<div class="movie-detail-card__flex-column">
+            <div *ngIf="selectedMovie" class="movie-detail-card__container">
+                <div class="movie-detail-card__image"><img [src]="selectedMovie.imgPath" [alt]="selectedMovie.title"></div>
+                <div class="movie-detail-card__description">
+                    <h2 class="movie-detail-card__title">{{ selectedMovie.title }}</h2>
+                    <p><strong>Year:</strong> {{ selectedMovie.year }}</p>
+                    <p><strong>Duration:</strong> {{ selectedMovie.duration ?? 0 | trasformTimeDuration }}</p>
+                    <p><strong>Rating:</strong> {{ selectedMovie.rating }}</p>
+                    <p><strong>Description:</strong> {{ selectedMovie.description }}</p>
+                    <p><strong>Quality:</strong> {{ selectedMovie.quality }}</p>
+                    <p><strong>Genres:</strong> {{ selectedMovie.genres?.join(', ') || 'N/A' }}</p>
+                </div>
+            </div>
+            <div class="movie-detail-card__button"><p-button label="Close" (onClick)="visible = false" class="btn-test" /></div>
+</div>
+
+    </p-dialog>
 </div>

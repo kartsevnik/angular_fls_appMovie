@@ -190,3 +190,72 @@
     height: 100px;
     background-image: url('../../../assets/icons/play.png');
 }
+
+// ================ detail view
+
+.card {}
+
+.flex {}
+
+.justify-content-center {}
+
+// --maincolor: #FF7A00;
+// --subMainColor: #f1a156;
+.movie-detail-card {
+
+    // .movie-detail-card__container
+    &__container {
+        // padding: 20px;
+        display: flex;
+        gap: 25px;
+    }
+
+    // .movie-detail-card__title
+    &__title {}
+
+    // .movie-detail-card__image
+    &__image {
+        // flex: 0 0 10%;
+
+        img {
+            width: 300px;
+        }
+
+    }
+
+    // .movie-detail-card__description
+    &__description {
+        // flex: 0 0 90%;
+        // width: 100%;
+    }
+}
+
+.btn {
+
+    // .btn_sign-in
+    &_sign-in {
+        border: var(--maincolor) 1px solid;
+        border-radius: 5px;
+        padding: 10px 10px;
+        width: 50%;
+    }
+}
+
+.btn-test {
+    border: var(--maincolor) 1px solid;
+    border-radius: 5px;
+    padding: 10px 10px;
+    width: 50px;
+    align-self: center;
+    margin-bottom: 25px;
+}
+
+.movie-detail-card__flex-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.movie-detail-card__button {
+    padding: 25px;
+    text-align: center;
+}
