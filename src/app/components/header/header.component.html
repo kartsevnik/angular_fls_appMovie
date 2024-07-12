@@ -1,8 +1,7 @@
 <header class="header">
     <div class="header__container">
         <div class="header__left-block">
-            <div (click)="changeCategory(categoryList[0].code)" class="header__logo"><img src="assets/icons/logo.svg"
-                    alt="Logo">
+            <div (click)="changeCategory('Home')" class="header__logo"><img src="assets/icons/logo.svg" alt="Logo">
                 <h3>MoviePulse</h3>
             </div>
         </div>
@@ -21,7 +20,8 @@
             <!-- <div class="header-icon-block__language"></div> -->
             <div class="card flex justify-content-center dropdown-categories">
                 <p-dropdown [options]="categoryList" [(ngModel)]="selectedCategory" optionLabel="name"
-                    placeholder="Select a Category" class="dropdown-categories__item" />
+                    placeholder="Select a Category" class="dropdown-categories__item"
+                    (onChange)="changeCategory($event.value.code)" />
             </div>
             <button class="header-icon-block__icon favorites-icons" (click)="changeCategory('Favorites')"><img
                     src="/assets/icons/favorites.png" alt=""></button>

@@ -26,12 +26,15 @@
         </div>
     </div>
 </ng-container>
-<div class="movie-list-cards">
-    <h3>{{selectedCategory}}</h3>
-    <div class="allFilms">
-        <ng-container *ngFor="let movie of selectedMovies; trackBy: trackById">
-            <app-movie-card [movie]="movie" (addFavoritesList)="updateFavoriteMovies($event)"
-                (addWatchList)="updateWatchMovies($event)"></app-movie-card>
-        </ng-container>
+<ng-container
+    *ngIf="shouldDisplayMovieList()">
+    <div class="movie-list-cards">
+        <h3>{{selectedCategory}}</h3>
+        <div class="allFilms">
+            <ng-container *ngFor="let movie of selectedMovies; trackBy: trackById">
+                <app-movie-card [movie]="movie" (addFavoritesList)="updateFavoriteMovies($event)"
+                    (addWatchList)="updateWatchMovies($event)"></app-movie-card>
+            </ng-container>
+        </div>
     </div>
-</div>
+</ng-container>

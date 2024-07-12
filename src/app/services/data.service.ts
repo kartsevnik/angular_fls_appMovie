@@ -11,8 +11,8 @@ export class DataService {
 
   categoryList: Category[] = [
     { name: "All Movies", code: 'All Movies' },
-    { name: "Now playing", code: 'Now playing"' },
-    { name: "Popular", code: 'To Watch' },
+    { name: "Now playing", code: 'Now playing' },
+    { name: "Popular", code: 'Popular' },
     { name: "Top rate", code: 'Top rate' },
     { name: "Upcoming", code: 'Upcoming' },
   ]

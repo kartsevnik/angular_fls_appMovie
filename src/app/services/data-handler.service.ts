@@ -67,22 +67,33 @@ export class DataHandlerService {
   updateSelectedMovies(selectedCategory: string) {
     switch (selectedCategory) {
       case 'All Movies':
-        this.selectedMovies = this.movies;
+        this.selectedMovies = [...this.movies];
         this.selectedMoviesOriginal = this.movies;
+        console.log("updateSelectedMovies.selectedCategory:" + selectedCategory);
+
         break;
       case 'Favorites':
         this.selectedMovies = this.favoriteMovies;
         this.selectedMoviesOriginal = this.favoriteMovies;
+        console.log("updateSelectedMovies.selectedCategory:" + selectedCategory);
         break;
       case 'To Watch':
         this.selectedMovies = this.toWatchMovies;
         this.selectedMoviesOriginal = this.toWatchMovies;
+        console.log("updateSelectedMovies.selectedCategory:" + selectedCategory);
         break;
       default:
         this.selectedMovies = this.movies;
         this.selectedMoviesOriginal = this.movies;
         break;
     }
+  }
+
+  forceUpdateCategory(nameOfCategory: string) {
+    this.changeCategory('');
+    setTimeout(() => {
+      this.changeCategory(nameOfCategory);
+    }, 0);
   }
 
   // метод добавления и удаления фильма в Favorite

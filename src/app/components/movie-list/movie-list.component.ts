@@ -11,10 +11,7 @@ export class MovieListComponent implements OnChanges, OnInit {
 
   movieForHomeBlock: movie | null = null;
 
-  constructor(private dataHandlerService: DataHandlerService) {
-
-
-  }
+  constructor(private dataHandlerService: DataHandlerService) {}
   ngOnInit(): void {
     this.movieForHomeBlock = this.selectedMovies[2];
     console.log(this.movieForHomeBlock.imgLargePath);
@@ -53,5 +50,10 @@ export class MovieListComponent implements OnChanges, OnInit {
 
   getBackgroundImage(): string {
     return this.movieForHomeBlock?.imgLargePath ? `url(${this.movieForHomeBlock.imgLargePath})` : '';
+  }
+
+  shouldDisplayMovieList(): boolean {
+    const categoriesToShow = ['Home', 'All Movies', 'Favorites', 'To Watch'];
+    return categoriesToShow.includes(this.selectedCategory);
   }
 }

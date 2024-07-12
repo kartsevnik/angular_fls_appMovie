@@ -10,9 +10,12 @@ import { HeaderComponent } from './components/header/header.component';
 import { TooltipModule } from 'primeng/tooltip';
 import { AnimateOnScrollModule } from 'primeng/animateonscroll';
 import { FormsModule } from '@angular/forms';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { NowPlayingComponent } from './components/now-playing/now-playing.component';
+import { PopularComponent } from './components/popular/popular.component';
+import { TopRateComponent } from './components/top-rate/top-rate.component';
+import { UpcomingComponent } from './components/upcoming/upcoming.component';
 
 @NgModule({
   declarations: [
@@ -21,8 +24,10 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
     MovieCardComponent,
     TrasformTimeDuration,
     HeaderComponent,
-    SidebarComponent,
-
+    NowPlayingComponent,
+    PopularComponent,
+    TopRateComponent,
+    UpcomingComponent,
   ],
   imports: [
     BrowserModule,
