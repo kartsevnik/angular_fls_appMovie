@@ -1,0 +1,33 @@
+<div class="sidebar-block">
+
+
+    <p-sidebar [(visible)]="sidebarVisible" position="left">
+
+        <h3 class="sidebar-title">Sidebar menu:</h3>
+        <ul class="sidebar-menu">
+            <a routerLink="home">
+                <li class="sidebar-menu_item">Home</li>
+            </a>
+            <a routerLink="popular">
+                <li class="sidebar-menu_item">Popular</li>
+            </a>
+            <a routerLink="now-playing">
+                <li class="sidebar-menu_item">Now playing</li>
+            </a>
+            <a routerLink="top-rate">
+                <li class="sidebar-menu_item">Top rate</li>
+            </a>
+            <a routerLink="upcoming">
+                <li class="sidebar-menu_item">Upcoming</li>
+            </a>
+        </ul>
+
+    </p-sidebar>
+
+    <p-button (onClick)="sidebarVisible = true">
+        <ng-template pTemplate="icon">
+            <img class="categories-button" src="assets/icons/menu-5.png" alt="Custom Icon" />
+        </ng-template>
+    </p-button>
+
+</div>

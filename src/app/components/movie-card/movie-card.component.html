@@ -32,12 +32,12 @@
     </div>
 </div>
 
-<!-- <div class="card flex justify-content-center"> -->
 <div class="movie-detail-card">
-    <p-dialog header="Movie Details" [modal]="true" [(visible)]="visible" [style]="{ width: '90rem'}">
-<div class="movie-detail-card__flex-column">
+    <p-dialog header="Movie Details" [modal]="true" [(visible)]="visible" [style]="{ width: '90rem', height: '100%'}">
+        <div class="movie-detail-card__flex-column">
             <div *ngIf="selectedMovie" class="movie-detail-card__container">
-                <div class="movie-detail-card__image"><img [src]="selectedMovie.imgPath" [alt]="selectedMovie.title"></div>
+                <div class="movie-detail-card__image"><img [src]="selectedMovie.imgPath" [alt]="selectedMovie.title">
+                </div>
                 <div class="movie-detail-card__description">
                     <h2 class="movie-detail-card__title">{{ selectedMovie.title }}</h2>
                     <p><strong>Year:</strong> {{ selectedMovie.year }}</p>
@@ -48,8 +48,9 @@
                     <p><strong>Genres:</strong> {{ selectedMovie.genres?.join(', ') || 'N/A' }}</p>
                 </div>
             </div>
-            <div class="movie-detail-card__button"><p-button label="Close" (onClick)="visible = false" class="btn-test" /></div>
-</div>
+            <div class="movie-detail-card__button"><p-button label="Close" (onClick)="visible = false"
+                    class="btn-test" /></div>
+        </div>
 
     </p-dialog>
 </div>

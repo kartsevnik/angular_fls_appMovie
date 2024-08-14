@@ -1,6 +1,7 @@
 import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { movie } from '../../models/movie';
 import { DataHandlerService } from '../../services/data-handler.service';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-movie-list',
@@ -9,12 +10,14 @@ import { DataHandlerService } from '../../services/data-handler.service';
 })
 export class MovieListComponent implements OnChanges, OnInit {
 
-  movieForHomeBlock: movie | null = null;
 
-  constructor(private dataHandlerService: DataHandlerService) {}
+  constructor(private dataHandlerService: DataHandlerService, private route: ActivatedRoute) { }
+  
   ngOnInit(): void {
-    this.movieForHomeBlock = this.selectedMovies[2];
-    console.log(this.movieForHomeBlock.imgLargePath);
+    this.route.params.subscribe(params => {
+      const category = params['category'];
+      this.dataHandlerService.changeCategory(category);
+    });
   }
 
   // при изменении значений в selectedCategory вызывается метод сервиса обновляющий данные
@@ -34,12 +37,12 @@ export class MovieListComponent implements OnChanges, OnInit {
     return this.dataHandlerService.selectedMovies;
   }
 
-  // метод который вызывает метод сервиса при нажатии на кнопку Favorite и передает необходимые данные
+  // метод который вызывает метод сервиса при нажатии на кнопку Favorite и вызывает необходимое действие
   updateFavoriteMovies(event: { movie: movie, action: 'add' | 'remove' }) {
     this.dataHandlerService.updateFavoriteMovies(event);
   }
 
-  // метод который вызывает метод сервиса при нажатии на кнопку Watch и передает необходимые данные
+  // метод который вызывает метод сервиса при нажатии на кнопку To Watch и вызывает необходимое действие
   updateWatchMovies(event: { movie: movie, action: 'add' | 'remove' }) {
     this.dataHandlerService.updateWatchMovies(event);
   }
@@ -48,12 +51,4 @@ export class MovieListComponent implements OnChanges, OnInit {
     return item.id;
   }
 
-  getBackgroundImage(): string {
-    return this.movieForHomeBlock?.imgLargePath ? `url(${this.movieForHomeBlock.imgLargePath})` : '';
-  }
-
-  shouldDisplayMovieList(): boolean {
-    const categoriesToShow = ['Home', 'All Movies', 'Favorites', 'To Watch'];
-    return categoriesToShow.includes(this.selectedCategory);
-  }
 }

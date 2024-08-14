@@ -6,7 +6,7 @@ import { Component } from '@angular/core';
   styleUrl: './app.component.scss'
 })
 export class AppComponent {
-  title = 'fls-course-project';
+  title = 'movie-project';
 
   selectedCategory = 'All Movies';  // default category
 

@@ -1,86 +1,54 @@
+// DataHandlerService:
+// управляет отображением фильмов в зависимости от категории,
+// а также вызовами методов в MovieStateService для добавления / удаления фильмов.
+
 import { Injectable } from '@angular/core';
 import { movie } from '../models/movie';
 import { DataService } from './data.service';
 import { Category } from '../models/category';
+import { MovieStateService } from './movie-state.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataHandlerService {
 
-  // выбранная категория
-  selectedCategory = ''
-  // текущий массив отображаемый на странице сделан для удобства управления и фильтрации
-  selectedMovies: movie[] = []
-  // оригинальный массив для метода поиск и возврата в исходное состояние
-  selectedMoviesOriginal: movie[] = []
+  selectedCategory = '';  // Выбранная категория фильмов
+  movies: movie[] = [];  // Все фильмы
+  selectedMovies: movie[] = [];  // Фильмы, отображаемые на текущей странице
+  selectedMoviesOriginal: movie[] = [];  // Оригинальный список фильмов для сброса фильтров
 
-  //начальное объявление переменных
-  movies: movie[] = []
-  favoriteMovies: movie[] = []
-  toWatchMovies: movie[] = []
-  categoryList: Category[] = []
-
-  // Ваш комментарий: Не дуже розумію суть такого запису. Якщо ви хочете додати новий елемент, то це можна зробити ось так:
-  //   movies: movie[] = [];
-  // const newMovie = {
-  //     id: 1,
-  //     title: "The Shawshank Redemption",
-  //     year: 1994,
-  //     duration: 142,
-  //     imageUrl: "../../../assets/img-movies/The Shawshank Redemption.jpg",
-  //     watched: false,
-  //     favorite: false,
-  //     rating: 9.3,
-  //     description: "Two imprisoned men bond over a number of years, finding solace and eventual redemption through acts of common decency.",
-  //     quality: "HD"
-  //   }
-  // this.movies.push(newMovie);
-
-  // Мое пояснение: Дело в том что я создал модель с названием movieи по ее параметрам создаю новые объекты, 
-  // в перспективе эти данные планирую перенести в локальную базу данных, как только объект будет наполнен все необходимыми аттрибутами
-
-
-
-  constructor(private dataService: DataService) {
-    this.loadData()
+  constructor(private dataService: DataService, private movieStateService: MovieStateService, private router: Router) {
+    this.loadData();
   }
 
+  // Загружаем данные при инициализации сервиса
   loadData() {
-    //загрузка данных из Дата сервиса 
-    this.movies = this.dataService.movies
-    this.favoriteMovies = this.dataService.favoriteMovies
-    this.toWatchMovies = this.dataService.toWatchMovies
-    this.categoryList = this.dataService.categoryList
-
-    //отображение согласно категории по умолчанию из header
+    this.movies = this.dataService.getMovies();
     this.updateSelectedMovies(this.selectedCategory);
   }
 
-  // метод изменения категории
+  // Меняем категорию фильмов и обновляем отображаемые фильмы
   changeCategory(nameOfCategory: string) {
-    this.selectedCategory = nameOfCategory
+    this.selectedCategory = nameOfCategory;
     this.updateSelectedMovies(nameOfCategory);
   }
 
-  // метод обновления данными текущего массива с учетом выбранной категории
+  // Обновляем список фильмов в зависимости от выбранной категории
   updateSelectedMovies(selectedCategory: string) {
     switch (selectedCategory) {
-      case 'All Movies':
-        this.selectedMovies = [...this.movies];
-        this.selectedMoviesOriginal = this.movies;
-        console.log("updateSelectedMovies.selectedCategory:" + selectedCategory);
-
-        break;
+      // case 'All Movies':
+      //   this.selectedMovies = [...this.movies];
+      //   this.selectedMoviesOriginal = this.movies;
+      //   break;
       case 'Favorites':
-        this.selectedMovies = this.favoriteMovies;
-        this.selectedMoviesOriginal = this.favoriteMovies;
-        console.log("updateSelectedMovies.selectedCategory:" + selectedCategory);
+        this.selectedMovies = this.movieStateService.getFavoriteMovies();
+        this.selectedMoviesOriginal = this.movieStateService.getFavoriteMovies();
         break;
       case 'To Watch':
-        this.selectedMovies = this.toWatchMovies;
-        this.selectedMoviesOriginal = this.toWatchMovies;
-        console.log("updateSelectedMovies.selectedCategory:" + selectedCategory);
+        this.selectedMovies = this.movieStateService.getToWatchMovies();
+        this.selectedMoviesOriginal = this.movieStateService.getToWatchMovies();
         break;
       default:
         this.selectedMovies = this.movies;
@@ -89,39 +57,40 @@ export class DataHandlerService {
     }
   }
 
-  forceUpdateCategory(nameOfCategory: string) {
-    this.changeCategory('');
-    setTimeout(() => {
-      this.changeCategory(nameOfCategory);
-    }, 0);
-  }
-
-  // метод добавления и удаления фильма в Favorite
+  // Добавляем или удаляем фильм из избранного
   updateFavoriteMovies(event: { movie: movie, action: 'add' | 'remove' }) {
     if (event.action === 'add') {
-      this.favoriteMovies.push(event.movie);
+      this.movieStateService.addMovieToFavorites(event.movie);
     } else {
-      this.favoriteMovies = this.favoriteMovies.filter(m => m.id !== event.movie.id);
-    }
-  }
-  // метод добавления и удаления фильма в toWatch
-  updateWatchMovies(event: { movie: movie, action: 'add' | 'remove' }) {
-    if (event.action === 'add') {
-      this.toWatchMovies.push(event.movie);
-    } else {
-      this.toWatchMovies = this.toWatchMovies.filter(m => m.id !== event.movie.id);
+      this.movieStateService.removeMovieFromFavorites(event.movie);
     }
   }
 
-  // метода отображения результатов поиска
-  fillListByFind(searchText: string): void {
-    this.changeCategory('All Movies')
-    if (searchText.trim() === '') {
-      this.selectedMovies = this.selectedMoviesOriginal;
+  // Добавляем или удаляем фильм из списка для просмотра
+  updateWatchMovies(event: { movie: movie, action: 'add' | 'remove' }) {
+    if (event.action === 'add') {
+      this.movieStateService.addMovieToWatchlist(event.movie);
     } else {
-      this.selectedMovies = this.movies.filter(movie =>
-        movie.title.toLowerCase().includes(searchText.toLowerCase())
-      );
+      this.movieStateService.removeMovieFromWatchlist(event.movie);
+    }
+  }
+
+  // Фильтруем фильмы по поисковому запросу
+  fillListByFind(searchText: string): void {
+    const currentUrl = this.router.url; // Получаем текущий URL
+
+    if (currentUrl === '/home') {
+      // Если мы находимся на странице Home, перенаправляем на страницу поиска
+      this.router.navigate(['/all-movies'], { queryParams: { query: searchText } });
+    } else {
+      // Если мы находимся на любой другой странице (например favorites), фильтруем текущие фильмы
+      if (searchText.trim() === '') {
+        this.selectedMovies = this.selectedMoviesOriginal;
+      } else {
+        this.selectedMovies = this.selectedMoviesOriginal.filter(movie =>
+          movie.title.toLowerCase().includes(searchText.toLowerCase())
+        );
+      }
     }
   }
 }

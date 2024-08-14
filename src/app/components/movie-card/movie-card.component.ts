@@ -4,6 +4,7 @@ import { TrasformTimeDuration } from '../../pipes/trasformTimeDuration.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
+import { DataService } from '../../services/data.service';
 
 @Component({
   selector: 'app-movie-card',
@@ -18,27 +19,15 @@ export class MovieCardComponent {
 
   visible: boolean = false;
   selectedMovie: Partial<movie> | null = null;
-  
-  constructor() { }
+
+  constructor(private dataService: DataService) { }
 
   showDialog() {
     if (this.movie) {
-      this.selectedMovie = {
-        id: this.movie.id,
-        title: this.movie.title,
-        year: this.movie.year,
-        duration: this.movie.duration,
-        imgPath: this.movie.imgPath,
-        favorite: this.movie.favorite,
-        toWatch: this.movie.toWatch,
-        rating: this.movie.rating,
-        description: this.movie.description,
-        quality: this.movie.quality,
-        genres: this.movie.genres,
-        imgLargePath: this.movie.imgLargePath
-      };
+      this.selectedMovie = this.dataService.getMovieById(this.movie.id)!;
       this.visible = true;
     }
+
   }
 
   toggleWatchList() {
@@ -56,4 +45,5 @@ export class MovieCardComponent {
       this.addFavoritesList.emit({ movie: this.movie, action });
     }
   }
+
 }

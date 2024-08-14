@@ -1,19 +1,16 @@
 .wrapper {
     display: grid;
-    // grid-template-columns: 200px 1fr;
-    // height: 100vh;
+    padding-right: 10px;
+
 
     // .wrapper__sidebar
     &__sidebar {
-        // height: 100%;
         background-color: var(--maincolor);
 
     }
 
     // .wrapper__main-block
     &__main-block {
-        // height: 98vh;
-        // overflow-y: scroll;
     }
 
     // .wrapper__header

@@ -1,11 +1,10 @@
 <header class="header">
     <div class="header__container">
         <div class="header__left-block">
-            <div (click)="changeCategory('Home')" class="header__logo"><img src="assets/icons/logo-pulse.svg"
-                    alt="Logo">
-                <h3>MoviePulse</h3>
-            </div>
+            <div><app-sidebar></app-sidebar></div>
+
         </div>
+
         <div class="header-icon-block__search search">
             <div>
                 <input (keyup)="search(filterText)" [(ngModel)]="filterText" placeholder="Search..." type="text"
@@ -13,26 +12,26 @@
                     [ngClass]="{'fadeinleft': isSearchVisible, 'fadeoutleft': !isSearchVisible}"
                     [style.display]="isSearchVisible ? 'block' : 'none'">
             </div>
-            <div> <label for="search" (click)="toggleSearch()" class="ramka-3"><span
-                        class="pi pi-search "></span></label></div>
+            <div>
+                <label for="search" (click)="toggleSearch()" class="ramka-3">
+                    <span class="pi pi-search "></span>
+                </label>
+            </div>
         </div>
         <div class="header__icon-block header-icon-block">
-
-            <!-- <div class="header-icon-block__language"></div> -->
-            <div class="card flex justify-content-center dropdown-categories">
-                <p-dropdown [options]="categoryList" [(ngModel)]="selectedCategory" optionLabel="name"
-                    placeholder="Select a Category" class="dropdown-categories__item"
-                    (onChange)="changeCategory($event.value.code)" />
-            </div>
-            <button class="header-icon-block__icon favorites-icons" (click)="changeCategory('Favorites')"><img
-                    src="/assets/icons/favorites.png" alt=""></button>
-
-            <button class="header-icon-block__icon favorites-icons" (click)="changeCategory('To Watch')"><img
-                    src="/assets/icons/play.png" alt=""></button>
+            <button class="header-icon-block__icon animation-icons" [routerLink]="['/movie-list/To Watch']">
+                <img src="/assets/icons/play.png" alt="">
+            </button>
+            <button class="header-icon-block__icon animation-icons" [routerLink]="['/movie-list/Favorites']">
+                <img src="/assets/icons/favorites.png" alt="">
+            </button>
             <div class="header-icon-block__login">
                 <button class="btn_sign-in" tooltipPosition="bottom" pTooltip="This feature is coming soon!">Sign
                     in</button>
-
+            </div>
+            <div class="header__logo animation-icons_0-5" [routerLink]="['/home']">
+                <img src="assets/icons/logo.svg" alt="Logo">
+                <h3>MoviePulse</h3>
             </div>
         </div>
     </div>

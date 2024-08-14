@@ -3,24 +3,23 @@ import { RouterModule, Routes } from '@angular/router';
 import { MovieListComponent } from './components/movie-list/movie-list.component';
 import { MovieCardComponent } from './components/movie-card/movie-card.component';
 import { MovieGuard } from './guards/movie.guard';
-import { NowPlayingComponent } from './components/now-playing/now-playing.component';
-import { PopularComponent } from './components/popular/popular.component';
-import { TopRateComponent } from './components/top-rate/top-rate.component';
-import { UpcomingComponent } from './components/upcoming/upcoming.component';
+import { NowPlayingComponent } from './pages/now-playing/now-playing.component';
+import { PopularComponent } from './pages/popular/popular.component';
+import { TopRateComponent } from './pages/top-rate/top-rate.component';
+import { UpcomingComponent } from './pages/upcoming/upcoming.component';
+import { HomeComponent } from './components/home/home.component';
 
 const routes: Routes = [
-  { path: '', canActivate: [MovieGuard], component: MovieListComponent },
-  { path: 'movie-list', canActivate: [MovieGuard], component: MovieListComponent },
-  { path: 'now-playing', canActivate: [MovieGuard], component: NowPlayingComponent },
-  { path: 'popular', canActivate: [MovieGuard], component: PopularComponent },
-  { path: 'top-rate', canActivate: [MovieGuard], component: TopRateComponent },
-  { path: 'upcoming', canActivate: [MovieGuard], component: UpcomingComponent },
-  // { path: 'movie/:id', canActivate: [MovieGuard], component: MovieListViewComponent, resolve: {data: MovieResolver} },
-
+  { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'home', component: HomeComponent },
+  { path: 'movie-list/:category', component: MovieListComponent },
+  { path: 'now-playing', component: NowPlayingComponent, canActivate: [MovieGuard] },
+  { path: 'all-movies', component: MovieListComponent }, 
+  { path: 'popular', component: PopularComponent, canActivate: [MovieGuard] },
+  { path: 'top-rate', component: TopRateComponent, canActivate: [MovieGuard] },
+  { path: 'upcoming', component: UpcomingComponent, canActivate: [MovieGuard] },
 ];
-// const routes: Routes = [
-//   {path: "login", component: LoginComponent},
-//   {path: "", component: DashboardComponent, canActivate: [AuthGuard] },
+
 
 
 // ];
