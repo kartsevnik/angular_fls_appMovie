@@ -1,48 +1,38 @@
-// MovieStateService:
-// отвечает за управление состоянием favoriteMovies и toWatchMovies,
-// взаимодействует с DataService для выполнения операций и обновления локальных данных
 import { Injectable } from '@angular/core';
-import { movie } from '../models/movie';
 import { DataService } from './data.service';
+import { movieDB } from '../models/api-movie-db';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MovieStateService {
 
-  // Локальные массивы для хранения состояния избранных фильмов и фильмов для просмотра
-  private favoriteMovies: movie[] = this.dataService.getFavoriteMovies();
-  private toWatchMovies: movie[] = this.dataService.getToWatchMovies();
+  private favoriteMovies: movieDB[] = this.dataService.getFavoriteMovies();
+  private toWatchMovies: movieDB[] = this.dataService.getToWatchMovies();
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService) {}
 
-  // Получаем локальный список избранных фильмов
-  getFavoriteMovies(): movie[] {
+  getFavoriteMovies(): movieDB[] {
     return this.favoriteMovies;
   }
 
-  // Получаем локальный список фильмов для просмотра
-  getToWatchMovies(): movie[] {
+  getToWatchMovies(): movieDB[] {
     return this.toWatchMovies;
   }
 
-  // Добавляем фильм в избранное и обновляем локальный список
-  addMovieToFavorites(movie: movie) {
+  addMovieToFavorites(movie: movieDB) {
     this.dataService.addMovieToFavorites(movie);
   }
 
-  // Удаляем фильм из избранного и обновляем локальный список
-  removeMovieFromFavorites(movie: movie) {
+  removeMovieFromFavorites(movie: movieDB) {
     this.dataService.removeMovieFromFavorites(movie);
   }
 
-  // Добавляем фильм в список для просмотра и обновляем локальный список
-  addMovieToWatchlist(movie: movie) {
+  addMovieToWatchlist(movie: movieDB) {
     this.dataService.addMovieToWatchlist(movie);
   }
 
-  // Удаляем фильм из списка для просмотра и обновляем локальный список
-  removeMovieFromWatchlist(movie: movie) {
+  removeMovieFromWatchlist(movie: movieDB) {
     this.dataService.removeMovieFromWatchlist(movie);
   }
 }

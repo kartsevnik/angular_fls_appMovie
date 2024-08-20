@@ -1,5 +1,6 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
-import { movie } from '../../models/movie';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+// import { movie } from '../../models/movie';
+import { movieDB } from '../../models/api-movie-db';
 import { TrasformTimeDuration } from '../../pipes/trasformTimeDuration.pipe';
 import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
@@ -11,20 +12,42 @@ import { DataService } from '../../services/data.service';
   templateUrl: './movie-card.component.html',
   styleUrl: './movie-card.component.scss'
 })
-export class MovieCardComponent {
+export class MovieCardComponent implements OnInit, OnChanges {
 
-  @Input() movie: movie | undefined;
-  @Output() addWatchList = new EventEmitter<{ movie: movie, action: 'add' | 'remove' }>();
-  @Output() addFavoritesList = new EventEmitter<{ movie: movie, action: 'add' | 'remove' }>();
+  @Input() movie: movieDB | undefined;
+  @Output() addWatchList = new EventEmitter<{ movie: movieDB, action: 'add' | 'remove' }>();
+  @Output() addFavoritesList = new EventEmitter<{ movie: movieDB, action: 'add' | 'remove' }>();
 
   visible: boolean = false;
-  selectedMovie: Partial<movie> | null = null;
+  selectedMovie: Partial<movieDB> | null = null;
 
-  constructor(private dataService: DataService) { }
+  imageUrlPoster: string = '';
+  imageUrlBackdrop: string = '';
+
+  constructor(private dataService: DataService) {
+  }
+
+  ngOnInit() {
+    this.setImageUrl();
+  }
+
+  ngOnChanges(changes: SimpleChanges) {
+    if (changes['movie'] && this.movie) {
+      this.setImageUrl();
+    }
+  }
+
+  setImageUrl() {
+    if (this.movie) {
+      this.imageUrlPoster = `https://image.tmdb.org/t/p/w500${this.movie.poster_path}`;
+      this.imageUrlBackdrop = `https://image.tmdb.org/t/p/w500${this.movie.backdrop_path}`;
+    }
+  }
+
 
   showDialog() {
     if (this.movie) {
-      this.selectedMovie = this.dataService.getMovieById(this.movie.id)!;
+      this.selectedMovie = this.movie;
       this.visible = true;
     }
 

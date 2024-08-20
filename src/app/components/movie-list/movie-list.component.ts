@@ -1,7 +1,7 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
-import { movie } from '../../models/movie';
+import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { DataHandlerService } from '../../services/data-handler.service';
 import { ActivatedRoute } from '@angular/router';
+import { movieDB } from '../../models/api-movie-db';
 
 @Component({
   selector: 'app-movie-list',
@@ -9,8 +9,14 @@ import { ActivatedRoute } from '@angular/router';
   styleUrl: './movie-list.component.scss'
 })
 export class MovieListComponent implements OnChanges, OnInit {
+  @Input() movies: movieDB[] = []
+  @Input() loadNextPage!: () => void; // Принимаем метод загрузки следующей страницы
+  @ViewChild('anchor') anchor!: ElementRef; // Якорь для отслеживания конца списка
+
+  private observer!: IntersectionObserver;
   selectedCategory: string = '';
-  selectedMovies: movie[] = [];
+  selectedMovies: movieDB[] = [];
+  isLoading = false;  // Флаг для предотвращения множественных запросов одновременно
 
   constructor(private dataHandlerService: DataHandlerService, private route: ActivatedRoute) { }
 
@@ -19,7 +25,7 @@ export class MovieListComponent implements OnChanges, OnInit {
     this.route.params.subscribe(params => {
       // Извлекаем значение параметра 'category' из URL
       const category = params['category'];
-  
+
       // Обновляем категорию в сервисе 
       this.dataHandlerService.changeCategory(category);
       // Обновляем категорию в локальном свойстве selectedCategory
@@ -29,7 +35,7 @@ export class MovieListComponent implements OnChanges, OnInit {
       this.updateMovies();
     });
   }
-  
+
 
   // при изменении значений в selectedCategory вызывается метод сервиса обновляющий данные
   ngOnChanges(changes: SimpleChanges): void {
@@ -38,24 +44,44 @@ export class MovieListComponent implements OnChanges, OnInit {
     }
   }
 
-    // Метод для обновления списка фильмов
-    private updateMovies(): void {
-      this.selectedMovies = this.dataHandlerService.selectedMovies;
-    }
+  ngAfterViewInit(): void {
+    this.setupObserver();
+  }
+
+  // Метод для обновления списка фильмов
+  private updateMovies(): void {
+    this.selectedMovies = this.dataHandlerService.selectedMovies;
+  }
 
 
   // метод который вызывает метод сервиса при нажатии на кнопку Favorite и вызывает необходимое действие
-  updateFavoriteMovies(movieAction: { movie: movie, action: 'add' | 'remove' }) {
+  updateFavoriteMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
+    console.log(movieAction);
     this.dataHandlerService.updateFavoriteMovies(movieAction);
   }
 
   // метод который вызывает метод сервиса при нажатии на кнопку To Watch и вызывает необходимое действие
-  updateWatchMovies(movieAction: { movie: movie, action: 'add' | 'remove' }) {
+  updateWatchMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
+    console.log(movieAction);
+
     this.dataHandlerService.updateWatchMovies(movieAction);
   }
 
-  trackById(index: number, item: movie) {
+  trackById(index: number, item: movieDB) {
     return item.id;
   }
 
+  private setupObserver() {
+    this.observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting && !this.isLoading) {
+          this.isLoading = true;
+          this.loadNextPage();
+          this.isLoading = false;
+        }
+      });
+    });
+
+    this.observer.observe(this.anchor.nativeElement);
+  }
 }

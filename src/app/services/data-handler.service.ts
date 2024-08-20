@@ -1,49 +1,37 @@
-// DataHandlerService:
-// управляет отображением фильмов в зависимости от категории,
-// а также вызовами методов в MovieStateService для добавления / удаления фильмов.
-
 import { Injectable } from '@angular/core';
-import { movie } from '../models/movie';
 import { DataService } from './data.service';
-import { Category } from '../models/category';
 import { MovieStateService } from './movie-state.service';
 import { Router } from '@angular/router';
+import { movieDB } from '../models/api-movie-db';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataHandlerService {
 
-  selectedCategory = '';  // Выбранная категория фильмов
-  movies: movie[] = [];  // Все фильмы
-  selectedMovies: movie[] = [];  // Фильмы, отображаемые на текущей странице
-  selectedMoviesOriginal: movie[] = [];  // Оригинальный список фильмов для сброса фильтров
+  selectedCategory = '';
+  movies: movieDB[] = [];
+  selectedMovies: movieDB[] = [];
+  selectedMoviesOriginal: movieDB[] = [];
 
-  shouldClearSearchInput = true; // Флаг для контроля очистки поля ввода
+  shouldClearSearchInput = true;
 
   constructor(private dataService: DataService, private movieStateService: MovieStateService, private router: Router) {
     this.loadData();
   }
 
-  // Загружаем данные при инициализации сервиса
   loadData() {
     this.movies = this.dataService.getMovies();
     this.updateSelectedMovies(this.selectedCategory);
   }
 
-  // Меняем категорию фильмов и обновляем отображаемые фильмы
   changeCategory(nameOfCategory: string) {
     this.selectedCategory = nameOfCategory;
     this.updateSelectedMovies(nameOfCategory);
   }
 
-  // Обновляем список фильмов в зависимости от выбранной категории
   updateSelectedMovies(selectedCategory: string) {
     switch (selectedCategory) {
-      // case 'All Movies':
-      //   this.selectedMovies = [...this.movies];
-      //   this.selectedMoviesOriginal = this.movies;
-      //   break;
       case 'favorites':
         this.selectedMovies = this.movieStateService.getFavoriteMovies();
         this.selectedMoviesOriginal = this.movieStateService.getFavoriteMovies();
@@ -59,8 +47,7 @@ export class DataHandlerService {
     }
   }
 
-  // Добавляем или удаляем фильм из избранного
-  updateFavoriteMovies(event: { movie: movie, action: 'add' | 'remove' }) {
+  updateFavoriteMovies(event: { movie: movieDB, action: 'add' | 'remove' }) {
     if (event.action === 'add') {
       this.movieStateService.addMovieToFavorites(event.movie);
     } else {
@@ -68,8 +55,7 @@ export class DataHandlerService {
     }
   }
 
-  // Добавляем или удаляем фильм из списка для просмотра
-  updateWatchMovies(event: { movie: movie, action: 'add' | 'remove' }) {
+  updateWatchMovies(event: { movie: movieDB, action: 'add' | 'remove' }) {
     if (event.action === 'add') {
       this.movieStateService.addMovieToWatchlist(event.movie);
     } else {
@@ -77,13 +63,11 @@ export class DataHandlerService {
     }
   }
 
-  // Фильтруем фильмы по поисковому запросу
   fillListByFind(searchText: string): void {
-    const currentUrl = this.router.url; // Получаем текущий URL
+    const currentUrl = this.router.url;
 
     if (currentUrl === '/home') {
-      this.shouldClearSearchInput = false;  // Отключаем очистку поля ввода
-      // Если мы находимся на странице Home, перенаправляем на страницу поиска
+      this.shouldClearSearchInput = false;
       this.router.navigate(['/all-movies'], { queryParams: { query: searchText } });
       setTimeout(() => {
         if (searchText.trim() === '') {
@@ -94,10 +78,8 @@ export class DataHandlerService {
           );
         }
       }, 0);
-
     } else {
-      this.shouldClearSearchInput = true; 
-      // Если мы находимся на любой другой странице (например favorites), фильтруем текущие фильмы
+      this.shouldClearSearchInput = true;
       if (searchText.trim() === '') {
         this.selectedMovies = this.selectedMoviesOriginal;
       } else {

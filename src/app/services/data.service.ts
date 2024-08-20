@@ -1,12 +1,13 @@
+import { HttpClient } from '@angular/common/http';
 // DataService 
 // является источником данных, и любые операции с данными(добавление, удаление) выполняются через этот сервис.
 
 
 import { Injectable } from '@angular/core';
-import { movie } from '../models/movie';
 import { Category } from '../models/category';
+import { Observable } from 'rxjs';
+import { movieDB, moviesResponse } from '../models/api-movie-db';
 import { categoryList } from '../mock-data/mock-data';
-import { movies } from '../mock-data/mock-data';
 import { favoriteMovies } from '../mock-data/mock-data';
 import { toWatchMovies } from '../mock-data/mock-data';
 
@@ -15,7 +16,12 @@ import { toWatchMovies } from '../mock-data/mock-data';
 })
 export class DataService {
 
-  constructor() {}
+  // API connection settings 
+  apiBaseURL = 'https://api.themoviedb.org/3/movie'
+  apiKey = '?api_key=fd8429ffaad200356d0b20c56812f7e5'
+  apiToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZDg0MjlmZmFhZDIwMDM1NmQwYjIwYzU2ODEyZjdlNSIsIm5iZiI6MTcyNDE2MDU0MC44MjYsInN1YiI6IjY2YzM1NjZhMTVlMzIzZjQ4OGEyOGNiYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EocVzPT_kLDOwV-lNfCGHUhsmJNTt74zlJ_tICcAqqA'
+
+  constructor(private HttpClient: HttpClient) { }
 
   // Получаем список всех категорий
   getCategoryList() {
@@ -23,24 +29,21 @@ export class DataService {
   }
 
   // Получаем список всех фильмов
-  getMovies() {
-    return movies;
+  getMovies(): movieDB[] {
+    return [];
   }
 
   // =================> Favorites
 
-  // Получаем список избранных фильмов
-  getFavoriteMovies() {
+  getFavoriteMovies(): movieDB[] {
     return favoriteMovies;
   }
 
-  // Добавляем фильм в список избранных
-  addMovieToFavorites(movie: movie) {
+  addMovieToFavorites(movie: movieDB) {
     favoriteMovies.push(movie);
   }
 
-  // Удаляем фильм из списка избранных
-  removeMovieFromFavorites(movie: movie) {
+  removeMovieFromFavorites(movie: movieDB) {
     const index = favoriteMovies.findIndex(m => m.id === movie.id);
     if (index !== -1) {
       favoriteMovies.splice(index, 1);
@@ -49,18 +52,15 @@ export class DataService {
 
   // =================> ToWatch
 
-  // Получаем список фильмов для просмотра
-  getToWatchMovies() {
+  getToWatchMovies(): movieDB[] {
     return toWatchMovies;
   }
 
-  // Добавляем фильм в список для просмотра
-  addMovieToWatchlist(movie: movie) {
+  addMovieToWatchlist(movie: movieDB) {
     toWatchMovies.push(movie);
   }
 
-  // Удаляем фильм из списка для просмотра
-  removeMovieFromWatchlist(movie: movie) {
+  removeMovieFromWatchlist(movie: movieDB) {
     const index = toWatchMovies.findIndex(m => m.id === movie.id);
     if (index !== -1) {
       toWatchMovies.splice(index, 1);
@@ -69,9 +69,14 @@ export class DataService {
 
   // =================> detail view
 
-  // Получаем фильм по его ID
-  getMovieById(id: number): movie | undefined {
+  getMovieById(id: number): movieDB | undefined {
     return this.getMovies().find(movie => movie.id === id);
+  }
+
+  // =================> now-playing
+
+  getMoviesNowPlaying(page: number = 1): Observable<moviesResponse> {
+    return this.HttpClient.get<moviesResponse>(`${this.apiBaseURL}/now_playing${this.apiKey}&page=${page}`);
   }
 }
 

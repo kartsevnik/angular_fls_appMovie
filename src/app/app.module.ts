@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { ScrollingModule } from '@angular/cdk/scrolling';
+import { HttpClientModule } from '@angular/common/http';
 
 //primeng
 import { TooltipModule } from 'primeng/tooltip';
@@ -33,6 +34,7 @@ import { NowPlayingComponent } from './pages/now-playing/now-playing.component';
 import { PopularComponent } from './pages/popular/popular.component';
 import { TopRateComponent } from './pages/top-rate/top-rate.component';
 import { UpcomingComponent } from './pages/upcoming/upcoming.component';
+import { provideHttpClient } from '@angular/common/http';
 
 
 @NgModule({
@@ -62,7 +64,8 @@ import { UpcomingComponent } from './pages/upcoming/upcoming.component';
     InputTextModule,
     SidebarModule,
     CommonModule,
-    ScrollingModule
+    ScrollingModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent]

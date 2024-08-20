@@ -1,15 +1,15 @@
 import { Component } from '@angular/core';
 import { MovieListComponent } from '../movie-list/movie-list.component';
-import { movie } from '../../models/movie';
 import { DataHandlerService } from '../../services/data-handler.service';
 import { ActivatedRoute } from '@angular/router';
+import { movieDB } from '../../models/api-movie-db';
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  movieForHomeBlock: movie | null = null;
+  movieForHomeBlock: movieDB | null = null;
 
   constructor(private dataHandlerService: DataHandlerService, private route: ActivatedRoute) { }
 
