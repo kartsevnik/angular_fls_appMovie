@@ -10,12 +10,16 @@
     }
 
     // .wrapper__main-block
-    &__main-block {
-    }
+    &__main-block {}
 
     // .wrapper__header
     &__header {}
 
     // .wrapper__main-content
     &__main-content {}
+}
+
+.wrapper__main-block {
+    padding-top: 50px;
+    /* Высота заголовка */
 }

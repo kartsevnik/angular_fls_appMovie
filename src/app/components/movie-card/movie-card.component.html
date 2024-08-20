@@ -41,7 +41,7 @@
                 <div class="movie-detail-card__description">
                     <h2 class="movie-detail-card__title">{{ selectedMovie.title }}</h2>
                     <p><strong>Year:</strong> {{ selectedMovie.year }}</p>
-                    <p><strong>Duration:</strong> {{ selectedMovie.duration ?? 0 | trasformTimeDuration }}</p>
+                    <p><strong>Duration:</strong> {{ selectedMovie.duration | trasformTimeDuration }}</p>
                     <p><strong>Rating:</strong> {{ selectedMovie.rating }}</p>
                     <p><strong>Description:</strong> {{ selectedMovie.description }}</p>
                     <p><strong>Quality:</strong> {{ selectedMovie.quality }}</p>

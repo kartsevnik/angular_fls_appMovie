@@ -10,6 +10,8 @@ import { ButtonModule } from 'primeng/button';
 export class SidebarComponent {
   sidebarVisible: boolean = false;
 
+  constructor() {}
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
     const clickedElement = event.target as HTMLElement;
@@ -18,5 +20,9 @@ export class SidebarComponent {
     if (!isClickInside) {
       this.sidebarVisible = false;
     }
+  }
+
+  setSidebarVisible() {
+    this.sidebarVisible = true
   }
 }

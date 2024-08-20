@@ -10,7 +10,7 @@ li {
     transition: transform 0.3s ease;
 }
 
-.animation-icons_0-5:hover  {
+.animation-icons_0-5:hover {
     transform: scale(1.05);
     transition: transform 0.3s ease;
 }
@@ -218,4 +218,22 @@ li {
     display: flex;
     gap: 30px;
     align-items: center;
+}
+
+// атрибуты для появления и скрытия header
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 1000;
+    transition: transform 0.3s ease-in-out;
+    background-image: var(--backgroundColor);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 10px 20px 10px 15px;
+}
+
+.header.hidden {
+    transform: translateY(-100%);
 }

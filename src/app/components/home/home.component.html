@@ -1,4 +1,4 @@
-<ng-container>
+
     <div class="home-block">
         <div class="home-block__container">
             <div class="home-block__titles">
@@ -10,7 +10,7 @@
                         <div class="home-block__item-quality">{{ movieForHomeBlock?.quality }}</div>
                         <div class="home-block__item-genres">{{ movieForHomeBlock?.genres }}</div>
                         <div class="home-block__item-icons">
-                            <div class="home-block__item-duration">{{ movieForHomeBlock?.duration ?? 0 |
+                            <div class="home-block__item-duration">{{ movieForHomeBlock?.duration  |
                                 trasformTimeDuration }}</div>
                             <div class="home-block__item-rating">{{ movieForHomeBlock?.rating }}</div>
                         </div>
@@ -24,6 +24,5 @@
             <div class="home-block__image"><img [src]="movieForHomeBlock?.imgLargePath" alt=""></div>
         </div>
     </div>
-</ng-container>
 
 <app-movie-list></app-movie-list>

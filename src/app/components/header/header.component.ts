@@ -1,6 +1,5 @@
-import { Component, OnInit, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, HostListener, ViewChild, ElementRef } from '@angular/core';
 import { DataHandlerService } from '../../services/data-handler.service';
-import { DataService } from '../../services/data.service';
 import { Category } from '../../models/category';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
@@ -10,12 +9,14 @@ import { filter } from 'rxjs/operators';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent implements OnInit {
-
-  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
+export class HeaderComponent {
+  lastScrollTop = 0;
+  // Это логическая переменная, которая используется для управления классом CSS в шаблоне компонента. Когда она true, к заголовку добавляется класс 
+  isHeaderHidden = false;
 
   // переменная для отображения панели поиска
   isSearchVisible = false;
+  @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   // начальная переменная со списком категорий
   categoryList: Category[] = []
@@ -24,7 +25,7 @@ export class HeaderComponent implements OnInit {
   // переменная для ngModel которая использует FormsModule для фильтрации
   filterText = ''
 
-  constructor(public dataHandlerService: DataHandlerService, private dataService: DataService, private router: Router) {
+  constructor(public dataHandlerService: DataHandlerService, private router: Router) {
     // Отслеживание изменения маршрута
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -33,17 +34,6 @@ export class HeaderComponent implements OnInit {
           this.clearSearchInput();
         }
       });
-  }
-
-  // при создании компонента загрузка списка категорий и выбор категории по умолчанию для загрузки
-  ngOnInit(): void {
-    // Add document click listener 
-    // document.addEventListener('click', this.onDocumentClick.bind(this));
-  }
-
-  ngOnDestroy(): void {
-    // Remove the document click listener to avoid memory leaks
-    // document.removeEventListener('click', this.onDocumentClick.bind(this));
   }
 
   //изменение отображения панели поиска
@@ -72,5 +62,27 @@ export class HeaderComponent implements OnInit {
     if (this.searchInput && this.searchInput.nativeElement) {
       this.searchInput.nativeElement.value = '';
     }
+  }
+
+  @HostListener('window:scroll', [])
+  onWindowScroll() {
+    //Возвращает количество пикселей, на которое прокручена страница по вертикали.
+    //Это свойство поддерживается большинством современных браузеров.
+    
+    // document.documentElement.scrollTop: Возвращает текущее значение вертикальной прокрутки. 
+    // Используется в качестве резервного варианта для более старых браузеров.
+    const currentScroll = window.scrollY  || document.documentElement.scrollTop;
+
+    if (currentScroll > this.lastScrollTop) {
+      // Скроллим вниз, прячем заголовок
+      this.isHeaderHidden = true;
+    } else {
+      // Скроллим вверх, показываем заголовок
+      this.isHeaderHidden = false;
+    }
+
+    // Если значение currentScroll меньше или равно 0 (например, если пользователь находится на самой верхней части страницы),
+    // lastScrollTop устанавливается в 0, чтобы избежать возможных отрицательных значений, которые могут вызывать некорректное поведение.
+    this.lastScrollTop = currentScroll <= 0 ? 0 : currentScroll; // Не допускаем отрицательных значений
   }
 }
