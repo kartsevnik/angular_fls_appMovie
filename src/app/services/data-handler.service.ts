@@ -19,6 +19,8 @@ export class DataHandlerService {
   selectedMovies: movie[] = [];  // Фильмы, отображаемые на текущей странице
   selectedMoviesOriginal: movie[] = [];  // Оригинальный список фильмов для сброса фильтров
 
+  shouldClearSearchInput = true; // Флаг для контроля очистки поля ввода
+
   constructor(private dataService: DataService, private movieStateService: MovieStateService, private router: Router) {
     this.loadData();
   }
@@ -42,11 +44,11 @@ export class DataHandlerService {
       //   this.selectedMovies = [...this.movies];
       //   this.selectedMoviesOriginal = this.movies;
       //   break;
-      case 'Favorites':
+      case 'favorites':
         this.selectedMovies = this.movieStateService.getFavoriteMovies();
         this.selectedMoviesOriginal = this.movieStateService.getFavoriteMovies();
         break;
-      case 'To Watch':
+      case 'watch-list':
         this.selectedMovies = this.movieStateService.getToWatchMovies();
         this.selectedMoviesOriginal = this.movieStateService.getToWatchMovies();
         break;
@@ -80,9 +82,21 @@ export class DataHandlerService {
     const currentUrl = this.router.url; // Получаем текущий URL
 
     if (currentUrl === '/home') {
+      this.shouldClearSearchInput = false;  // Отключаем очистку поля ввода
       // Если мы находимся на странице Home, перенаправляем на страницу поиска
       this.router.navigate(['/all-movies'], { queryParams: { query: searchText } });
+      setTimeout(() => {
+        if (searchText.trim() === '') {
+          this.selectedMovies = this.selectedMoviesOriginal;
+        } else {
+          this.selectedMovies = this.selectedMoviesOriginal.filter(movie =>
+            movie.title.toLowerCase().includes(searchText.toLowerCase())
+          );
+        }
+      }, 0);
+
     } else {
+      this.shouldClearSearchInput = true; 
       // Если мы находимся на любой другой странице (например favorites), фильтруем текущие фильмы
       if (searchText.trim() === '') {
         this.selectedMovies = this.selectedMoviesOriginal;

@@ -7,8 +7,8 @@
 
         <div class="header-icon-block__search search">
             <div>
-                <input (keyup)="search(filterText)" [(ngModel)]="filterText" placeholder="Search..." type="text"
-                    class="search-input" name="search" id="search"
+                <input #searchInput (input)="search(filterText)" [(ngModel)]="filterText" placeholder="Search..."
+                    type="text" class="search-input" name="search" id="search"
                     [ngClass]="{'fadeinleft': isSearchVisible, 'fadeoutleft': !isSearchVisible}"
                     [style.display]="isSearchVisible ? 'block' : 'none'">
             </div>
@@ -19,10 +19,10 @@
             </div>
         </div>
         <div class="header__icon-block header-icon-block">
-            <button class="header-icon-block__icon animation-icons" [routerLink]="['/movie-list/To Watch']">
+            <button class="header-icon-block__icon animation-icons" [routerLink]="['/movie-list/watch-list']">
                 <img src="/assets/icons/play.png" alt="">
             </button>
-            <button class="header-icon-block__icon animation-icons" [routerLink]="['/movie-list/Favorites']">
+            <button class="header-icon-block__icon animation-icons" [routerLink]="['/movie-list/favorites']">
                 <img src="/assets/icons/favorites.png" alt="">
             </button>
             <div class="header-icon-block__login">

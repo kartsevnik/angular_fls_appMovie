@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, HostListener } from '@angular/core';
 import { SidebarModule } from 'primeng/sidebar';
 import { ButtonModule } from 'primeng/button';
 
@@ -9,4 +9,14 @@ import { ButtonModule } from 'primeng/button';
 })
 export class SidebarComponent {
   sidebarVisible: boolean = false;
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const clickedElement = event.target as HTMLElement;
+    const isClickInside = clickedElement.closest('.sidebar-block') !== null;
+
+    if (!isClickInside) {
+      this.sidebarVisible = false;
+    }
+  }
 }
