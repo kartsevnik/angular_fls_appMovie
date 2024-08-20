@@ -20,6 +20,7 @@ export class MovieCardComponent implements OnInit, OnChanges {
 
   visible: boolean = false;
   selectedMovie: Partial<movieDB> | null = null;
+  scrollPosition = 0; // Для сохранения позиции скролла
 
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
@@ -47,10 +48,23 @@ export class MovieCardComponent implements OnInit, OnChanges {
 
   showDialog() {
     if (this.movie) {
+      this.saveScrollPosition(); // Сохраняем позицию скролла перед открытием
       this.selectedMovie = this.movie;
       this.visible = true;
     }
+  }
 
+  hideDialog() {
+    this.visible = false;
+    this.restoreScrollPosition(); // Восстанавливаем позицию скролла после закрытия
+  }
+
+  saveScrollPosition() {
+    this.scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+  }
+
+  restoreScrollPosition() {
+    window.scrollTo({ top: this.scrollPosition, behavior: 'auto' });
   }
 
   toggleWatchList() {
