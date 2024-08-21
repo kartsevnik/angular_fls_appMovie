@@ -18,6 +18,7 @@ import { DialogModule } from 'primeng/dialog';
 import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SidebarModule } from 'primeng/sidebar';
+import { CarouselModule } from 'primeng/carousel';
 
 //pipes
 import { TrasformTimeDuration } from './pipes/trasformTimeDuration.pipe';
@@ -34,8 +35,9 @@ import { NowPlayingComponent } from './pages/now-playing/now-playing.component';
 import { PopularComponent } from './pages/popular/popular.component';
 import { TopRateComponent } from './pages/top-rate/top-rate.component';
 import { UpcomingComponent } from './pages/upcoming/upcoming.component';
-import { provideHttpClient } from '@angular/common/http';
+
 import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.component';
+
 
 
 @NgModule({
@@ -67,7 +69,8 @@ import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.componen
     SidebarModule,
     CommonModule,
     ScrollingModule,
-    HttpClientModule
+    HttpClientModule,
+    CarouselModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -73,7 +73,7 @@
 
     // .home-block__sub-title
     &__sub-title {
-        color: var(--maincolor);
+        // color: var(--maincolor);
         font-size: 26px;
         letter-spacing: 3px;
     }
@@ -98,10 +98,10 @@
 .movie-list-title {
     font-size: 40px;
     letter-spacing: 1px;
-    padding: 20px 0px;
+    padding: 0px 0px 20px 0px;
     width: 100%;
     text-align: center;
-    transform: translateX(-6px);
+    transform: translate(-6px, -20px);
 }
 
 .btn {

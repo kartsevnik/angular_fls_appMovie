@@ -4,6 +4,8 @@ import { DataHandlerService } from '../../services/data-handler.service';
 import { ActivatedRoute } from '@angular/router';
 import { movieDB } from '../../models/api-movie-db';
 import { DataService } from '../../services/data.service';
+import { CarouselModule } from 'primeng/carousel';
+
 @Component({
   selector: 'app-home',
   templateUrl: './home.component.html',
@@ -17,15 +19,18 @@ export class HomeComponent {
   isLoading = false;  // Флаг для предотвращения множественных запросов одновременно
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
+
+  randomMovies: movieDB[] = []
+  responsiveOptions: any[] | undefined;
+
   constructor(private dataService: DataService, private dataHandlerService: DataHandlerService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
       const category = params['category'];
-      // this.dataHandlerService.changeCategory(category);
       this.dataHandlerService.changeCategory('Home');
-
     });
+
     this.loadMovies();
   }
 
@@ -39,9 +44,9 @@ export class HomeComponent {
 
     this.dataService.getMoviesTrending(this.currentPage).subscribe(movies => {
       this.movies = [...this.movies, ...movies.results];
-      const randomMovie = this.getRandomMoviesForSlider(1)[0];
-      this.setImageUrl(randomMovie)
-      this.movieForHomeBlock = randomMovie
+      this.randomMovies = this.getRandomMoviesForSlider(3);
+      // this.setImageUrl(randomMovie)
+      // this.movieForHomeBlock = randomMovie
       console.log(this.movies);
       this.isLoading = false;
 
@@ -75,10 +80,9 @@ export class HomeComponent {
     this.loadMovies();
   }
 
-  setImageUrl(movie: movieDB) {
-
-    this.imageUrlPoster = `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
-    this.imageUrlBackdrop = `https://image.tmdb.org/t/p/w500${movie.backdrop_path}`;
+  getMovieImageUrl(movie: movieDB): string {
+    return `https://image.tmdb.org/t/p/w500${movie.poster_path}`;
   }
+
 
 }
