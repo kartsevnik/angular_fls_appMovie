@@ -31,12 +31,12 @@
 </div>
 
 <div class="movie-detail-card">
-    <p-dialog header="Movie Details" [modal]="true" [(visible)]="visible" [style]="{ width: '90rem', height: '100%'}"
-        (onHide)="hideDialog()">
+    <p-dialog class="detail-view" header="Movie Details" [modal]="true" [(visible)]="visible" (onHide)="hideDialog()"
+        [style]="{ width: '90rem', height: '100vh'}" (onHide)="hideDialog()">
         <div class="movie-detail-card__flex-column">
             <div *ngIf="selectedMovie" class="movie-detail-card__container">
                 <div class="movie-detail-card__image">
-                    <img [src]="imageUrlBackdrop" [alt]="selectedMovie.title">
+                    <img [src]="imageUrlPoster" [alt]="selectedMovie.title">
                 </div>
                 <div class="movie-detail-card__description">
                     <h2 class="movie-detail-card__title">{{ selectedMovie.title }}</h2>
@@ -51,5 +51,4 @@
             </div>
         </div>
     </p-dialog>
-
 </div>

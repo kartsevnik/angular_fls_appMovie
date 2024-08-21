@@ -17,7 +17,7 @@
         img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: contain;
             border-radius: 10px 10px 0 0;
         }
     }
@@ -68,7 +68,7 @@
     &__item-icons {
         display: flex;
         align-items: center;
-        gap: 25px;
+        gap: 15px;
     }
 
     // .movie-card__item-quality
@@ -209,33 +209,43 @@
 .justify-content-center {}
 
 .movie-detail-card {
-
-    // .movie-detail-card__container
     &__container {
-        // padding: 20px;
-        display: flex;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        height: 100%;
         gap: 25px;
     }
 
-    // .movie-detail-card__title
-    &__title {}
-
-    // .movie-detail-card__image
     &__image {
-        // flex: 0 0 10%;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        /* Убирает любые лишние части изображения */
+        z-index: 1;
 
         img {
-            width: 300px;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            /* Заполняет контейнер, сохраняя пропорции */
+            object-position: center;
+            opacity: 0.5;
         }
-
     }
 
-    // .movie-detail-card__description
     &__description {
-        // flex: 0 0 90%;
-        // width: 100%;
+        padding: 20px;
+        border-radius: 10px;
+        overflow-y: auto;
+        /* Позволяет прокручивать текст в случае необходимости */
+    }
+
+    &__button {
+        padding: 25px;
+        text-align: center;
     }
 }
+
 
 .btn {
 
@@ -257,9 +267,15 @@
     margin-bottom: 25px;
 }
 
+// detail-view
+
+
+
 .movie-detail-card__flex-column {
     display: flex;
     flex-direction: column;
+    gap: 20px;
+    height: 80vh;
 }
 
 .movie-detail-card__button {

@@ -23,3 +23,43 @@
     padding-top: 75px;
     /* Высота заголовка */
 }
+
+.wrapper {
+    height: 95vh;
+    /* Занимает всю высоту окна */
+    overflow-y: auto;
+    /* Добавляем вертикальную прокрутку, если контент превышает высоту */
+
+    /* Стилизация кастомного скроллбара */
+    ::-webkit-scrollbar {
+        width: 12px;
+        /* Ширина скроллбара */
+    }
+
+    ::-webkit-scrollbar-track {
+        background: #f1f1f100;
+        /* Цвет трека скроллбара */
+        border-radius: 10px;
+        /* Радиус закругления трека */
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background: var(--maincolor);
+        /* Цвет ползунка скроллбара */
+        border-radius: 10px;
+        /* Радиус закругления ползунка */
+        border: 3px solid #f1f1f1;
+        /* Отступы внутри трека */
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background: var(--maincolor);
+        /* Цвет ползунка при наведении */
+    }
+
+    /* Дополнительная стилизация для других браузеров */
+    scrollbar-color: var(--maincolor) #f1f1f100;
+    /* Цвет ползунка и трека */
+    scrollbar-width: thin;
+    /* Ширина скроллбара в Firefox */
+}
