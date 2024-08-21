@@ -30,7 +30,7 @@ export class NowPlayingComponent implements OnInit {
     this.dataService.getMoviesNowPlaying(this.currentPage).subscribe(movies => {
       this.nowPlayingMovies = [...this.nowPlayingMovies, ...movies.results];
       this.isLoading = false;
-      console.log(this.nowPlayingMovies);
+      (this.nowPlayingMovies);
     }, () => {
       this.isLoading = false;
     });

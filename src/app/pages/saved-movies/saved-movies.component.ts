@@ -28,7 +28,7 @@ export class SavedMoviesComponent {
     // Получаем параметр из ActivatedRoute
     this.activatedRoute.url.subscribe(urlSegments => {
       const category = urlSegments[0]?.path;
-      console.log(category);
+      (category);
 
       if (category) {
         if (category === 'favorites') {

@@ -8,15 +8,14 @@
         </p-button>
 
         <div class="movie-card__text">
-            <div class="movie-card__titleAndYear">
-                <h5 class="movie-card__title">{{ movie.title }}</h5>
-                <span class="movie-card__year">{{ movie.release_date }}</span>
-            </div>
+            <div class="movie-card__title">{{ movie.title }}</div>
+            <!-- <div class="movie-card__titleAndYear">
+            </div> -->
             <div class="movie-card__items">
-                <div class="movie-card__item-quality">{{ movie.original_language }}</div>
+                <span class="movie-card__year">{{ movie.release_date }}</span>
                 <div class="movie-card__item-icons">
-                    <!-- <div class="movie-card__item-duration">{{ movie.duration | trasformTimeDuration }}</div> -->
                     <div class="movie-card__item-rating">{{ movie.vote_average }}</div>
+                    <div class="movie-card__item-quality">{{ movie.original_language }}</div>
                 </div>
             </div>
         </div>

@@ -29,7 +29,6 @@ export class DataHandlerService {
   }
 
   changeCategory(nameOfCategory: string) {
-    console.log(nameOfCategory);
     this.selectedCategorySubject.next(nameOfCategory); // Обновляем значение категории
     this.updateSelectedMovies(nameOfCategory);
   }

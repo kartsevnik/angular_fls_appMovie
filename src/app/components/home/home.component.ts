@@ -47,7 +47,7 @@ export class HomeComponent {
       this.randomMovies = this.getRandomMoviesForSlider(3);
       // this.setImageUrl(randomMovie)
       // this.movieForHomeBlock = randomMovie
-      console.log(this.movies);
+      (this.movies);
       this.isLoading = false;
 
     }, () => {
@@ -69,8 +69,6 @@ export class HomeComponent {
         moviesForSlider.push(randomMovie);
       }
     }
-
-    console.log(moviesForSlider);
 
     return moviesForSlider;
   }
