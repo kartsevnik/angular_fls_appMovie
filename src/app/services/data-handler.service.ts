@@ -3,13 +3,16 @@ import { DataService } from './data.service';
 import { MovieStateService } from './movie-state.service';
 import { Router } from '@angular/router';
 import { movieDB } from '../models/api-movie-db';
+import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataHandlerService {
 
-  selectedCategory = '';
+  private selectedCategorySubject = new BehaviorSubject<string>(''); // Создаём BehaviorSubject
+  selectedCategory$ = this.selectedCategorySubject.asObservable(); // Экспортируем как Observable
+
   movies: movieDB[] = [];
   selectedMovies: movieDB[] = [];
   selectedMoviesOriginal: movieDB[] = [];
@@ -22,11 +25,12 @@ export class DataHandlerService {
 
   loadData() {
     this.movies = this.dataService.getMovies();
-    this.updateSelectedMovies(this.selectedCategory);
+    this.updateSelectedMovies(this.selectedCategorySubject.value);
   }
 
   changeCategory(nameOfCategory: string) {
-    this.selectedCategory = nameOfCategory;
+    console.log(nameOfCategory);
+    this.selectedCategorySubject.next(nameOfCategory); // Обновляем значение категории
     this.updateSelectedMovies(nameOfCategory);
   }
 

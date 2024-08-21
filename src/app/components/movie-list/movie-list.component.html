@@ -1,5 +1,5 @@
 <div class="movie-list-cards">
-    <h3>{{ selectedCategory }}</h3>
+    <!-- <h3>{{ selectedCategory }}</h3> -->
     <div class="allFilms">
         <div *ngFor="let movie of movies; trackBy: trackById">
             <app-movie-card [movie]="movie" (addFavoritesList)="updateFavoriteMovies($event)"

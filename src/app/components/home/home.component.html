@@ -23,5 +23,5 @@
         <div class="home-block__image"><img [src]="movieForHomeBlock?.poster_path" alt=""></div>
     </div>
 </div>
-
-<app-movie-list></app-movie-list>
+<div class="movie-list-title">Movies <span class="main-color">trends</span></div>
+<app-movie-list [movies]="movies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>

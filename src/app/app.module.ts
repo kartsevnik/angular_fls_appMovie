@@ -35,6 +35,7 @@ import { PopularComponent } from './pages/popular/popular.component';
 import { TopRateComponent } from './pages/top-rate/top-rate.component';
 import { UpcomingComponent } from './pages/upcoming/upcoming.component';
 import { provideHttpClient } from '@angular/common/http';
+import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.component';
 
 
 @NgModule({
@@ -50,6 +51,7 @@ import { provideHttpClient } from '@angular/common/http';
     UpcomingComponent,
     HomeComponent,
     SidebarComponent,
+    SavedMoviesComponent,
   ],
   imports: [
     BrowserModule,

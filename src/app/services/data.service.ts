@@ -74,9 +74,30 @@ export class DataService {
   }
 
   // =================> now-playing
+  getMoviesTrending(page: number = 1): Observable<moviesResponse> {
+    const url = `https://api.themoviedb.org/3/trending/movie/day?language=en-US&page=${page}`;
+    const headers = {
+      accept: 'application/json',
+      Authorization: `Bearer ${this.apiToken}`,
+    };
+    return this.HttpClient.get<moviesResponse>(url, { headers });
+  }
+
 
   getMoviesNowPlaying(page: number = 1): Observable<moviesResponse> {
     return this.HttpClient.get<moviesResponse>(`${this.apiBaseURL}/now_playing${this.apiKey}&page=${page}`);
+  }
+
+  getMoviesPopular(page: number = 1): Observable<moviesResponse> {
+    return this.HttpClient.get<moviesResponse>(`${this.apiBaseURL}/popular${this.apiKey}&page=${page}`);
+  }
+
+  getMoviesTopRated(page: number = 1): Observable<moviesResponse> {
+    return this.HttpClient.get<moviesResponse>(`${this.apiBaseURL}/top_rated${this.apiKey}&page=${page}`);
+  }
+
+  getMoviesUpcoming(page: number = 1): Observable<moviesResponse> {
+    return this.HttpClient.get<moviesResponse>(`${this.apiBaseURL}/upcoming${this.apiKey}&page=${page}`);
   }
 }
 

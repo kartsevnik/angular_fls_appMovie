@@ -19,10 +19,12 @@
             </div>
         </div>
         <div class="header__icon-block header-icon-block">
-            <button class="header-icon-block__icon animation-icons" [routerLink]="['/movie-list/watch-list']">
+            <h4 class="header-icon-block__name-page">{{selectedCategory}}</h4>
+            <button class="header-icon-block__icon animation-icons" [routerLink]="'watch-list'">
                 <img src="/assets/icons/play.png" alt="">
             </button>
-            <button class="header-icon-block__icon animation-icons" [routerLink]="['/movie-list/favorites']">
+
+            <button class="header-icon-block__icon animation-icons" [routerLink]="'favorites'">
                 <img src="/assets/icons/favorites.png" alt="">
             </button>
             <div class="header-icon-block__login">

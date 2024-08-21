@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { movieDB } from '../../models/api-movie-db';
 import { DataService } from '../../services/data.service';
+import { DataHandlerService } from '../../services/data-handler.service';
 
 @Component({
   selector: 'app-now-playing',
@@ -13,10 +14,11 @@ export class NowPlayingComponent implements OnInit {
   currentPage = 1;
   isLoading = false;  // Флаг для предотвращения множественных запросов одновременно
 
-  constructor(private dataService: DataService) {
+  constructor(private dataService: DataService, private dataHandlerService: DataHandlerService) {
   }
 
   ngOnInit() {
+    this.dataHandlerService.changeCategory('Now Playing');
     this.loadMovies();
   }
 

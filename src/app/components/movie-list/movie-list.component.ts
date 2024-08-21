@@ -27,21 +27,25 @@ export class MovieListComponent implements OnChanges, OnInit {
       const category = params['category'];
 
       // Обновляем категорию в сервисе 
-      this.dataHandlerService.changeCategory(category);
-      // Обновляем категорию в локальном свойстве selectedCategory
-      this.selectedCategory = this.dataHandlerService.selectedCategory;
+      // this.dataHandlerService.changeCategory(category);
+      // Подписка на изменения категории из сервиса
+      this.dataHandlerService.selectedCategory$.subscribe(category => {
+        this.selectedCategory = category;
+      });
 
       // Обновляем список фильмов
       this.updateMovies();
     });
+
+    
   }
 
 
   // при изменении значений в selectedCategory вызывается метод сервиса обновляющий данные
   ngOnChanges(changes: SimpleChanges): void {
-    if (changes['selectedCategory']) {
-      this.dataHandlerService.updateSelectedMovies(this.selectedCategory);
-    }
+    // if (changes['selectedCategory']) {
+    //   this.dataHandlerService.updateSelectedMovies(this.selectedCategory);
+    // }
   }
 
   ngAfterViewInit(): void {
@@ -56,14 +60,11 @@ export class MovieListComponent implements OnChanges, OnInit {
 
   // метод который вызывает метод сервиса при нажатии на кнопку Favorite и вызывает необходимое действие
   updateFavoriteMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
-    console.log(movieAction);
     this.dataHandlerService.updateFavoriteMovies(movieAction);
   }
 
   // метод который вызывает метод сервиса при нажатии на кнопку To Watch и вызывает необходимое действие
   updateWatchMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
-    console.log(movieAction);
-
     this.dataHandlerService.updateWatchMovies(movieAction);
   }
 

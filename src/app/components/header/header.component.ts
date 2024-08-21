@@ -1,4 +1,4 @@
-import { Component, HostListener, ViewChild, ElementRef } from '@angular/core';
+import { Component, HostListener, ViewChild, ElementRef, SimpleChanges, OnChanges, OnInit } from '@angular/core';
 import { DataHandlerService } from '../../services/data-handler.service';
 import { Category } from '../../models/category';
 import { Router, NavigationEnd } from '@angular/router';
@@ -9,7 +9,7 @@ import { filter } from 'rxjs/operators';
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })
-export class HeaderComponent {
+export class HeaderComponent implements OnInit {
   lastScrollTop = 0;
   // Это логическая переменная, которая используется для управления классом CSS в шаблоне компонента. Когда она true, к заголовку добавляется класс 
   isHeaderHidden = false;
@@ -19,8 +19,8 @@ export class HeaderComponent {
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
 
   // начальная переменная со списком категорий
-  categoryList: Category[] = []
-  selectedCategory: Category | undefined;
+  // categoryList: Category[] = []
+  selectedCategory: string = '';
 
   // переменная для ngModel которая использует FormsModule для фильтрации
   filterText = ''
@@ -35,6 +35,14 @@ export class HeaderComponent {
         }
       });
   }
+
+  ngOnInit(): void {
+    // Подписка на изменения категории из сервиса
+    this.dataHandlerService.selectedCategory$.subscribe(category => {
+      this.selectedCategory = category;
+    });
+  }
+
 
   //изменение отображения панели поиска
   toggleSearch() {
@@ -68,10 +76,10 @@ export class HeaderComponent {
   onWindowScroll() {
     //Возвращает количество пикселей, на которое прокручена страница по вертикали.
     //Это свойство поддерживается большинством современных браузеров.
-    
+
     // document.documentElement.scrollTop: Возвращает текущее значение вертикальной прокрутки. 
     // Используется в качестве резервного варианта для более старых браузеров.
-    const currentScroll = window.scrollY  || document.documentElement.scrollTop;
+    const currentScroll = window.scrollY || document.documentElement.scrollTop;
 
     if (currentScroll > this.lastScrollTop) {
       // Скроллим вниз, прячем заголовок

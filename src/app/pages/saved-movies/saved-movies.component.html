@@ -1,0 +1,5 @@
+<app-movie-list [movies]="savedMovies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+
+<h4 class="empty-list" *ngIf="savedMovies.length==0">
+    You haven't added movies to this {{nameOfCategory}} list yet
+</h4>

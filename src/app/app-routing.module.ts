@@ -8,11 +8,14 @@ import { PopularComponent } from './pages/popular/popular.component';
 import { TopRateComponent } from './pages/top-rate/top-rate.component';
 import { UpcomingComponent } from './pages/upcoming/upcoming.component';
 import { HomeComponent } from './components/home/home.component';
+import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'home', component: HomeComponent },
-  { path: 'movie-list/:category', component: MovieListComponent },
+  // { path: 'movie-list/:category', component: MovieListComponent },
+  { path: 'favorites', component: SavedMoviesComponent, canActivate: [MovieGuard] },
+  { path: 'watch-list', component: SavedMoviesComponent, canActivate: [MovieGuard] },
   { path: 'now-playing', component: NowPlayingComponent, canActivate: [MovieGuard] },
   { path: 'all-movies', component: MovieListComponent }, 
   { path: 'popular', component: PopularComponent, canActivate: [MovieGuard] },

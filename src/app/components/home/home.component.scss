@@ -20,7 +20,7 @@
     &__container {
         margin-top: 15px;
         // width: 96vw;
-        height: 90vh;
+        height: 88vh;
         border: var(--maincolor) 1px solid;
         position: relative;
         overflow: hidden;
@@ -74,6 +74,15 @@
     &__button {
         margin-top: 20px;
     }
+}
+
+.movie-list-title {
+    font-size: 40px;
+    letter-spacing: 1px;
+    padding: 20px 0px;
+    width: 100%;
+    text-align: center;
+    transform: translateX(-6px);
 }
 
 .btn {
