@@ -1,9 +1,9 @@
 <div class="home-block">
     <div class="home-block__container">
         <div class="home-block__titles">
-            <div class="home-block__sub-title">Movie Pulse</div>
-            <div class="home-block__title">Unlimited <span class="main-color">Entertainment</span>: </div>
-            <div class="home-block__title">Movies, TVs shows, & More.</div>
+            <!-- <div class="home-block__sub-title">Movie Pulse</div> -->
+            <div class="home-block__title">Movie Pulse <span class="main-color">represents</span>: </div>
+            <div class="home-block__title">{{movieForHomeBlock?.title}}</div>
             <div class="home-block__icons">
                 <div class="home-block__items">
                     <!-- <div class="home-block__item-quality">{{ movieForHomeBlock?.quality }}</div> -->
@@ -11,16 +11,21 @@
                     <div class="home-block__item-icons">
                         <!-- <div class="home-block__item-duration">{{ movieForHomeBlock?.duration  |
                                 trasformTimeDuration }}</div> -->
+                        <div class="home-block__item-duration"> {{ movieForHomeBlock?.release_date }}</div>
                         <div class="home-block__item-rating">{{ movieForHomeBlock?.vote_average }}</div>
                     </div>
                 </div>
+                <div class="home-block__item-overview">{{ movieForHomeBlock?.overview }}</div>
             </div>
-            <div class="home-block__button">
-                <button class="btn_sign-in" tooltipPosition="bottom" pTooltip="This feature is coming soon!">Play
-                    now</button>
-            </div>
+            <ng-container *ngIf="movieForHomeBlock?.video == true">
+                <div class="home-block__button">
+                    <button class="btn_sign-in" tooltipPosition="bottom" pTooltip="This feature is coming soon!">Play
+                        trailer</button>
+                </div>
+            </ng-container>
+
         </div>
-        <div class="home-block__image"><img [src]="movieForHomeBlock?.poster_path" alt=""></div>
+        <div class="home-block__image"><img [src]="imageUrlPoster" alt=""></div>
     </div>
 </div>
 <div class="movie-list-title">Movies <span class="main-color">trends</span></div>

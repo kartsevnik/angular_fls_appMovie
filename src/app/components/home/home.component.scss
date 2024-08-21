@@ -31,17 +31,34 @@
 
     // .home-block__image
     &__image {
+        position: relative;
         flex: 0 0 50%;
         overflow: hidden;
+
+        &::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            box-shadow: inset 0px 0px 50px 22px #000000;
+            /* тень сверху */
+
+            /* тень снизу */
+            pointer-events: none;
+            /* Чтобы тень не мешала взаимодействию с картинкой */
+        }
 
         img {
             width: 100%;
             height: 100%;
             object-fit: contain;
             object-position: center;
-            box-shadow: inset 0px 0px 50px 22px #000000;
         }
     }
+
+
 
     // .home-block__titles
     &__titles {
@@ -68,7 +85,9 @@
     }
 
     // .home-block__icons
-    &__icons {}
+    &__icons {
+        margin-left: 12px;
+    }
 
     // .home-block__button
     &__button {
@@ -103,6 +122,14 @@
     gap: 30px;
     padding: 5px;
 
+}
+
+.home-block__item-overview {
+    font-size: 20px;
+    margin-left: -10px;
+    width: 70%;
+    // text-align: end;
+    padding: 45px 0 25px 0
 }
 
 .home-block__item-icons {
