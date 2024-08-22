@@ -10,10 +10,14 @@ import { DataHandlerService } from '../../services/data-handler.service';
   styleUrl: './saved-movies.component.scss'
 })
 export class SavedMoviesComponent {
-
   savedMovies: movieDB[] = []
-  isLoading = false;  // Флаг для предотвращения множественных запросов одновременно
+
+  // Переменная для текста в шаблоне
   nameOfCategory: string = ''
+
+   // Флаг для предотвращения множественных запросов одновременно
+  isLoading = false; 
+  
   constructor(
     private dataService: DataService,
     private activatedRoute: ActivatedRoute,
@@ -28,7 +32,6 @@ export class SavedMoviesComponent {
     // Получаем параметр из ActivatedRoute
     this.activatedRoute.url.subscribe(urlSegments => {
       const category = urlSegments[0]?.path;
-      (category);
 
       if (category) {
         if (category === 'favorites') {

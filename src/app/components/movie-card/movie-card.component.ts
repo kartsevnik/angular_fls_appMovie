@@ -60,7 +60,7 @@ export class MovieCardComponent implements OnInit, OnChanges {
   }
 
   saveScrollPosition() {
-    this.scrollPosition = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop || 0;
+    this.scrollPosition = window.scrollY || document.documentElement.scrollTop || document.body.scrollTop || 0;
   }
 
   restoreScrollPosition() {

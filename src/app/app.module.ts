@@ -27,7 +27,7 @@ import { TrasformTimeDuration } from './pipes/trasformTimeDuration.pipe';
 import { MovieListComponent } from './components/movie-list/movie-list.component';
 import { MovieCardComponent } from './components/movie-card/movie-card.component';
 import { HeaderComponent } from './components/header/header.component';
-import { HomeComponent } from './components/home/home.component';
+import { HomeComponent } from './pages/home/home.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 //pages
@@ -37,6 +37,8 @@ import { TopRateComponent } from './pages/top-rate/top-rate.component';
 import { UpcomingComponent } from './pages/upcoming/upcoming.component';
 
 import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.component';
+import { StoreModule } from '@ngrx/store';
+import { EffectsModule } from '@ngrx/effects';
 
 
 
@@ -70,7 +72,9 @@ import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.componen
     CommonModule,
     ScrollingModule,
     HttpClientModule,
-    CarouselModule
+    CarouselModule,
+    StoreModule.forRoot({}, {}),
+    EffectsModule.forRoot([])
   ],
   providers: [],
   bootstrap: [AppComponent]

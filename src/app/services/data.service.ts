@@ -1,10 +1,5 @@
-import { HttpClient } from '@angular/common/http';
-// DataService 
-// является источником данных, и любые операции с данными(добавление, удаление) выполняются через этот сервис.
-
-
 import { Injectable } from '@angular/core';
-import { Category } from '../models/category';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { movieDB, moviesResponse } from '../models/api-movie-db';
 import { categoryList } from '../mock-data/mock-data';
@@ -16,22 +11,30 @@ import { toWatchMovies } from '../mock-data/mock-data';
 })
 export class DataService {
 
-  // API connection settings 
+  accountId: number | null = null;
+
+
+
+  // moveiAPI connection settings 
   apiBaseURL = 'https://api.themoviedb.org/3/movie'
   apiKey = '?api_key=fd8429ffaad200356d0b20c56812f7e5'
   apiToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZDg0MjlmZmFhZDIwMDM1NmQwYjIwYzU2ODEyZjdlNSIsIm5iZiI6MTcyNDE2MDU0MC44MjYsInN1YiI6IjY2YzM1NjZhMTVlMzIzZjQ4OGEyOGNiYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EocVzPT_kLDOwV-lNfCGHUhsmJNTt74zlJ_tICcAqqA'
 
   constructor(private HttpClient: HttpClient) { }
 
-  // Получаем список всех категорий
+  setAccountId(id: number) {
+    this.accountId = id;
+  }
+
+  // Get a list of all categories
   getCategoryList() {
     return categoryList;
   }
 
-  // Получаем список всех фильмов
-  getMovies(): movieDB[] {
-    return [];
-  }
+  // Get a list of all films
+  // getMovies(): movieDB[] {
+  //   return [];
+  // }
 
   // =================> Favorites
 
@@ -69,11 +72,11 @@ export class DataService {
 
   // =================> detail view
 
-  getMovieById(id: number): movieDB | undefined {
-    return this.getMovies().find(movie => movie.id === id);
-  }
+  // getMovieById(id: number): movieDB | undefined {
+  //   return this.getMovies().find(movie => movie.id === id);
+  // }
 
-  // =================> now-playing
+  // =================> get movies for all pages
   getMoviesTrending(page: number = 1): Observable<moviesResponse> {
     const url = `https://api.themoviedb.org/3/trending/movie/day?language=en-US&page=${page}`;
     const headers = {
@@ -82,7 +85,6 @@ export class DataService {
     };
     return this.HttpClient.get<moviesResponse>(url, { headers });
   }
-
 
   getMoviesNowPlaying(page: number = 1): Observable<moviesResponse> {
     return this.HttpClient.get<moviesResponse>(`${this.apiBaseURL}/now_playing${this.apiKey}&page=${page}`);

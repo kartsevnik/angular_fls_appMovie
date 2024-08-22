@@ -10,45 +10,47 @@ import { BehaviorSubject } from 'rxjs';
 })
 export class DataHandlerService {
 
+  setAccountId: number = 0
+
   private selectedCategorySubject = new BehaviorSubject<string>(''); // Создаём BehaviorSubject
   selectedCategory$ = this.selectedCategorySubject.asObservable(); // Экспортируем как Observable
 
-  movies: movieDB[] = [];
-  selectedMovies: movieDB[] = [];
-  selectedMoviesOriginal: movieDB[] = [];
+  // movies: movieDB[] = [];
+  // selectedMovies: movieDB[] = [];
+  // selectedMoviesOriginal: movieDB[] = [];
 
   shouldClearSearchInput = true;
 
   constructor(private dataService: DataService, private movieStateService: MovieStateService, private router: Router) {
-    this.loadData();
+    // this.loadData();
   }
 
-  loadData() {
-    this.movies = this.dataService.getMovies();
-    this.updateSelectedMovies(this.selectedCategorySubject.value);
-  }
+  // loadData() {
+  //   // this.movies = this.dataService.getMovies();
+  //   // this.updateSelectedMovies(this.selectedCategorySubject.value);
+  // }
 
   changeCategory(nameOfCategory: string) {
     this.selectedCategorySubject.next(nameOfCategory); // Обновляем значение категории
-    this.updateSelectedMovies(nameOfCategory);
+    // this.updateSelectedMovies(nameOfCategory);
   }
 
-  updateSelectedMovies(selectedCategory: string) {
-    switch (selectedCategory) {
-      case 'favorites':
-        this.selectedMovies = this.movieStateService.getFavoriteMovies();
-        this.selectedMoviesOriginal = this.movieStateService.getFavoriteMovies();
-        break;
-      case 'watch-list':
-        this.selectedMovies = this.movieStateService.getToWatchMovies();
-        this.selectedMoviesOriginal = this.movieStateService.getToWatchMovies();
-        break;
-      default:
-        this.selectedMovies = this.movies;
-        this.selectedMoviesOriginal = this.movies;
-        break;
-    }
-  }
+  // updateSelectedMovies(selectedCategory: string) {
+  //   switch (selectedCategory) {
+  //     case 'favorites':
+  //       this.selectedMovies = this.movieStateService.getFavoriteMovies();
+  //       this.selectedMoviesOriginal = this.movieStateService.getFavoriteMovies();
+  //       break;
+  //     case 'watch-list':
+  //       this.selectedMovies = this.movieStateService.getToWatchMovies();
+  //       this.selectedMoviesOriginal = this.movieStateService.getToWatchMovies();
+  //       break;
+  //     default:
+  //       this.selectedMovies = this.movies;
+  //       this.selectedMoviesOriginal = this.movies;
+  //       break;
+  //   }
+  // }
 
   updateFavoriteMovies(event: { movie: movieDB, action: 'add' | 'remove' }) {
     if (event.action === 'add') {
@@ -67,29 +69,29 @@ export class DataHandlerService {
   }
 
   fillListByFind(searchText: string): void {
-    const currentUrl = this.router.url;
+  //   const currentUrl = this.router.url;
 
-    if (currentUrl === '/home') {
-      this.shouldClearSearchInput = false;
-      this.router.navigate(['/all-movies'], { queryParams: { query: searchText } });
-      setTimeout(() => {
-        if (searchText.trim() === '') {
-          this.selectedMovies = this.selectedMoviesOriginal;
-        } else {
-          this.selectedMovies = this.selectedMoviesOriginal.filter(movie =>
-            movie.title.toLowerCase().includes(searchText.toLowerCase())
-          );
-        }
-      }, 0);
-    } else {
-      this.shouldClearSearchInput = true;
-      if (searchText.trim() === '') {
-        this.selectedMovies = this.selectedMoviesOriginal;
-      } else {
-        this.selectedMovies = this.selectedMoviesOriginal.filter(movie =>
-          movie.title.toLowerCase().includes(searchText.toLowerCase())
-        );
-      }
-    }
+  //   if (currentUrl === '/home') {
+  //     this.shouldClearSearchInput = false;
+  //     this.router.navigate(['/all-movies'], { queryParams: { query: searchText } });
+  //     setTimeout(() => {
+  //       if (searchText.trim() === '') {
+  //         this.selectedMovies = this.selectedMoviesOriginal;
+  //       } else {
+  //         this.selectedMovies = this.selectedMoviesOriginal.filter(movie =>
+  //           movie.title.toLowerCase().includes(searchText.toLowerCase())
+  //         );
+  //       }
+  //     }, 0);
+  //   } else {
+  //     this.shouldClearSearchInput = true;
+  //     if (searchText.trim() === '') {
+  //       this.selectedMovies = this.selectedMoviesOriginal;
+  //     } else {
+  //       this.selectedMovies = this.selectedMoviesOriginal.filter(movie =>
+  //         movie.title.toLowerCase().includes(searchText.toLowerCase())
+  //       );
+  //     }
+  //   }
   }
 }

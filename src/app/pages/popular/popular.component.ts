@@ -29,6 +29,7 @@ export class PopularComponent {
     this.dataService.getMoviesPopular(this.currentPage).subscribe(movies => {
       this.popularMovies = [...this.popularMovies, ...movies.results];
       this.isLoading = false;
+      
     }, () => {
       this.isLoading = false;
     });

@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { DataHandlerService } from '../../services/data-handler.service';
 import { ActivatedRoute } from '@angular/router';
 import { movieDB } from '../../models/api-movie-db';
@@ -8,55 +8,29 @@ import { movieDB } from '../../models/api-movie-db';
   templateUrl: './movie-list.component.html',
   styleUrl: './movie-list.component.scss'
 })
-export class MovieListComponent implements OnChanges, OnInit {
+export class MovieListComponent implements OnInit {
   @Input() movies: movieDB[] = []
   @Input() loadNextPage!: () => void; // Принимаем метод загрузки следующей страницы
   @ViewChild('anchor') anchor!: ElementRef; // Якорь для отслеживания конца списка
-
   private observer!: IntersectionObserver;
+
   selectedCategory: string = '';
   selectedMovies: movieDB[] = [];
-  isLoading = false;  // Флаг для предотвращения множественных запросов одновременно
+
+  isLoading = false;
 
   constructor(private dataHandlerService: DataHandlerService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // Подписываемся на изменения параметров маршрута (например, 'category' в URL)
-    this.route.params.subscribe(params => {
-      // Извлекаем значение параметра 'category' из URL
-      const category = params['category'];
-
-      // Обновляем категорию в сервисе 
-      // this.dataHandlerService.changeCategory(category);
-      // Подписка на изменения категории из сервиса
-      this.dataHandlerService.selectedCategory$.subscribe(category => {
-        this.selectedCategory = category;
-      });
-
-      // Обновляем список фильмов
-      this.updateMovies();
+    // Обновляем категорию в сервисе 
+    this.dataHandlerService.selectedCategory$.subscribe(category => {
+      this.selectedCategory = category;
     });
-
-    
-  }
-
-
-  // при изменении значений в selectedCategory вызывается метод сервиса обновляющий данные
-  ngOnChanges(changes: SimpleChanges): void {
-    // if (changes['selectedCategory']) {
-    //   this.dataHandlerService.updateSelectedMovies(this.selectedCategory);
-    // }
   }
 
   ngAfterViewInit(): void {
     this.setupObserver();
   }
-
-  // Метод для обновления списка фильмов
-  private updateMovies(): void {
-    this.selectedMovies = this.dataHandlerService.selectedMovies;
-  }
-
 
   // метод который вызывает метод сервиса при нажатии на кнопку Favorite и вызывает необходимое действие
   updateFavoriteMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
