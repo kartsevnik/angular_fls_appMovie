@@ -26,7 +26,7 @@ export class PopularComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.store.dispatch(MoviesActions.loadPopularMovies());
+    this.store.dispatch(MoviesActions.loadPopularMovies()); // Загружаем популярные фильмы
   }
 
   loadNextPage() {
