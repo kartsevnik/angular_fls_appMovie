@@ -39,6 +39,9 @@ import { UpcomingComponent } from './pages/upcoming/upcoming.component';
 import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.component';
 import { StoreModule } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
+import { moviesReducer } from './store/reducer';
+import { MoviesEffects } from './store/effects';
+import { appReducers } from './store/state';
 
 
 
@@ -73,8 +76,8 @@ import { EffectsModule } from '@ngrx/effects';
     ScrollingModule,
     HttpClientModule,
     CarouselModule,
-    StoreModule.forRoot({}, {}),
-    EffectsModule.forRoot([])
+    StoreModule.forRoot(appReducers), // Регистрация редюсера
+    EffectsModule.forRoot([MoviesEffects]) // Регистрация эффектов
   ],
   providers: [],
   bootstrap: [AppComponent]

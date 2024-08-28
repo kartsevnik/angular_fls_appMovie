@@ -1,42 +1,35 @@
-import { Component } from '@angular/core';
-import { DataService } from '../../services/data.service';
+import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { movieDB } from '../../models/api-movie-db';
-import { DataHandlerService } from '../../services/data-handler.service';
+import * as MoviesActions from '../../store/actions';
+import { selectPopularMovies, selectLoadingPopular, selectPopularCurrentPage } from '../../store/selectors';
+import { AppState } from '../../store/state';  // Используем AppState вместо MoviesState
 
 @Component({
   selector: 'app-popular',
   templateUrl: './popular.component.html',
-  styleUrl: './popular.component.scss'
+  styleUrls: ['./popular.component.scss']
 })
-export class PopularComponent {
+export class PopularComponent implements OnInit {
 
-  popularMovies: movieDB[] = []
-  currentPage = 1;
-  isLoading = false;  // Флаг для предотвращения множественных запросов одновременно
+  popularMovies$: Observable<movieDB[]>;
+  isLoading$: Observable<boolean>;
+  currentPage$: Observable<number>;
+  loadingPopular$: Observable<boolean>;
 
-  constructor(private dataService: DataService, private dataHandlerService: DataHandlerService) {
+  constructor(private store: Store<AppState>) {  // Используем AppState вместо MoviesState
+    this.popularMovies$ = this.store.select(selectPopularMovies);
+    this.isLoading$ = this.store.select(selectLoadingPopular);
+    this.currentPage$ = this.store.select(selectPopularCurrentPage);
+    this.loadingPopular$ = this.store.select(selectLoadingPopular);
   }
 
   ngOnInit() {
-    this.dataHandlerService.changeCategory('Popular');
-    this.loadMovies();
-  }
-
-  loadMovies() {
-    if (this.isLoading) return;  // Если уже идет загрузка, ничего не делаем
-    this.isLoading = true;
-
-    this.dataService.getMoviesPopular(this.currentPage).subscribe(movies => {
-      this.popularMovies = [...this.popularMovies, ...movies.results];
-      this.isLoading = false;
-      
-    }, () => {
-      this.isLoading = false;
-    });
+    this.store.dispatch(MoviesActions.loadPopularMovies());
   }
 
   loadNextPage() {
-    this.currentPage++;
-    this.loadMovies();
+    this.store.dispatch(MoviesActions.loadPopularMovies());  // Загружаем следующую страницу
   }
 }

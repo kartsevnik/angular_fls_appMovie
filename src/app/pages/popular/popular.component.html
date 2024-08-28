@@ -1,1 +1,3 @@
-<app-movie-list [movies]="popularMovies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+<div *ngIf="(popularMovies$ | async) as movies">
+    <app-movie-list [movies]="movies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+</div>
