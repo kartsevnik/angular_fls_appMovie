@@ -4,6 +4,8 @@ import { MovieStateService } from './movie-state.service';
 import { Router } from '@angular/router';
 import { movieDB } from '../models/api-movie-db';
 import { BehaviorSubject } from 'rxjs';
+import * as MoviesActions from '../store/actions'; // Убедитесь, что путь корректен
+import { Store } from '@ngrx/store';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +23,7 @@ export class DataHandlerService {
 
   shouldClearSearchInput = true;
 
-  constructor(private dataService: DataService, private movieStateService: MovieStateService, private router: Router) {
+  constructor(private dataService: DataService, private movieStateService: MovieStateService, private router: Router, private store: Store) {
     // this.loadData();
   }
 
@@ -52,21 +54,41 @@ export class DataHandlerService {
   //   }
   // }
 
-  updateFavoriteMovies(event: { movie: movieDB, action: 'add' | 'remove' }) {
-    if (event.action === 'add') {
-      this.movieStateService.addMovieToFavorites(event.movie);
-    } else {
-      this.movieStateService.removeMovieFromFavorites(event.movie);
-    }
-  }
+  // updateFavoriteMovies(event: { movie: movieDB, action: 'add' | 'remove' }) {
+  //   if (event.action === 'add') {
+  //     this.movieStateService.addMovieToFavorites(event.movie);
+  //   } else {
+  //     this.movieStateService.removeMovieFromFavorites(event.movie);
+  //   }
+  // }
 
-  updateWatchMovies(event: { movie: movieDB, action: 'add' | 'remove' }) {
-    if (event.action === 'add') {
-      this.movieStateService.addMovieToWatchlist(event.movie);
-    } else {
-      this.movieStateService.removeMovieFromWatchlist(event.movie);
-    }
+  // updateWatchMovies(event: { movie: movieDB, action: 'add' | 'remove' }) {
+  //   if (event.action === 'add') {
+  //     this.movieStateService.addMovieToWatchlist(event.movie);
+  //   } else {
+  //     this.movieStateService.removeMovieFromWatchlist(event.movie);
+  //   }
+  // }
+
+
+// Для updateFavoriteMovies
+updateFavoriteMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
+  if (movieAction.action === 'add') {
+    this.store.dispatch(MoviesActions.addMovieToFavorites({ movie: movieAction.movie }));
+  } else if (movieAction.action === 'remove') {
+    this.store.dispatch(MoviesActions.removeMovieFromFavorites({ movie: movieAction.movie }));
   }
+}
+
+// Для updateWatchMovies
+updateWatchMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
+  if (movieAction.action === 'add') {
+    this.store.dispatch(MoviesActions.addMovieToWatchlist({ movie: movieAction.movie }));
+  } else if (movieAction.action === 'remove') {
+    this.store.dispatch(MoviesActions.removeMovieFromWatchlist({ movie: movieAction.movie }));
+  }
+}
+
 
   fillListByFind(searchText: string): void {
   //   const currentUrl = this.router.url;

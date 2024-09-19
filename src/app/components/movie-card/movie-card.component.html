@@ -20,11 +20,10 @@
             </div>
         </div>
         <div class="movie-card__buttons">
-            <button class="movie-card__addToFavorite btn-card"
-                [ngClass]="{'selected-favorite' : movie.favorite == true}"
-                (click)="toggleFavoritesList()">Favorite</button>
-            <button class="movie-card__addToWatch btn-card" [ngClass]="{'selected-toWatch' : movie.toWatch == true}"
-                (click)="toggleWatchList()">To Watch</button>
+            <button class="movie-card__addToFavorite btn-card" [ngClass]="{'selected-favorite' : (isFavorite$ | async)}"
+                (click)="toggleFavoritesList()">Favorites</button>
+            <button class="movie-card__addToWatch btn-card" [ngClass]="{'selected-toWatch' : (isToWatch$ | async) }"
+                (click)="toggleWatchList()"> Watchlist </button>
         </div>
 
     </div>

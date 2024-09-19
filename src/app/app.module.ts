@@ -35,15 +35,20 @@ import { NowPlayingComponent } from './pages/now-playing/now-playing.component';
 import { PopularComponent } from './pages/popular/popular.component';
 import { TopRateComponent } from './pages/top-rate/top-rate.component';
 import { UpcomingComponent } from './pages/upcoming/upcoming.component';
-
 import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.component';
-import { StoreModule } from '@ngrx/store';
+
+//store
+import { StoreModule, MetaReducer, ActionReducer } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
 import { moviesReducer } from './store/reducer';
 import { MoviesEffects } from './store/effects';
 import { appReducers } from './store/state';
+import { localStorageSync } from 'ngrx-store-localstorage';
 
-
+export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+  return localStorageSync({ keys: ['movies'], rehydrate: true })(reducer);
+}
+export const metaReducers: MetaReducer<any>[] = [localStorageSyncReducer];
 
 @NgModule({
   declarations: [
@@ -76,7 +81,7 @@ import { appReducers } from './store/state';
     ScrollingModule,
     HttpClientModule,
     CarouselModule,
-    StoreModule.forRoot(appReducers), // Регистрация редюсера
+    StoreModule.forRoot(appReducers, { metaReducers }),
     EffectsModule.forRoot([MoviesEffects]) // Регистрация эффектов
   ],
   providers: [],

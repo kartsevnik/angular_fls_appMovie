@@ -1,5 +1,5 @@
-<app-movie-list [movies]="savedMovies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+<app-movie-list *ngIf="savedMovies$ | async as movies" [movies]="movies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
 
-<h4 class="empty-list" *ngIf="savedMovies.length==0">
+<h4 class="empty-list" *ngIf="(savedMovies$ | async)?.length==0">
     You haven't added movies to this {{nameOfCategory}} list yet
 </h4>

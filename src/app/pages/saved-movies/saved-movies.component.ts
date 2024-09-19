@@ -1,8 +1,12 @@
 import { Component } from '@angular/core';
-import { DataService } from '../../services/data.service';
+import { Store } from '@ngrx/store';
 import { movieDB } from '../../models/api-movie-db';
 import { ActivatedRoute } from '@angular/router';
 import { DataHandlerService } from '../../services/data-handler.service';
+import { AppState } from '../../store/state'; // Убедитесь, что путь корректен
+import { selectFavoriteMovies, selectToWatchMovies } from '../../store/selectors'; // Убедитесь, что путь корректен
+import { Observable } from 'rxjs';
+
 
 @Component({
   selector: 'app-saved-movies',
@@ -10,7 +14,7 @@ import { DataHandlerService } from '../../services/data-handler.service';
   styleUrl: './saved-movies.component.scss'
 })
 export class SavedMoviesComponent {
-  savedMovies: movieDB[] = []
+  savedMovies$!: Observable<movieDB[]>;
 
   // Переменная для текста в шаблоне
   nameOfCategory: string = ''
@@ -19,7 +23,7 @@ export class SavedMoviesComponent {
   isLoading = false; 
   
   constructor(
-    private dataService: DataService,
+    private store: Store<AppState>,
     private activatedRoute: ActivatedRoute,
     private dataHandlerService: DataHandlerService
   ) { }
@@ -37,12 +41,11 @@ export class SavedMoviesComponent {
         if (category === 'favorites') {
           this.dataHandlerService.changeCategory("Favorites"); // Обновляем категорию в сервисе
           this.nameOfCategory = "favorites"
-          this.savedMovies = this.dataService.getFavoriteMovies();
+          this.savedMovies$ = this.store.select(selectFavoriteMovies);
         } else if (category === 'watch-list') {
           this.dataHandlerService.changeCategory("Watch list"); // Обновляем категорию в сервисе
           this.nameOfCategory = "watch"
-
-          this.savedMovies = this.dataService.getToWatchMovies();
+          this.savedMovies$ = this.store.select(selectToWatchMovies);
         }
       }
     });

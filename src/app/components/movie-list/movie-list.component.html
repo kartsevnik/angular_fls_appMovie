@@ -1,8 +1,7 @@
 <div class="movie-list-cards">
     <div class="allFilms">
         <div *ngFor="let movie of movies; trackBy: trackById">
-            <app-movie-card [movie]="movie" (addFavoritesList)="updateFavoriteMovies($event)"
-                (addWatchList)="updateWatchMovies($event)"></app-movie-card>
+            <app-movie-card [movie]="movie"></app-movie-card>
         </div>
         <div #anchor></div> <!-- Якорь, чтобы отслеживать конец списка -->
     </div>

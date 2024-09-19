@@ -1,11 +1,12 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
-// import { movie } from '../../models/movie';
+import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { movieDB } from '../../models/api-movie-db';
-import { TrasformTimeDuration } from '../../pipes/trasformTimeDuration.pipe';
-import { DialogModule } from 'primeng/dialog';
-import { ButtonModule } from 'primeng/button';
-import { InputTextModule } from 'primeng/inputtext';
-import { DataService } from '../../services/data.service';
+import { Store, select } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppState } from '../../store/state';
+import { selectFavoriteMovies, selectToWatchMovies } from '../../store/selectors';
+import { map, take } from 'rxjs/operators';
+import * as MoviesActions from '../../store/actions';
+
 
 @Component({
   selector: 'app-movie-card',
@@ -15,8 +16,11 @@ import { DataService } from '../../services/data.service';
 export class MovieCardComponent implements OnInit, OnChanges {
 
   @Input() movie: movieDB | undefined;
-  @Output() addWatchList = new EventEmitter<{ movie: movieDB, action: 'add' | 'remove' }>();
-  @Output() addFavoritesList = new EventEmitter<{ movie: movieDB, action: 'add' | 'remove' }>();
+  // @Output() addWatchList = new EventEmitter<{ movie: movieDB, action: 'add' | 'remove' }>();
+  // @Output() addFavoritesList = new EventEmitter<{ movie: movieDB, action: 'add' | 'remove' }>();
+
+  isFavorite$!: Observable<boolean>;
+  isToWatch$!: Observable<boolean>;
 
   visible: boolean = false;
   selectedMovie: Partial<movieDB> | null = null;
@@ -25,16 +29,18 @@ export class MovieCardComponent implements OnInit, OnChanges {
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
 
-  constructor(private dataService: DataService) {
+  constructor(private store: Store<AppState>) {
   }
 
   ngOnInit() {
     this.setImageUrl();
+    this.initializeObservables();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['movie'] && this.movie) {
       this.setImageUrl();
+      this.initializeObservables();
     }
   }
 
@@ -45,6 +51,18 @@ export class MovieCardComponent implements OnInit, OnChanges {
     }
   }
 
+  initializeObservables() {
+    if (this.movie) {
+      this.isFavorite$ = this.store.pipe(
+        select(selectFavoriteMovies),
+        map(movies => movies.some(m => m.id === this.movie!.id))
+      );
+      this.isToWatch$ = this.store.pipe(
+        select(selectToWatchMovies),
+        map(movies => movies.some(m => m.id === this.movie!.id))
+      );
+    }
+  }
 
   showDialog() {
     if (this.movie) {
@@ -69,18 +87,27 @@ export class MovieCardComponent implements OnInit, OnChanges {
 
   toggleWatchList() {
     if (this.movie) {
-      this.movie.toWatch = !this.movie.toWatch;
-      const action = this.movie.toWatch ? 'add' : 'remove';
-      this.addWatchList.emit({ movie: this.movie, action });
+      this.isToWatch$.pipe(take(1)).subscribe(isInWatchlist => {
+        if (isInWatchlist) {
+          this.store.dispatch(MoviesActions.removeMovieFromWatchlist({ movie: this.movie! }));
+        } else {
+          this.store.dispatch(MoviesActions.addMovieToWatchlist({ movie: this.movie! }));
+        }
+      });
     }
   }
-
+  
   toggleFavoritesList() {
     if (this.movie) {
-      this.movie.favorite = !this.movie.favorite;
-      const action = this.movie.favorite ? 'add' : 'remove';
-      this.addFavoritesList.emit({ movie: this.movie, action });
+      this.isFavorite$.pipe(take(1)).subscribe(isInFavorites => {
+        if (isInFavorites) {
+          this.store.dispatch(MoviesActions.removeMovieFromFavorites({ movie: this.movie! }));
+        } else {
+          this.store.dispatch(MoviesActions.addMovieToFavorites({ movie: this.movie! }));
+        }
+      });
     }
   }
+  
 
 }

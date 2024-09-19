@@ -33,14 +33,14 @@ export class MovieListComponent implements OnInit {
   }
 
   // метод который вызывает метод сервиса при нажатии на кнопку Favorite и вызывает необходимое действие
-  updateFavoriteMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
-    this.dataHandlerService.updateFavoriteMovies(movieAction);
-  }
+  // updateFavoriteMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
+  //   this.dataHandlerService.updateFavoriteMovies(movieAction);
+  // }
 
   // метод который вызывает метод сервиса при нажатии на кнопку To Watch и вызывает необходимое действие
-  updateWatchMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
-    this.dataHandlerService.updateWatchMovies(movieAction);
-  }
+  // updateWatchMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
+  //   this.dataHandlerService.updateWatchMovies(movieAction);
+  // }
 
   trackById(index: number, item: movieDB) {
     return item.id;

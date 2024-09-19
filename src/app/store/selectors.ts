@@ -18,6 +18,11 @@ export const selectFavoriteMovies = createSelector(
     (state: MoviesState) => state.favoriteMovies
 );
 
+export const selectToWatchMovies = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.toWatchMovies
+);
+
 export const selectLoading = createSelector(
     selectMoviesState,
     (state: MoviesState) => state.loading
