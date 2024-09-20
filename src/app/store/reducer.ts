@@ -14,6 +14,10 @@ export interface MoviesState {
     loading: boolean;
     error: string | null;
 
+    trendMovies: movieDB[];
+    trendCurrentPage: number;
+    trendLoading: boolean;
+
     nowPlayingMovies: movieDB[];
     nowPlayingCurrentPage: number;
     nowPlayingLoading: boolean;
@@ -32,6 +36,10 @@ export const initialState: MoviesState = {
     toWatchMovies: [],
     loading: false,
     error: null,
+
+    trendMovies: [],
+    trendCurrentPage: 1,
+    trendLoading: false,
 
     nowPlayingMovies: [],
     nowPlayingCurrentPage: 1,
@@ -53,20 +61,58 @@ export const moviesReducer = createReducer(
     initialState,
     //=====================saved-movies===============================
 
-    on(MoviesActions.loadMovies, state => ({
+            //=====================Favorites===============================
+    on(MoviesActions.addMovieToFavorites, (state, { movie }) => ({
         ...state,
-        loading: true,
+        favoriteMovies: [...state.favoriteMovies, movie]
+    })),
+    on(MoviesActions.removeMovieFromFavorites, (state, { movie }) => ({
+        ...state,
+        favoriteMovies: state.favoriteMovies.filter(m => m.id !== movie.id)
+    })),
+    //=======================Watchlist=============================
+    on(MoviesActions.addMovieToWatchlist, (state, { movie }) => ({
+        ...state,
+        toWatchMovies: [...state.toWatchMovies, movie]
+    })),
+    on(MoviesActions.removeMovieFromWatchlist, (state, { movie }) => ({
+        ...state,
+        toWatchMovies: state.toWatchMovies.filter(m => m.id !== movie.id)
+    })),
+    //====================================================
+    // on(MoviesActions.loadMovies, state => ({
+    //     ...state,
+    //     loading: true,
+    //     error: null
+    // })),
+    // on(MoviesActions.loadMoviesSuccess, (state, { movies }) => ({
+    //     ...state,
+    //     favoriteMovies: movies.filter(movie => movie.favorite),
+    //     toWatchMovies: movies.filter(movie => movie.toWatch),
+    //     loading: false
+    // })),
+    // on(MoviesActions.loadMoviesFailure, (state, { error }) => ({
+    //     ...state,
+    //     loading: false,
+    //     error
+    // })),
+
+    //==================Trend Home==================================
+
+    on(MoviesActions.loadTrendMovies, (state) => ({
+        ...state,
+        trendLoading: true,
         error: null
     })),
-    on(MoviesActions.loadMoviesSuccess, (state, { movies }) => ({
+    on(MoviesActions.loadTrendMoviesSuccess, (state, { movies }) => ({
         ...state,
-        favoriteMovies: movies.filter(movie => movie.favorite),
-        toWatchMovies: movies.filter(movie => movie.toWatch),
-        loading: false
+        trendMovies: [...state.trendMovies, ...movies],
+        trendCurrentPage: state.trendCurrentPage + 1,
+        trendLoading: false
     })),
-    on(MoviesActions.loadMoviesFailure, (state, { error }) => ({
+    on(MoviesActions.loadTrendMoviesFailure, (state, { error }) => ({
         ...state,
-        loading: false,
+        trendLoading: false,
         error
     })),
 
@@ -108,24 +154,6 @@ export const moviesReducer = createReducer(
         error
     })),
 
-    //=====================Favorites===============================
-    on(MoviesActions.addMovieToFavorites, (state, { movie }) => ({
-        ...state,
-        favoriteMovies: [...state.favoriteMovies, movie]
-    })),
-    on(MoviesActions.removeMovieFromFavorites, (state, { movie }) => ({
-        ...state,
-        favoriteMovies: state.favoriteMovies.filter(m => m.id !== movie.id)
-    })),
-    //=======================Watchlist=============================
-    on(MoviesActions.addMovieToWatchlist, (state, { movie }) => ({
-        ...state,
-        toWatchMovies: [...state.toWatchMovies, movie]
-    })),
-    on(MoviesActions.removeMovieFromWatchlist, (state, { movie }) => ({
-        ...state,
-        toWatchMovies: state.toWatchMovies.filter(m => m.id !== movie.id)
-    })),
-    //====================================================
+
 
 );

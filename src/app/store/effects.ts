@@ -15,23 +15,22 @@ export class MoviesEffects {
   constructor(
     private actions$: Actions,
     private dataService: DataService,
-    private store: Store<AppState>  // Используем AppState вместо MoviesState
+    private store: Store<AppState>
   ) { }
-//=======================================================================================
+  //=======================================================================================
 
   // Эффект для загрузки фильмов
-  // createEffect: Создает эффект, который слушает определенные действия и выполняет побочные эффекты.
   loadTrendMovies$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(MoviesActions.loadMovies),  // ofType: Фильтрует поток действий, чтобы эффект сработал только для указанных действий.
+      ofType(MoviesActions.loadTrendMovies),  // ofType: Фильтрует поток действий, чтобы эффект сработал только для указанных действий.
       mergeMap(() => this.dataService.getMoviesTrending().pipe( //mergeMap: Создает новый поток Observable и подписывается на него. Используется для выполнения HTTP-запросов.
-        map((response: moviesResponse) => MoviesActions.loadMoviesSuccess({ movies: response.results })),  // Действие успеха
-        catchError(error => of(MoviesActions.loadMoviesFailure({ error: error.message })))  // Действие ошибки
+        map((response: moviesResponse) => MoviesActions.loadTrendMoviesSuccess({ movies: response.results })),  // Действие успеха
+        catchError(error => of(MoviesActions.loadTrendMoviesFailure({ error: error.message })))  // Действие ошибки
       ))
     )
   );
 
-//=======================================================================================
+  //=======================================================================================
 
   // Эффект для загрузки популярных фильмов
   loadNowPlayingMovies$ = createEffect(() =>
@@ -47,7 +46,7 @@ export class MoviesEffects {
     )
   );
 
-//=======================================================================================
+  //=======================================================================================
 
   // Эффект для загрузки популярных фильмов
   loadPopularMovies$ = createEffect(() =>
@@ -62,7 +61,7 @@ export class MoviesEffects {
       )
     )
   );
-  
-//=======================================================================================
+
+  //=======================================================================================
 
 }

@@ -1,36 +1,42 @@
 <div class="home-block">
     <div class="home-block__carousel">
-        <p-carousel [value]="randomMovies" [numVisible]="1" [numScroll]="1" [circular]="true" [autoplayInterval]="4000">
-            <ng-template let-movie pTemplate="item">
-                <div class="home-block__container">
-                    <div class="home-block__titles">
-                        <div class="home-block__sub-title">Movie Pulse <span class="main-color">represents</span>:</div>
-                        <div class="home-block__title">{{ movie.title }}</div>
-                        <div class="home-block__icons">
-                            <div class="home-block__items">
-                                <div class="home-block__item-icons">
-                                    <div class="home-block__item-duration">{{ movie.release_date }}</div>
-                                    <div class="home-block__item-rating">{{ movie.vote_average }}</div>
+        <div *ngIf="(randomMovies$ |async) as randomMovies">
+            <p-carousel [value]="randomMovies" [numVisible]="1" [numScroll]="1" [circular]="true"
+                [autoplayInterval]="4000">
+                <ng-template let-movie pTemplate="item">
+                    <div class="home-block__container">
+                        <div class="home-block__titles">
+                            <div class="home-block__sub-title">Movie Pulse <span class="main-color">represents</span>:
+                            </div>
+                            <div class="home-block__title">{{ movie.title }}</div>
+                            <div class="home-block__icons">
+                                <div class="home-block__items">
+                                    <div class="home-block__item-icons">
+                                        <div class="home-block__item-duration">{{ movie.release_date }}</div>
+                                        <div class="home-block__item-rating">{{ movie.vote_average }}</div>
+                                    </div>
                                 </div>
+                                <div class="home-block__item-overview">{{ movie.overview }}</div>
                             </div>
-                            <div class="home-block__item-overview">{{ movie.overview }}</div>
+                            <ng-container *ngIf="movie.video == true">
+                                <div class="home-block__button">
+                                    <button class="btn_sign-in" tooltipPosition="bottom"
+                                        pTooltip="This feature is coming soon!">
+                                        Play trailer
+                                    </button>
+                                </div>
+                            </ng-container>
                         </div>
-                        <ng-container *ngIf="movie.video == true">
-                            <div class="home-block__button">
-                                <button class="btn_sign-in" tooltipPosition="bottom"
-                                    pTooltip="This feature is coming soon!">
-                                    Play trailer
-                                </button>
-                            </div>
-                        </ng-container>
+                        <div class="home-block__image">
+                            <img [src]="getMovieImageUrl(movie)" [alt]="movie.title">
+                        </div>
                     </div>
-                    <div class="home-block__image">
-                        <img [src]="getMovieImageUrl(movie)" [alt]="movie.title">
-                    </div>
-                </div>
-            </ng-template>
-        </p-carousel>
+                </ng-template>
+            </p-carousel>
+        </div>
     </div>
 </div>
 <div class="main-title">Movies <span class="main-color">trends</span></div>
-<app-movie-list [movies]="movies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+<div *ngIf="(trendMovies$ | async) as movies">
+    <app-movie-list [movies]="movies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+</div>

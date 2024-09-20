@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { movieDB } from '../../models/api-movie-db';
 import * as MoviesActions from '../../store/actions'
-import { selectNowPlayingMovies, selectLoadingNowPlaying, selectNowPlayingCurrentPage } from '../../store/selectors';
+import { selectNowPlayingMovies, selectNowPlayingLoading, selectNowPlayingCurrentPage } from '../../store/selectors';
 import { AppState } from '../../store/state';
 
 @Component({
@@ -21,10 +21,10 @@ export class NowPlayingComponent implements OnInit {
   isLoading$: Observable<boolean>;
   currentPage$: Observable<number>;
 
- //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
+  //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
   constructor(private store: Store<AppState>) {
     this.nowPlayingMovies$ = this.store.select(selectNowPlayingMovies) //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
-    this.isLoading$ = this.store.select(selectLoadingNowPlaying)
+    this.isLoading$ = this.store.select(selectNowPlayingLoading)
     this.currentPage$ = this.store.select(selectNowPlayingCurrentPage)
   }
 

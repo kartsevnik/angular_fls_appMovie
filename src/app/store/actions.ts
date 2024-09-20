@@ -18,11 +18,18 @@ export const removeMovieFromFavorites = createAction('[Movies] Remove Movie From
 export const addMovieToWatchlist = createAction('[Movies] Add Movie To Watchlist', props<{ movie: movieDB }>());
 export const removeMovieFromWatchlist = createAction('[Movies] Remove Movie From Watchlist', props<{ movie: movieDB }>());
 
-export const loadMovies = createAction('[Movies] Load Movies');
+// export const loadMovies = createAction('[Movies] Load Movies');
 // Действие для успешной загрузки фильмов с передачей данных
-export const loadMoviesSuccess = createAction('[Movies] Load Movies Success', props<{ movies: movieDB[] }>());
+// export const loadMoviesSuccess = createAction('[Movies] Load Movies Success', props<{ movies: movieDB[] }>());
 // Действие для ошибки при загрузке фильмов с передачей сообщения об ошибке
-export const loadMoviesFailure = createAction('[Movies] Load Movies Failure', props<{ error: string }>());
+// export const loadMoviesFailure = createAction('[Movies] Load Movies Failure', props<{ error: string }>());
+
+//=======================================================================================
+
+// Действия для загрузки Trend - HOME фильмов
+export const loadTrendMovies = createAction('[Movies] Load Trend Movies');
+export const loadTrendMoviesSuccess = createAction('[Movies] Load Trend Movies Success', props<{ movies: movieDB[] }>());
+export const loadTrendMoviesFailure = createAction('[Movies] Load Trend Movies Failure', props<{ error: string }>());
 
 //=======================================================================================
 

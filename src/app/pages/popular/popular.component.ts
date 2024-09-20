@@ -3,7 +3,7 @@ import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { movieDB } from '../../models/api-movie-db';
 import * as MoviesActions from '../../store/actions';
-import { selectPopularMovies, selectLoadingPopular, selectPopularCurrentPage } from '../../store/selectors';
+import { selectPopularMovies, selectPopularLoading, selectPopularCurrentPage } from '../../store/selectors';
 import { AppState } from '../../store/state';  // Используем AppState вместо MoviesState
 
 @Component({
@@ -18,10 +18,10 @@ export class PopularComponent implements OnInit {
   currentPage$: Observable<number>;
 
   //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
-  constructor(private store: Store<AppState>) { 
+  constructor(private store: Store<AppState>) {
     this.popularMovies$ = this.store.select(selectPopularMovies); //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
     this.currentPage$ = this.store.select(selectPopularCurrentPage);
-    this.isLoading$ = this.store.select(selectLoadingPopular);
+    this.isLoading$ = this.store.select(selectPopularLoading);
   }
 
   ngOnInit() {

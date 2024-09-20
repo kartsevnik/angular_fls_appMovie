@@ -2,6 +2,11 @@ import { Component } from '@angular/core';
 import { DataHandlerService } from '../../services/data-handler.service';
 import { movieDB } from '../../models/api-movie-db';
 import { DataService } from '../../services/data.service';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
+import { AppState } from '../../store/state';
+import * as MoviesActions from '../../store/actions';
+import { selectTrendCurrentPage, selectTrendLoading, selectTrendMovies } from '../../store/selectors';
 
 @Component({
   selector: 'app-home',
@@ -9,10 +14,14 @@ import { DataService } from '../../services/data.service';
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  movies: movieDB[] = []
-  currentPage = 1;
+  // movies: movieDB[] = []
+  // currentPage = 1;
 
-  randomMovies: movieDB[] = []
+  trendMovies$: Observable<movieDB[]>;
+  isLoading$: Observable<boolean>;
+  currentPage$: Observable<number>;
+
+  randomMovies$: Observable<movieDB[]> | undefined;
 
   // Флаг для предотвращения множественных запросов одновременно во время дозагрузки фильмов
   isLoading = false;
@@ -20,52 +29,46 @@ export class HomeComponent {
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
 
-  constructor(private dataService: DataService, private dataHandlerService: DataHandlerService) { }
+  constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
+    this.trendMovies$ = this.store.select(selectTrendMovies); //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
+    this.currentPage$ = this.store.select(selectTrendCurrentPage);
+    this.isLoading$ = this.store.select(selectTrendLoading);
+  }
 
   ngOnInit(): void {
     this.dataHandlerService.changeCategory('Home');
-    this.loadMovies();
+    this.store.dispatch(MoviesActions.loadTrendMovies());
   }
 
-  loadMovies() {
-    if (this.isLoading) return;
-    this.isLoading = true;
 
-    this.dataService.getMoviesTrending(this.currentPage).subscribe(movies => {
-      this.movies = [...this.movies, ...movies.results];
-
-      if (this.randomMovies.length == 0) {
-        this.randomMovies = this.getRandomMoviesForSlider(3);
-      }
-
-      this.isLoading = false;
-
-    }, () => {
-      this.isLoading = false;
-    });
-  }
-
-  getRandomMoviesForSlider(quantityOfMovies: number): movieDB[] {
+  getRandomMoviesForSlider(movies: movieDB[], quantityOfMovies: number): movieDB[] {
     const minV = 0;
-    const maxV = this.movies.length;
+    const maxV = movies.length;
     let moviesForSlider: movieDB[] = [];
+
+    if (maxV === 0) {
+      return moviesForSlider; // Возвращаем пустой массив, если нет фильмов
+    }
 
     while (moviesForSlider.length < quantityOfMovies) {
       const randomIndex = minV + Math.floor(Math.random() * (maxV - minV));
-      const randomMovie = this.movies[randomIndex];
+      const randomMovie = movies[randomIndex];
 
       // Проверяем, есть ли уже этот фильм в массиве
       if (!moviesForSlider.some(movie => movie.id === randomMovie.id)) {
         moviesForSlider.push(randomMovie);
       }
+
+      // Добавляем проверку на случай, если количество уникальных фильмов меньше требуемого
+      if (moviesForSlider.length === movies.length) {
+        break;
+      }
     }
 
     return moviesForSlider;
   }
-
   loadNextPage() {
-    this.currentPage++;
-    this.loadMovies();
+    this.store.dispatch(MoviesActions.loadTrendMovies());
   }
 
   getMovieImageUrl(movie: movieDB): string {

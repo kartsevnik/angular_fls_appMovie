@@ -14,41 +14,45 @@ export const selectMoviesState = createFeatureSelector<AppState, MoviesState>('m
 // createSelector: Создает селектор для извлечения и обработки части состояния.
 // Например, selectFavoriteMovies выбирает массив favoriteMovies из состояния MoviesState.
 
-//FavoriteMovies and ToWatchMovies
+
+//==================FavoriteMovies==================================
+
 export const selectFavoriteMovies = createSelector(
     selectMoviesState,
     (state: MoviesState) => state.favoriteMovies
 );
+
+//==================ToWatchMovies==================================
 
 export const selectToWatchMovies = createSelector(
     selectMoviesState,
     (state: MoviesState) => state.toWatchMovies
 );
 
-export const selectLoading = createSelector(
+// export const selectLoading = createSelector(
+//     selectMoviesState,
+//     (state: MoviesState) => state.loading
+// );
+
+// export const selectError = createSelector(
+//     selectMoviesState,
+//     (state: MoviesState) => state.error
+// );
+
+//==================TREND home==================================
+export const selectTrendMovies = createSelector(
     selectMoviesState,
-    (state: MoviesState) => state.loading
+    (state: MoviesState) => state.trendMovies
 );
 
-export const selectError = createSelector(
+export const selectTrendLoading = createSelector(
     selectMoviesState,
-    (state: MoviesState) => state.error
+    (state: MoviesState) => state.trendLoading
 );
 
-//==================POPULAR==================================
-export const selectPopularMovies = createSelector(
+export const selectTrendCurrentPage = createSelector(
     selectMoviesState,
-    (state: MoviesState) => state.popularMovies
-);
-
-export const selectLoadingPopular = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.popularLoading
-);
-
-export const selectPopularCurrentPage = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.popularCurrentPage
+    (state: MoviesState) => state.trendCurrentPage
 );
 
 //==================Now playing==================================
@@ -57,7 +61,7 @@ export const selectNowPlayingMovies = createSelector(
     (state: MoviesState) => state.nowPlayingMovies
 );
 
-export const selectLoadingNowPlaying = createSelector(
+export const selectNowPlayingLoading = createSelector(
     selectMoviesState,
     (state: MoviesState) => state.nowPlayingLoading
 );
@@ -65,4 +69,20 @@ export const selectLoadingNowPlaying = createSelector(
 export const selectNowPlayingCurrentPage = createSelector(
     selectMoviesState,
     (state: MoviesState) => state.nowPlayingCurrentPage
+);
+
+//==================POPULAR==================================
+export const selectPopularMovies = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.popularMovies
+);
+
+export const selectPopularLoading = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.popularLoading
+);
+
+export const selectPopularCurrentPage = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.popularCurrentPage
 );
