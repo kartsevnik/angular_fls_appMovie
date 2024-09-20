@@ -11,11 +11,18 @@ import { movieDB } from '../models/api-movie-db';
 export interface MoviesState {
     favoriteMovies: movieDB[];
     toWatchMovies: movieDB[];
+    loading: boolean;
+    error: string | null;
+
+    nowPlayingMovies: movieDB[];
+    nowPlayingCurrentPage: number;
+    nowPlayingLoading: boolean;
+
     popularMovies: movieDB[];
     popularCurrentPage: number;
-    loading: boolean;
-    loadingPopular: boolean;
-    error: string | null;
+    popularLoading: boolean;
+
+
 }
 
 // Начальное состояние фильмов
@@ -23,11 +30,17 @@ export interface MoviesState {
 export const initialState: MoviesState = {
     favoriteMovies: [],
     toWatchMovies: [],
+    loading: false,
+    error: null,
+
+    nowPlayingMovies: [],
+    nowPlayingCurrentPage: 1,
+    nowPlayingLoading: false,
+
     popularMovies: [],
     popularCurrentPage: 1,
-    loading: false,
-    loadingPopular: false,
-    error: null,
+    popularLoading: false,
+
 };
 
 // Редьюсер для управления состоянием фильмов
@@ -38,24 +51,8 @@ export const initialState: MoviesState = {
 // Например, при MoviesActions.loadMovies устанавливается флаг загрузки в true, а ошибка сбрасывается в null.
 export const moviesReducer = createReducer(
     initialState,
-    //==================POPULAR==================================
-    on(MoviesActions.loadPopularMovies, (state) => ({
-        ...state,
-        loadingPopular: true,
-        error: null
-    })),
-    on(MoviesActions.loadPopularMoviesSuccess, (state, { movies }) => ({
-        ...state,
-        popularMovies: [...state.popularMovies, ...movies],
-        popularCurrentPage: state.popularCurrentPage + 1,
-        loadingPopular: false
-    })),
-    on(MoviesActions.loadPopularMoviesFailure, (state, { error }) => ({
-        ...state,
-        loadingPopular: false,
-        error
-    })),
-    //=====================HOME?===============================
+    //=====================saved-movies===============================
+
     on(MoviesActions.loadMovies, state => ({
         ...state,
         loading: true,
@@ -72,6 +69,45 @@ export const moviesReducer = createReducer(
         loading: false,
         error
     })),
+
+    //==================Now playing==================================
+
+    on(MoviesActions.loadNowPlayingMovies, (state) => ({
+        ...state,
+        nowPlayingLoading: true,
+        error: null
+    })),
+    on(MoviesActions.loadNowPlayingMoviesSuccess, (state, { movies }) => ({
+        ...state,
+        nowPlayingMovies: [...state.nowPlayingMovies, ...movies],
+        nowPlayingCurrentPage: state.nowPlayingCurrentPage + 1,
+        nowPlayingLoading: false
+    })),
+    on(MoviesActions.loadNowPlayingMoviesFailure, (state, { error }) => ({
+        ...state,
+        nowPlayingLoading: false,
+        error
+    })),
+
+    //==================POPULAR==================================
+
+    on(MoviesActions.loadPopularMovies, (state) => ({
+        ...state,
+        popularLoading: true,
+        error: null
+    })),
+    on(MoviesActions.loadPopularMoviesSuccess, (state, { movies }) => ({
+        ...state,
+        popularMovies: [...state.popularMovies, ...movies],
+        popularCurrentPage: state.popularCurrentPage + 1,
+        popularLoading: false
+    })),
+    on(MoviesActions.loadPopularMoviesFailure, (state, { error }) => ({
+        ...state,
+        popularLoading: false,
+        error
+    })),
+
     //=====================Favorites===============================
     on(MoviesActions.addMovieToFavorites, (state, { movie }) => ({
         ...state,

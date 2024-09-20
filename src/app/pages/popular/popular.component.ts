@@ -16,14 +16,12 @@ export class PopularComponent implements OnInit {
   popularMovies$: Observable<movieDB[]>;
   isLoading$: Observable<boolean>;
   currentPage$: Observable<number>;
-  loadingPopular$: Observable<boolean>;
 
   //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
-  constructor(private store: Store<AppState>) {  // Используем AppState вместо MoviesState
+  constructor(private store: Store<AppState>) { 
     this.popularMovies$ = this.store.select(selectPopularMovies); //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
-    this.isLoading$ = this.store.select(selectLoadingPopular);
     this.currentPage$ = this.store.select(selectPopularCurrentPage);
-    this.loadingPopular$ = this.store.select(selectLoadingPopular);
+    this.isLoading$ = this.store.select(selectLoadingPopular);
   }
 
   ngOnInit() {

@@ -1,7 +1,10 @@
 import { Component, OnInit } from '@angular/core';
+import { Store } from '@ngrx/store';
+import { Observable } from 'rxjs';
 import { movieDB } from '../../models/api-movie-db';
-import { DataService } from '../../services/data.service';
-import { DataHandlerService } from '../../services/data-handler.service';
+import * as MoviesActions from '../../store/actions'
+import { selectNowPlayingMovies, selectLoadingNowPlaying, selectNowPlayingCurrentPage } from '../../store/selectors';
+import { AppState } from '../../store/state';
 
 @Component({
   selector: 'app-now-playing',
@@ -10,33 +13,26 @@ import { DataHandlerService } from '../../services/data-handler.service';
 })
 export class NowPlayingComponent implements OnInit {
 
-  nowPlayingMovies: movieDB[] = []
-  currentPage = 1;
-  isLoading = false;  // Флаг для предотвращения множественных запросов одновременно
+  // nowPlayingMovies: movieDB[] = []
+  // currentPage = 1;
+  // isLoading = false;  
 
-  constructor(private dataService: DataService, private dataHandlerService: DataHandlerService) {
+  nowPlayingMovies$: Observable<movieDB[]>;
+  isLoading$: Observable<boolean>;
+  currentPage$: Observable<number>;
+
+ //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
+  constructor(private store: Store<AppState>) {
+    this.nowPlayingMovies$ = this.store.select(selectNowPlayingMovies) //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
+    this.isLoading$ = this.store.select(selectLoadingNowPlaying)
+    this.currentPage$ = this.store.select(selectNowPlayingCurrentPage)
   }
 
   ngOnInit() {
-    this.dataHandlerService.changeCategory('Now Playing');
-    this.loadMovies();
-  }
-
-
-  loadMovies() {
-    if (this.isLoading) return;  // Если уже идет загрузка, ничего не делаем
-    this.isLoading = true;
-
-    this.dataService.getMoviesNowPlaying(this.currentPage).subscribe(movies => {
-      this.nowPlayingMovies = [...this.nowPlayingMovies, ...movies.results];
-      this.isLoading = false;
-    }, () => {
-      this.isLoading = false;
-    });
+    this.store.dispatch(MoviesActions.loadNowPlayingMovies()) // dispatch: Метод, который отправляет действие в хранилище для изменения состояния.
   }
 
   loadNextPage() {
-    this.currentPage++;
-    this.loadMovies();
+    this.store.dispatch(MoviesActions.loadNowPlayingMovies()) // Загружаем следующую страницу
   }
 }
