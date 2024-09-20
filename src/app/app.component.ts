@@ -9,7 +9,7 @@ import { DataService } from './services/data.service';
   styleUrl: './app.component.scss'
 })
 export class AppComponent implements OnInit {
-  title = 'movie-project';
+  title = 'Movie Pulse';
   selectedCategory = 'All Movies';  // default category
 
   constructor(private dataService: DataService, private authService: AuthService) { }

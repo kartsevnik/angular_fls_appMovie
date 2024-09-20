@@ -12,14 +12,13 @@ export class HomeComponent {
   movies: movieDB[] = []
   currentPage = 1;
 
+  randomMovies: movieDB[] = []
+
   // Флаг для предотвращения множественных запросов одновременно во время дозагрузки фильмов
   isLoading = false;
 
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
-
-  randomMovies: movieDB[] = []
-  responsiveOptions: any[] | undefined;
 
   constructor(private dataService: DataService, private dataHandlerService: DataHandlerService) { }
 
@@ -28,17 +27,13 @@ export class HomeComponent {
     this.loadMovies();
   }
 
-  // get selectedMovies() {
-  //   return this.dataHandlerService.selectedMovies;
-  // }
-
   loadMovies() {
     if (this.isLoading) return;
     this.isLoading = true;
 
     this.dataService.getMoviesTrending(this.currentPage).subscribe(movies => {
       this.movies = [...this.movies, ...movies.results];
-      
+
       if (this.randomMovies.length == 0) {
         this.randomMovies = this.getRandomMoviesForSlider(3);
       }

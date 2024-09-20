@@ -2,17 +2,16 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
-import { DataService } from './data.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = 'https://api.themoviedb.org/3';
-  private apiKey = 'YOUR_KEY';
+  private apiKey = 'fd8429ffaad200356d0b20c56812f7e5';
 
-  private username = 'YOUR_USER_NAME';
-  private password = 'PASS';
+  private username = 'mykola.kartsev';
+  private password = 'ay4w!@Dp26#fN2W';
 
   constructor(private http: HttpClient) { }
 
@@ -65,7 +64,7 @@ export class AuthService {
         switchMap(() => this.createSession(requestToken)),
         switchMap(sessionId => this.getAccountId(sessionId))
       ))
-    );
+      );
   }
 
   private handleError(error: any) {
@@ -73,27 +72,4 @@ export class AuthService {
     return throwError(error);
   }
 }
-
-
-
-// add this code to ngOnInit in your appConfig.component
-
-
-// this.authService.authenticateAndGetAccountId().subscribe(
-//     accountId => {
-//         this.movieService.setAccountId(accountId);
-//         console.log('Account ID:', accountId);
-//     },
-//     error => {
-//         console.error('Authentication failed:', error);
-//     }
-// );
-
-
-// and save accountId in your MovieService
-
-// accountId: number | null = null;
-
-// setAccountId(id: number) {
-//     this.accountId = id;
-// }
+  

@@ -20,12 +20,13 @@
     &__container {
         margin-top: 15px;
         // width: 96vw;
-        height: 88vh;
+        height: 80vh;
         border: var(--maincolor) 1px solid;
         position: relative;
         overflow: hidden;
         display: flex;
-        padding: 10px;
+        padding: 10px 10px 0 10px;
+        margin-bottom: 10px;
 
     }
 
@@ -95,14 +96,7 @@
     }
 }
 
-.movie-list-title {
-    font-size: 40px;
-    letter-spacing: 1px;
-    padding: 0px 0px 20px 0px;
-    width: 100%;
-    text-align: center;
-    transform: translate(-6px, -20px);
-}
+.movie-list-title {}
 
 .btn {
 

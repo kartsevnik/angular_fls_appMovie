@@ -44,6 +44,8 @@ import { moviesReducer } from './store/reducer';
 import { MoviesEffects } from './store/effects';
 import { appReducers } from './store/state';
 import { localStorageSync } from 'ngrx-store-localstorage';
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
+import { environment } from '../environments/environments';
 
 export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
   return localStorageSync({ keys: ['movies'], rehydrate: true })(reducer);
@@ -82,7 +84,11 @@ export const metaReducers: MetaReducer<any>[] = [localStorageSyncReducer];
     HttpClientModule,
     CarouselModule,
     StoreModule.forRoot(appReducers, { metaReducers }),
-    EffectsModule.forRoot([MoviesEffects]) // Регистрация эффектов
+    EffectsModule.forRoot([MoviesEffects]),
+    StoreDevtoolsModule.instrument({
+      maxAge: 25, // Хранить последние 25 состояний
+      logOnly: environment.production, // В продакшене не разрешаем изменять состояние через DevTools
+    }),
   ],
   providers: [],
   bootstrap: [AppComponent]

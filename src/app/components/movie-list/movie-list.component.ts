@@ -14,7 +14,7 @@ export class MovieListComponent implements OnInit {
   @ViewChild('anchor') anchor!: ElementRef; // Якорь для отслеживания конца списка
   private observer!: IntersectionObserver;
 
-  selectedCategory: string = '';
+  // selectedCategory: string = '';
   selectedMovies: movieDB[] = [];
 
   isLoading = false;
@@ -22,25 +22,11 @@ export class MovieListComponent implements OnInit {
   constructor(private dataHandlerService: DataHandlerService, private route: ActivatedRoute) { }
 
   ngOnInit(): void {
-    // Обновляем категорию в сервисе 
-    this.dataHandlerService.selectedCategory$.subscribe(category => {
-      this.selectedCategory = category;
-    });
   }
 
   ngAfterViewInit(): void {
     this.setupObserver();
   }
-
-  // метод который вызывает метод сервиса при нажатии на кнопку Favorite и вызывает необходимое действие
-  // updateFavoriteMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
-  //   this.dataHandlerService.updateFavoriteMovies(movieAction);
-  // }
-
-  // метод который вызывает метод сервиса при нажатии на кнопку To Watch и вызывает необходимое действие
-  // updateWatchMovies(movieAction: { movie: movieDB, action: 'add' | 'remove' }) {
-  //   this.dataHandlerService.updateWatchMovies(movieAction);
-  // }
 
   trackById(index: number, item: movieDB) {
     return item.id;
