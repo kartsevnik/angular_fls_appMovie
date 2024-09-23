@@ -1,5 +1,7 @@
 export const environment = {
     production: true,
-    // Add other production-specific variables here
+    apiKey: 'your_api_key_here',
+    username: 'your_username',
+    password: 'your_password'
   };
   
