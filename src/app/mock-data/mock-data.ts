@@ -9,5 +9,5 @@ export const categoryList: Category[] = [
 ];
 
 
-export const favoriteMovies: movieDB[] = [];
-export const toWatchMovies: movieDB[] = [];
+// export const favoriteMovies: movieDB[] = [];
+// export const toWatchMovies: movieDB[] = [];

@@ -2,6 +2,11 @@ import { Component } from '@angular/core';
 import { movieDB } from '../../models/api-movie-db';
 import { DataService } from '../../services/data.service';
 import { DataHandlerService } from '../../services/data-handler.service';
+import { Observable } from 'rxjs';
+import { AppState } from '../../store/state';
+import { selectPopularCurrentPage, selectPopularLoading, selectPopularMovies } from '../../store/selectors';
+import { Store } from '@ngrx/store';
+import * as MoviesActions from '../../store/actions';
 
 @Component({
   selector: 'app-upcoming',
@@ -10,32 +15,22 @@ import { DataHandlerService } from '../../services/data-handler.service';
 })
 export class UpcomingComponent {
 
-  upcomingMovies: movieDB[] = []
-  currentPage = 1;
-  isLoading = false;  // Флаг для предотвращения множественных запросов одновременно
+  upComingMovies$: Observable<movieDB[]>;
+  isLoading$: Observable<boolean>;
+  currentPage$: Observable<number>;
 
-  constructor(private dataService: DataService, private dataHandlerService: DataHandlerService) {
+  //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
+  constructor(private store: Store<AppState>) {
+    this.upComingMovies$ = this.store.select(selectPopularMovies); //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
+    this.currentPage$ = this.store.select(selectPopularCurrentPage);
+    this.isLoading$ = this.store.select(selectPopularLoading);
   }
 
   ngOnInit() {
-    this.dataHandlerService.changeCategory('Upcoming');
-    this.loadMovies();
-  }
-
-  loadMovies() {
-    if (this.isLoading) return;  // Если уже идет загрузка, ничего не делаем
-    this.isLoading = true;
-
-    this.dataService.getMoviesUpcoming(this.currentPage).subscribe(movies => {
-      this.upcomingMovies = [...this.upcomingMovies, ...movies.results];
-      this.isLoading = false;
-    }, () => {
-      this.isLoading = false;
-    });
+    this.store.dispatch(MoviesActions.loadPopularMovies()); // dispatch: Метод, который отправляет действие в хранилище для изменения состояния.
   }
 
   loadNextPage() {
-    this.currentPage++;
-    this.loadMovies();
+    this.store.dispatch(MoviesActions.loadPopularMovies());  // Загружаем следующую страницу
   }
 }

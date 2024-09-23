@@ -46,3 +46,17 @@ export const loadPopularMoviesSuccess = createAction('[Movies] Load Popular Movi
 export const loadPopularMoviesFailure = createAction('[Movies] Load Popular Movies Failure', props<{ error: string }>());
 
 //=======================================================================================
+
+// Действия для загрузки TopRate фильмов
+export const loadTopRateMovies = createAction('[Movies] Load TopRate Movies')
+export const loadTopRateMoviesSuccess = createAction('[Movies] Load TopRate Movies Success', props<{ movies: movieDB[] }>())
+export const loadTopRateMoviesFailure = createAction('[Movies] Load TopRate Movies', props<{ error: string }>());
+
+//=======================================================================================
+
+// Действия для загрузки Up Coming фильмов
+export const loadUpComingMovies = createAction('[Movies] Load Up Coming Movies')
+export const loadUpComingSuccess = createAction('[Movies] Load Up Coming Movies Success', props<{ movies: movieDB[] }>())
+export const loadUpComingFailure = createAction('[Movies] Load Up Coming Movies', props<{ error: string }>());
+
+//=======================================================================================

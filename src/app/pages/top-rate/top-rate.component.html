@@ -1,2 +1,4 @@
-<div class="main-title">Top <span class="main-color">rate</span></div>
-<app-movie-list [movies]="topRateMovies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+<div *ngIf="(topRateMovies$ |async) as movies">
+    <div class="main-title">Top <span class="main-color">rate</span></div>
+    <app-movie-list [movies]="movies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+</div>

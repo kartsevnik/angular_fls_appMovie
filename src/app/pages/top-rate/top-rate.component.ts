@@ -1,7 +1,11 @@
 import { Component } from '@angular/core';
 import { movieDB } from '../../models/api-movie-db';
-import { DataService } from '../../services/data.service';
 import { DataHandlerService } from '../../services/data-handler.service';
+import { Observable } from 'rxjs';
+import { AppState } from '../../store/state';
+import { Store } from '@ngrx/store';
+import { selectTopRateCurrentPage, selectTopRateLoading, selectTopRateMovies } from '../../store/selectors';
+import * as MoviesActions from '../../store/actions';
 
 @Component({
   selector: 'app-top-rate',
@@ -10,32 +14,24 @@ import { DataHandlerService } from '../../services/data-handler.service';
 })
 export class TopRateComponent {
 
-  topRateMovies: movieDB[] = []
-  currentPage = 1;
-  isLoading = false;  // Флаг для предотвращения множественных запросов одновременно
+  topRateMovies$: Observable<movieDB[]>;
+  isLoading$: Observable<boolean>;
+  currentPage$: Observable<number>;
 
-  constructor(private dataService: DataService, private dataHandlerService: DataHandlerService) {
+  constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
+    this.topRateMovies$ = this.store.select(selectTopRateMovies)
+    this.currentPage$ = this.store.select(selectTopRateCurrentPage)
+    this.isLoading$ = this.store.select(selectTopRateLoading)
   }
 
   ngOnInit() {
     this.dataHandlerService.changeCategory('Top Rate');
-    this.loadMovies();
+    this.store.dispatch(MoviesActions.loadTopRateMovies());
   }
 
-  loadMovies() {
-    if (this.isLoading) return;  // Если уже идет загрузка, ничего не делаем
-    this.isLoading = true;
 
-    this.dataService.getMoviesTopRated(this.currentPage).subscribe(movies => {
-      this.topRateMovies = [...this.topRateMovies, ...movies.results];
-      this.isLoading = false;
-    }, () => {
-      this.isLoading = false;
-    });
-  }
 
   loadNextPage() {
-    this.currentPage++;
-    this.loadMovies();
+    this.store.dispatch(MoviesActions.loadTopRateMovies());
   }
 }

@@ -48,7 +48,7 @@ export class MoviesEffects {
 
   //=======================================================================================
 
-  // Эффект для загрузки популярных фильмов
+  // Эффект для загрузки Popular фильмов
   loadPopularMovies$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadPopularMovies),  // Слушаем действие loadPopularMovies
@@ -63,5 +63,30 @@ export class MoviesEffects {
   );
 
   //=======================================================================================
+  // Эффект для загрузки TopRated фильмов
+  loadTopRatedMovies$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.loadTopRateMovies),
+      withLatestFrom(this.store.pipe(select(selectMoviesState))),
+      mergeMap(([action, state]) =>
+        this.dataService.getMoviesTopRated(state.topRateCurrentPage).pipe(
+          map((response: moviesResponse) => MoviesActions.loadTopRateMoviesSuccess({ movies: response.results })),
+          catchError((error) => of(MoviesActions.loadTopRateMoviesFailure({ error: error.message })))
+        ))
+    )
+  )
 
+  //=======================================================================================
+  // Эффект для загрузки Up Coming фильмов
+  loadUpComingMovies$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.loadUpComingMovies),
+      withLatestFrom(this.store.pipe(select(selectMoviesState))),
+      mergeMap(([action, state]) =>
+        this.dataService.getMoviesUpcoming(state.upComingCurrentPage).pipe(
+          map((response: moviesResponse) => MoviesActions.loadUpComingSuccess({ movies: response.results })),
+          catchError((error) => of(MoviesActions.loadUpComingFailure({ error: error.message })))
+        ))
+    )
+  )
 }

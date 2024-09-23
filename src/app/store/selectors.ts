@@ -86,3 +86,35 @@ export const selectPopularCurrentPage = createSelector(
     selectMoviesState,
     (state: MoviesState) => state.popularCurrentPage
 );
+
+//==================Top Rate==================================
+export const selectTopRateMovies = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.topRateMovies
+);
+
+export const selectTopRateLoading = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.topRateLoading
+);
+
+export const selectTopRateCurrentPage = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.topRateCurrentPage
+);
+
+//==================UpComing==================================
+export const selectUpComingMovies = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.upComingMovies
+);
+
+export const selectUpComingLoading = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.upComingLoading
+);
+
+export const selectUpComingCurrentPage = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.upComingCurrentPage
+);

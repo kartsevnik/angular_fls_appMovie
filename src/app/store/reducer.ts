@@ -26,7 +26,13 @@ export interface MoviesState {
     popularCurrentPage: number;
     popularLoading: boolean;
 
+    topRateMovies: movieDB[];
+    topRateCurrentPage: number;
+    topRateLoading: boolean;
 
+    upComingMovies: movieDB[];
+    upComingCurrentPage: number;
+    upComingLoading: boolean;
 }
 
 // Начальное состояние фильмов
@@ -49,6 +55,13 @@ export const initialState: MoviesState = {
     popularCurrentPage: 1,
     popularLoading: false,
 
+    topRateMovies: [],
+    topRateCurrentPage: 1,
+    topRateLoading: false,
+
+    upComingMovies: [],
+    upComingCurrentPage: 1,
+    upComingLoading: false,
 };
 
 // Редьюсер для управления состоянием фильмов
@@ -61,7 +74,7 @@ export const moviesReducer = createReducer(
     initialState,
     //=====================saved-movies===============================
 
-            //=====================Favorites===============================
+    //=====================Favorites===============================
     on(MoviesActions.addMovieToFavorites, (state, { movie }) => ({
         ...state,
         favoriteMovies: [...state.favoriteMovies, movie]
@@ -154,6 +167,42 @@ export const moviesReducer = createReducer(
         error
     })),
 
+    //==================Top Rate==================================
 
+    on(MoviesActions.loadTopRateMovies, (state) => ({
+        ...state,
+        topRateLoading: true,
+        error: null
+    })),
+    on(MoviesActions.loadTopRateMoviesSuccess, (state, { movies }) => ({
+        ...state,
+        topRateMovies: [...state.topRateMovies, ...movies],
+        topRateCurrentPage: state.topRateCurrentPage + 1,
+        topRateLoading: false
+    })),
+    on(MoviesActions.loadTopRateMoviesFailure, (state, { error }) => ({
+        ...state,
+        topRateLoading: false,
+        error
+    })),
+
+    //==================UPCOMING==================================
+
+    on(MoviesActions.loadUpComingMovies, (state) => ({
+        ...state,
+        upComingLoading: true,
+        error: null
+    })),
+    on(MoviesActions.loadUpComingSuccess, (state, { movies }) => ({
+        ...state,
+        upComingMovies: [...state.upComingMovies, ...movies],
+        upComingCurrentPage: state.upComingCurrentPage + 1,
+        upComingLoading: false
+    })),
+    on(MoviesActions.loadUpComingFailure, (state, { error }) => ({
+        ...state,
+        upComingLoading: false,
+        error
+    })),
 
 );
