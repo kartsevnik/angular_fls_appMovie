@@ -37,7 +37,7 @@ export class HomeComponent {
 
   ngOnInit(): void {
     this.dataHandlerService.changeCategory('Home');
-    this.store.dispatch(MoviesActions.loadTrendMovies());
+    // this.store.dispatch(MoviesActions.loadTrendMovies());
   }
 
 

@@ -28,7 +28,7 @@ export class UpcomingComponent {
 
   ngOnInit() {
     this.dataHandlerService.changeCategory('Up Coming');
-    this.store.dispatch(MoviesActions.loadUpComingMovies()); // dispatch: Метод, который отправляет действие в хранилище для изменения состояния.
+    // this.store.dispatch(MoviesActions.loadUpComingMovies()); 
   }
 
   loadNextPage() {

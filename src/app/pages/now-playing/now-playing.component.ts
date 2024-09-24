@@ -31,7 +31,6 @@ export class NowPlayingComponent implements OnInit {
 
   ngOnInit() {
     this.dataHandlerService.changeCategory('Now playing');
-    this.store.dispatch(MoviesActions.loadNowPlayingMovies()) // dispatch: Метод, который отправляет действие в хранилище для изменения состояния.
   }
 
   loadNextPage() {

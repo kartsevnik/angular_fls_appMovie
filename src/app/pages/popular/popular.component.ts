@@ -27,7 +27,6 @@ export class PopularComponent implements OnInit {
 
   ngOnInit() {
     this.dataHandlerService.changeCategory('Popular');
-    this.store.dispatch(MoviesActions.loadPopularMovies()); // dispatch: Метод, который отправляет действие в хранилище для изменения состояния.
   }
 
   loadNextPage() {
