@@ -20,13 +20,14 @@ export class UpcomingComponent {
   currentPage$: Observable<number>;
 
   //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
     this.upComingMovies$ = this.store.select(selectPopularMovies); //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
     this.currentPage$ = this.store.select(selectPopularCurrentPage);
     this.isLoading$ = this.store.select(selectPopularLoading);
   }
 
   ngOnInit() {
+    this.dataHandlerService.changeCategory('Up Coming');
     this.store.dispatch(MoviesActions.loadPopularMovies()); // dispatch: Метод, который отправляет действие в хранилище для изменения состояния.
   }
 

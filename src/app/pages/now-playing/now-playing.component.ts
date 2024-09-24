@@ -5,6 +5,7 @@ import { movieDB } from '../../models/api-movie-db';
 import * as MoviesActions from '../../store/actions'
 import { selectNowPlayingMovies, selectNowPlayingLoading, selectNowPlayingCurrentPage } from '../../store/selectors';
 import { AppState } from '../../store/state';
+import { DataHandlerService } from '../../services/data-handler.service';
 
 @Component({
   selector: 'app-now-playing',
@@ -22,13 +23,14 @@ export class NowPlayingComponent implements OnInit {
   currentPage$: Observable<number>;
 
   //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
-  constructor(private store: Store<AppState>) {
+  constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
     this.nowPlayingMovies$ = this.store.select(selectNowPlayingMovies) //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
     this.isLoading$ = this.store.select(selectNowPlayingLoading)
     this.currentPage$ = this.store.select(selectNowPlayingCurrentPage)
   }
 
   ngOnInit() {
+    this.dataHandlerService.changeCategory('Now playing');
     this.store.dispatch(MoviesActions.loadNowPlayingMovies()) // dispatch: Метод, который отправляет действие в хранилище для изменения состояния.
   }
 
