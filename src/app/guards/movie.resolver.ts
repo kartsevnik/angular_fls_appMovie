@@ -16,7 +16,7 @@ export class MoviesResolver {
 
     resolve(route: ActivatedRouteSnapshot): Observable<movieDB[]> {
         const path = route.routeConfig?.path;
-
+        window.scrollTo(0, 0);
         switch (path) {
             case 'home':
                 this.store.dispatch(MoviesActions.loadTrendMovies());

@@ -39,18 +39,17 @@ import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.componen
 import { ErrorComponent } from './pages/error/error.component';
 
 //store
-import { StoreModule, MetaReducer, ActionReducer } from '@ngrx/store';
+import { appReducers, AppState, metaReducers } from './store/state';
 import { EffectsModule } from '@ngrx/effects';
 import { MoviesEffects } from './store/effects';
-import { appReducers } from './store/state';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environments';
-
-export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
-  return localStorageSync({ keys: ['movies'], rehydrate: true })(reducer);
-}
-export const metaReducers: MetaReducer<any>[] = [localStorageSyncReducer];
+import { StoreModule, MetaReducer } from '@ngrx/store';
+// export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
+//   return localStorageSync({ keys: ['movies'], rehydrate: true })(reducer);
+// }
+// export const metaReducers: MetaReducer<any>[] = [localStorageSyncReducer];
 
 @NgModule({
   declarations: [

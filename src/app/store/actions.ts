@@ -54,3 +54,9 @@ export const loadUpComingSuccess = createAction('[Movies] Load Up Coming Movies 
 export const loadUpComingFailure = createAction('[Movies] Load Up Coming Movies Failure', props<{ error: string }>());
 
 //=======================================================================================
+
+export const resetTrendCurrentPage = createAction('[Movies] Reset Trend Current Page');
+export const resetNowPlayingCurrentPage = createAction('[Movies] Reset Now Playing Current Page');
+export const resetPopularCurrentPage = createAction('[Movies] Reset Popular Current Page');
+export const resetTopRateCurrentPage = createAction('[Movies] Reset Top Rate Current Page');
+export const resetUpComingCurrentPage = createAction('[Movies] Reset Up Coming Current Page');

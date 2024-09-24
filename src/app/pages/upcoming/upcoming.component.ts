@@ -20,16 +20,17 @@ export class UpcomingComponent {
   currentPage$: Observable<number>;
 
   constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
-    this.upComingMovies$ = this.store.select(selectUpComingMovies); 
+    this.upComingMovies$ = this.store.select(selectUpComingMovies);
     this.currentPage$ = this.store.select(selectUpComingCurrentPage);
     this.isLoading$ = this.store.select(selectUpComingLoading);
   }
 
   ngOnInit() {
     this.dataHandlerService.changeCategory('Up Coming');
+    this.store.dispatch(MoviesActions.resetUpComingCurrentPage());
   }
 
   loadNextPage() {
-    this.store.dispatch(MoviesActions.loadUpComingMovies());  
+    this.store.dispatch(MoviesActions.loadUpComingMovies());
   }
 }

@@ -19,16 +19,18 @@ export class NowPlayingComponent implements OnInit {
 
 
   constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
-    this.nowPlayingMovies$ = this.store.select(selectNowPlayingMovies) 
+    this.nowPlayingMovies$ = this.store.select(selectNowPlayingMovies)
     this.isLoading$ = this.store.select(selectNowPlayingLoading)
     this.currentPage$ = this.store.select(selectNowPlayingCurrentPage)
   }
 
   ngOnInit() {
     this.dataHandlerService.changeCategory('Now playing');
+    this.store.dispatch(MoviesActions.resetNowPlayingCurrentPage());
   }
 
   loadNextPage() {
-    this.store.dispatch(MoviesActions.loadNowPlayingMovies()) 
+    this.store.dispatch(MoviesActions.loadNowPlayingMovies())
+
   }
 }

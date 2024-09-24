@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { movieDB } from '../../models/api-movie-db';
 import * as MoviesActions from '../../store/actions';
 import { selectPopularMovies, selectPopularLoading, selectPopularCurrentPage } from '../../store/selectors';
-import { AppState } from '../../store/state'; 
+import { AppState } from '../../store/state';
 import { DataHandlerService } from '../../services/data-handler.service';
 
 @Component({
@@ -19,16 +19,17 @@ export class PopularComponent implements OnInit {
   currentPage$: Observable<number>;
 
   constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
-    this.popularMovies$ = this.store.select(selectPopularMovies); 
+    this.popularMovies$ = this.store.select(selectPopularMovies);
     this.currentPage$ = this.store.select(selectPopularCurrentPage);
     this.isLoading$ = this.store.select(selectPopularLoading);
   }
 
   ngOnInit() {
     this.dataHandlerService.changeCategory('Popular');
+    this.store.dispatch(MoviesActions.resetPopularCurrentPage());
   }
 
   loadNextPage() {
-    this.store.dispatch(MoviesActions.loadPopularMovies()); 
+    this.store.dispatch(MoviesActions.loadPopularMovies());
   }
 }

@@ -152,5 +152,31 @@ export const moviesReducer = createReducer(
         upComingLoading: false,
         error
     })),
-
+    //==================RESET PAGE==================================
+    // Обработчики действий для сброса currentPage
+    on(MoviesActions.resetTrendCurrentPage, (state) => ({
+        ...state,
+        trendCurrentPage: 1,
+        trendMovies: [] // Опционально очищаем список фильмов
+    })),
+    on(MoviesActions.resetNowPlayingCurrentPage, (state) => ({
+        ...state,
+        nowPlayingCurrentPage: 1,
+        nowPlayingMovies: [] // Опционально очищаем список фильмов
+    })),
+    on(MoviesActions.resetPopularCurrentPage, (state) => ({
+        ...state,
+        popularCurrentPage: 1,
+        popularMovies: [] // Опционально очищаем список фильмов
+    })),
+    on(MoviesActions.resetTopRateCurrentPage, (state) => ({
+        ...state,
+        topRateCurrentPage: 1,
+        topRateMovies: [] // Опционально очищаем список фильмов
+    })),
+    on(MoviesActions.resetUpComingCurrentPage, (state) => ({
+        ...state,
+        upComingCurrentPage: 1,
+        upComingMovies: [] // Опционально очищаем список фильмов
+    })),
 );
