@@ -1,42 +1,14 @@
 // Reducers (Редьюсеры): Функции, которые принимают текущее состояние и действие и возвращают новое состояние.
 
+// Редьюсер для управления состоянием фильмов
+// createReducer: Функция, создающая редьюсер.
+// Она принимает начальное состояние и множество обработчиков(handlers) для различных действий.
+
 import { createReducer, on } from '@ngrx/store';
 import * as MoviesActions from './actions';
 import { movieDB } from '../models/api-movie-db';
+import { MoviesState } from './state';
 
-// Определение состояния фильмов
-// MoviesState: Интерфейс, описывающий структуру состояния фильмов. 
-// Он определяет, какие данные хранятся в состоянии
-// (например, массивы фильмов, текущая страница, флаги загрузки).
-export interface MoviesState {
-    favoriteMovies: movieDB[];
-    toWatchMovies: movieDB[];
-    loading: boolean;
-    error: string | null;
-
-    trendMovies: movieDB[];
-    trendCurrentPage: number;
-    trendLoading: boolean;
-
-    nowPlayingMovies: movieDB[];
-    nowPlayingCurrentPage: number;
-    nowPlayingLoading: boolean;
-
-    popularMovies: movieDB[];
-    popularCurrentPage: number;
-    popularLoading: boolean;
-
-    topRateMovies: movieDB[];
-    topRateCurrentPage: number;
-    topRateLoading: boolean;
-
-    upComingMovies: movieDB[];
-    upComingCurrentPage: number;
-    upComingLoading: boolean;
-}
-
-// Начальное состояние фильмов
-// initialState: Начальное состояние, которое будет установлено в начале работы приложения.
 export const initialState: MoviesState = {
     favoriteMovies: [],
     toWatchMovies: [],
@@ -63,17 +35,8 @@ export const initialState: MoviesState = {
     upComingCurrentPage: 1,
     upComingLoading: false,
 };
-
-// Редьюсер для управления состоянием фильмов
-// createReducer: Функция, создающая редьюсер.
-// Она принимает начальное состояние и множество обработчиков(handlers) для различных действий.
-
-// on: Функция, определяющая, что делать при определенном действии.
-// Например, при MoviesActions.loadMovies устанавливается флаг загрузки в true, а ошибка сбрасывается в null.
 export const moviesReducer = createReducer(
     initialState,
-    //=====================saved-movies===============================
-
     //=====================Favorites===============================
     on(MoviesActions.addMovieToFavorites, (state, { movie }) => ({
         ...state,
@@ -92,25 +55,10 @@ export const moviesReducer = createReducer(
         ...state,
         toWatchMovies: state.toWatchMovies.filter(m => m.id !== movie.id)
     })),
-    //====================================================
-    // on(MoviesActions.loadMovies, state => ({
-    //     ...state,
-    //     loading: true,
-    //     error: null
-    // })),
-    // on(MoviesActions.loadMoviesSuccess, (state, { movies }) => ({
-    //     ...state,
-    //     favoriteMovies: movies.filter(movie => movie.favorite),
-    //     toWatchMovies: movies.filter(movie => movie.toWatch),
-    //     loading: false
-    // })),
-    // on(MoviesActions.loadMoviesFailure, (state, { error }) => ({
-    //     ...state,
-    //     loading: false,
-    //     error
-    // })),
 
     //==================Trend Home==================================
+    // on: Функция, определяющая, что делать при определенном действии.
+    // Например, при MoviesActions.loadTrendMovies устанавливается флаг загрузки в true, а ошибка сбрасывается в null.
 
     on(MoviesActions.loadTrendMovies, (state) => ({
         ...state,

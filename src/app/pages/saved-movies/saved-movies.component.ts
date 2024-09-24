@@ -15,11 +15,8 @@ import { Observable } from 'rxjs';
 })
 export class SavedMoviesComponent {
   savedMovies$!: Observable<movieDB[]>;
-
-  // Переменная для текста в шаблоне
+  
   nameOfCategory: string = ''
-
-   // Флаг для предотвращения множественных запросов одновременно
   isLoading = false; 
   
   constructor(
@@ -33,17 +30,17 @@ export class SavedMoviesComponent {
   }
 
   loadMovies() {
-    // Получаем параметр из ActivatedRoute
+    // We get a parameter from ActivatedRoute
     this.activatedRoute.url.subscribe(urlSegments => {
       const category = urlSegments[0]?.path;
 
       if (category) {
         if (category === 'favorites') {
-          this.dataHandlerService.changeCategory("Favorites"); // Обновляем категорию в сервисе
+          this.dataHandlerService.changeCategory("Favorites"); 
           this.nameOfCategory = "favorites"
           this.savedMovies$ = this.store.select(selectFavoriteMovies);
         } else if (category === 'watch-list') {
-          this.dataHandlerService.changeCategory("Watch list"); // Обновляем категорию в сервисе
+          this.dataHandlerService.changeCategory("Watch list"); 
           this.nameOfCategory = "watch"
           this.savedMovies$ = this.store.select(selectToWatchMovies);
         }
@@ -52,7 +49,7 @@ export class SavedMoviesComponent {
   }
 
   loadNextPage() {
-    // Заглушка, так как для избранных и списка для просмотра нет пагинации
+ // plug, since there is no pagination for the chosen ones and the list for viewing
   }
 
 }

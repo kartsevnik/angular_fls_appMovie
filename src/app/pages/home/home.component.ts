@@ -23,21 +23,17 @@ export class HomeComponent {
 
   randomMovies$: Observable<movieDB[]> | undefined;
 
-  // Флаг для предотвращения множественных запросов одновременно во время дозагрузки фильмов
-  isLoading = false;
-
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
 
   constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
-    this.trendMovies$ = this.store.select(selectTrendMovies); //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
+    this.trendMovies$ = this.store.select(selectTrendMovies); 
     this.currentPage$ = this.store.select(selectTrendCurrentPage);
     this.isLoading$ = this.store.select(selectTrendLoading);
   }
 
   ngOnInit(): void {
     this.dataHandlerService.changeCategory('Home');
-    // this.store.dispatch(MoviesActions.loadTrendMovies());
   }
 
 
@@ -47,19 +43,19 @@ export class HomeComponent {
     let moviesForSlider: movieDB[] = [];
 
     if (maxV === 0) {
-      return moviesForSlider; // Возвращаем пустой массив, если нет фильмов
+      return moviesForSlider; // Return an empty array if there are no films
     }
 
     while (moviesForSlider.length < quantityOfMovies) {
       const randomIndex = minV + Math.floor(Math.random() * (maxV - minV));
       const randomMovie = movies[randomIndex];
 
-      // Проверяем, есть ли уже этот фильм в массиве
+     // We check if this film is already in the array
       if (!moviesForSlider.some(movie => movie.id === randomMovie.id)) {
         moviesForSlider.push(randomMovie);
       }
 
-      // Добавляем проверку на случай, если количество уникальных фильмов меньше требуемого
+      // Add a check in case the number of unique films is less than the required
       if (moviesForSlider.length === movies.length) {
         break;
       }

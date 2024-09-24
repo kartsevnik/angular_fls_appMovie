@@ -4,8 +4,8 @@ import { Component } from '@angular/core';
   selector: 'app-error',
   template: `
     <div class="error-page">
-      <h1>Произошла ошибка</h1>
-      <p>К сожалению, что-то пошло не так. Попробуйте позже.</p>
+      <h1>An error occurred</h1>
+      <p>Unfortunately, something went wrong.Try it later.</p>
     </div>
   `,
   styles: [`

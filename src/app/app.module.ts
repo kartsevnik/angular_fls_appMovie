@@ -41,7 +41,6 @@ import { ErrorComponent } from './pages/error/error.component';
 //store
 import { StoreModule, MetaReducer, ActionReducer } from '@ngrx/store';
 import { EffectsModule } from '@ngrx/effects';
-import { moviesReducer } from './store/reducer';
 import { MoviesEffects } from './store/effects';
 import { appReducers } from './store/state';
 import { localStorageSync } from 'ngrx-store-localstorage';

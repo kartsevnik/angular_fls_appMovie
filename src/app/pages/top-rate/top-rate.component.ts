@@ -26,7 +26,6 @@ export class TopRateComponent {
 
   ngOnInit() {
     this.dataHandlerService.changeCategory('Top Rate');
-    // this.store.dispatch(MoviesActions.loadTopRateMovies());
   }
 
 

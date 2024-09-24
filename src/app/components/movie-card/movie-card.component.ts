@@ -16,15 +16,12 @@ import * as MoviesActions from '../../store/actions';
 export class MovieCardComponent implements OnInit, OnChanges {
 
   @Input() movie: movieDB | undefined;
-  // @Output() addWatchList = new EventEmitter<{ movie: movieDB, action: 'add' | 'remove' }>();
-  // @Output() addFavoritesList = new EventEmitter<{ movie: movieDB, action: 'add' | 'remove' }>();
-
   isFavorite$!: Observable<boolean>;
   isToWatch$!: Observable<boolean>;
 
   visible: boolean = false;
   selectedMovie: Partial<movieDB> | null = null;
-  scrollPosition = 0; // Для сохранения позиции скролла
+  scrollPosition = 0; // to maintain the position of the scroll
 
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
@@ -66,7 +63,7 @@ export class MovieCardComponent implements OnInit, OnChanges {
 
   showDialog() {
     if (this.movie) {
-      this.saveScrollPosition(); // Сохраняем позицию скролла перед открытием
+      this.saveScrollPosition(); // Save the position of the scroll before the opening
       this.selectedMovie = this.movie;
       this.visible = true;
     }
@@ -74,7 +71,7 @@ export class MovieCardComponent implements OnInit, OnChanges {
 
   hideDialog() {
     this.visible = false;
-    this.restoreScrollPosition(); // Восстанавливаем позицию скролла после закрытия
+    this.restoreScrollPosition(); // Restore the position of the scroll after closing
   }
 
   saveScrollPosition() {

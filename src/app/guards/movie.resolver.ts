@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { ActivatedRouteSnapshot, Resolve, RouterStateSnapshot, Router } from "@angular/router";
+import { ActivatedRouteSnapshot, Router } from "@angular/router";
 import { Observable, of } from "rxjs";
 import { Store } from '@ngrx/store';
 import { AppState } from "../store/state";
@@ -11,10 +11,10 @@ import { movieDB } from "../models/api-movie-db";
 @Injectable({
     providedIn: 'root'
 })
-export class MoviesResolver implements Resolve<movieDB[]> {
+export class MoviesResolver {
     constructor(private store: Store<AppState>, private router: Router) { }
 
-    resolve(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): Observable<movieDB[]> {
+    resolve(route: ActivatedRouteSnapshot): Observable<movieDB[]> {
         const path = route.routeConfig?.path;
 
         switch (path) {

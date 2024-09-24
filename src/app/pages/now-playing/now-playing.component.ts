@@ -13,18 +13,13 @@ import { DataHandlerService } from '../../services/data-handler.service';
   styleUrl: './now-playing.component.scss'
 })
 export class NowPlayingComponent implements OnInit {
-
-  // nowPlayingMovies: movieDB[] = []
-  // currentPage = 1;
-  // isLoading = false;  
-
   nowPlayingMovies$: Observable<movieDB[]>;
   isLoading$: Observable<boolean>;
   currentPage$: Observable<number>;
 
-  //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
+
   constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
-    this.nowPlayingMovies$ = this.store.select(selectNowPlayingMovies) //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
+    this.nowPlayingMovies$ = this.store.select(selectNowPlayingMovies) 
     this.isLoading$ = this.store.select(selectNowPlayingLoading)
     this.currentPage$ = this.store.select(selectNowPlayingCurrentPage)
   }
@@ -34,6 +29,6 @@ export class NowPlayingComponent implements OnInit {
   }
 
   loadNextPage() {
-    this.store.dispatch(MoviesActions.loadNowPlayingMovies()) // Загружаем следующую страницу
+    this.store.dispatch(MoviesActions.loadNowPlayingMovies()) 
   }
 }

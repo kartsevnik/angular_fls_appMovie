@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { movieDB } from '../../models/api-movie-db';
 import * as MoviesActions from '../../store/actions';
 import { selectPopularMovies, selectPopularLoading, selectPopularCurrentPage } from '../../store/selectors';
-import { AppState } from '../../store/state';  // Используем AppState вместо MoviesState
+import { AppState } from '../../store/state'; 
 import { DataHandlerService } from '../../services/data-handler.service';
 
 @Component({
@@ -18,9 +18,8 @@ export class PopularComponent implements OnInit {
   isLoading$: Observable<boolean>;
   currentPage$: Observable<number>;
 
-  //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
   constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
-    this.popularMovies$ = this.store.select(selectPopularMovies); //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
+    this.popularMovies$ = this.store.select(selectPopularMovies); 
     this.currentPage$ = this.store.select(selectPopularCurrentPage);
     this.isLoading$ = this.store.select(selectPopularLoading);
   }
@@ -30,6 +29,6 @@ export class PopularComponent implements OnInit {
   }
 
   loadNextPage() {
-    this.store.dispatch(MoviesActions.loadPopularMovies());  // Загружаем следующую страницу
+    this.store.dispatch(MoviesActions.loadPopularMovies()); 
   }
 }

@@ -1,6 +1,4 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import { DataHandlerService } from '../../services/data-handler.service';
-import { ActivatedRoute } from '@angular/router';
 import { movieDB } from '../../models/api-movie-db';
 
 @Component({
@@ -10,8 +8,8 @@ import { movieDB } from '../../models/api-movie-db';
 })
 export class MovieListComponent implements OnInit {
   @Input() movies: movieDB[] = []
-  @Input() loadNextPage!: () => void; // Принимаем метод загрузки следующей страницы
-  @ViewChild('anchor') anchor!: ElementRef; // Якорь для отслеживания конца списка
+  @Input() loadNextPage!: () => void; // Take the method of downloading the next page
+  @ViewChild('anchor') anchor!: ElementRef; // anchor to track the end of the list
   private observer!: IntersectionObserver;
 
   // selectedCategory: string = '';
@@ -19,7 +17,7 @@ export class MovieListComponent implements OnInit {
 
   isLoading = false;
 
-  constructor(private dataHandlerService: DataHandlerService, private route: ActivatedRoute) { }
+  constructor() { }
 
   ngOnInit(): void {
   }
