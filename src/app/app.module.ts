@@ -36,6 +36,7 @@ import { PopularComponent } from './pages/popular/popular.component';
 import { TopRateComponent } from './pages/top-rate/top-rate.component';
 import { UpcomingComponent } from './pages/upcoming/upcoming.component';
 import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.component';
+import { ErrorComponent } from './pages/error/error.component';
 
 //store
 import { StoreModule, MetaReducer, ActionReducer } from '@ngrx/store';
@@ -66,6 +67,7 @@ export const metaReducers: MetaReducer<any>[] = [localStorageSyncReducer];
     HomeComponent,
     SidebarComponent,
     SavedMoviesComponent,
+    ErrorComponent
   ],
   imports: [
     BrowserModule,
