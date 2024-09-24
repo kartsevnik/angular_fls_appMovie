@@ -5,7 +5,6 @@ import { movieDB } from '../../models/api-movie-db';
 import * as MoviesActions from '../../store/actions';
 import { selectPopularMovies, selectPopularLoading, selectPopularCurrentPage } from '../../store/selectors';
 import { AppState } from '../../store/state';  // Используем AppState вместо MoviesState
-import { DataHandlerService } from '../../services/data-handler.service';
 
 @Component({
   selector: 'app-popular',
@@ -19,14 +18,13 @@ export class PopularComponent implements OnInit {
   currentPage$: Observable<number>;
 
   //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
-  constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
+  constructor(private store: Store<AppState>) {
     this.popularMovies$ = this.store.select(selectPopularMovies); //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
     this.currentPage$ = this.store.select(selectPopularCurrentPage);
     this.isLoading$ = this.store.select(selectPopularLoading);
   }
 
   ngOnInit() {
-    this.dataHandlerService.changeCategory('Popular');
     this.store.dispatch(MoviesActions.loadPopularMovies()); // dispatch: Метод, который отправляет действие в хранилище для изменения состояния.
   }
 

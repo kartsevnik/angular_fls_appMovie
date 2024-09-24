@@ -2,12 +2,13 @@
 
 import { createReducer, on } from '@ngrx/store';
 import * as MoviesActions from './actions';
-import { initialState } from './state'; // Импортируем MoviesState и initialState
+import { movieDB } from '../models/api-movie-db';
+import { MoviesState, initialState } from './state'; // Импортируем MoviesState и initialState
 
 export const moviesReducer = createReducer(
     initialState,
     //=====================saved-movies===============================
-
+    
     //=====================Favorites===============================
     on(MoviesActions.addMovieToFavorites, (state, { movie }) => ({
         ...state,
@@ -27,7 +28,7 @@ export const moviesReducer = createReducer(
         toWatchMovies: state.toWatchMovies.filter(m => m.id !== movie.id)
     })),
     //====================================================
-
+    
     //==================Trend Home==================================
     on(MoviesActions.loadTrendMovies, (state) => ({
         ...state,
@@ -45,7 +46,7 @@ export const moviesReducer = createReducer(
         trendLoading: false,
         error
     })),
-
+    
     //==================Now playing==================================
     on(MoviesActions.loadNowPlayingMovies, (state) => ({
         ...state,
@@ -63,7 +64,7 @@ export const moviesReducer = createReducer(
         nowPlayingLoading: false,
         error
     })),
-
+    
     //==================POPULAR==================================
     on(MoviesActions.loadPopularMovies, (state) => ({
         ...state,
@@ -81,7 +82,7 @@ export const moviesReducer = createReducer(
         popularLoading: false,
         error
     })),
-
+    
     //==================Top Rate==================================
     on(MoviesActions.loadTopRateMovies, (state) => ({
         ...state,
@@ -99,7 +100,7 @@ export const moviesReducer = createReducer(
         topRateLoading: false,
         error
     })),
-
+    
     //==================UPCOMING==================================
     on(MoviesActions.loadUpComingMovies, (state) => ({
         ...state,
