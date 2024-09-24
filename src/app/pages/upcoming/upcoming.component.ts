@@ -4,7 +4,7 @@ import { DataService } from '../../services/data.service';
 import { DataHandlerService } from '../../services/data-handler.service';
 import { Observable } from 'rxjs';
 import { AppState } from '../../store/state';
-import { selectPopularCurrentPage, selectPopularLoading, selectPopularMovies } from '../../store/selectors';
+import { selectUpComingCurrentPage, selectUpComingMovies, selectUpComingLoading } from '../../store/selectors';
 import { Store } from '@ngrx/store';
 import * as MoviesActions from '../../store/actions';
 
@@ -20,17 +20,18 @@ export class UpcomingComponent {
   currentPage$: Observable<number>;
 
   //Store: Инжектируется в компонент для взаимодействия с хранилищем. Используется для отправки действий и подписки на изменения состояния.
-  constructor(private store: Store<AppState>) {
-    this.upComingMovies$ = this.store.select(selectPopularMovies); //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
-    this.currentPage$ = this.store.select(selectPopularCurrentPage);
-    this.isLoading$ = this.store.select(selectPopularLoading);
+  constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
+    this.upComingMovies$ = this.store.select(selectUpComingMovies); //select: Метод, который выбирает часть состояния из хранилища, используя селекторы.
+    this.currentPage$ = this.store.select(selectUpComingCurrentPage);
+    this.isLoading$ = this.store.select(selectUpComingLoading);
   }
 
   ngOnInit() {
-    this.store.dispatch(MoviesActions.loadPopularMovies()); // dispatch: Метод, который отправляет действие в хранилище для изменения состояния.
+    this.dataHandlerService.changeCategory('Up Coming');
+    this.store.dispatch(MoviesActions.loadUpComingMovies()); // dispatch: Метод, который отправляет действие в хранилище для изменения состояния.
   }
 
   loadNextPage() {
-    this.store.dispatch(MoviesActions.loadPopularMovies());  // Загружаем следующую страницу
+    this.store.dispatch(MoviesActions.loadUpComingMovies());  // Загружаем следующую страницу
   }
 }
