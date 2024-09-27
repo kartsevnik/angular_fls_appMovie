@@ -1,22 +1,24 @@
 // Selectors (Селекторы): Функции, которые выбирают (извлекают) части состояния из хранилища.
 
-import { createFeatureSelector, createSelector } from '@ngrx/store';
+import { createFeatureSelector, createSelector, on } from '@ngrx/store';
 import { MoviesState } from './state';
 import { AppState } from './state';  // Импорт глобального состояния
+import * as MoviesActions from './actions';
 
-
-// Создаем селектор для состояния фильмов
-// createFeatureSelector: Создает селектор для выбора определенного раздела состояния из глобального состояния.
-// Здесь он используется для выбора состояния фильмов MoviesState.
 export const selectMoviesState = createFeatureSelector<AppState, MoviesState>('movies');
 
+//==================Category Management============================
+export const selectCategories = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.categories
+);
 
+export const selectSelectedCategory = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.selectedCategory
+);
 
-// Селекторы для отдельных частей состояния фильмов
 //==================FavoriteMovies==================================
-
-// createSelector: Создает селектор для извлечения и обработки части состояния.
-// Например, selectFavoriteMovies выбирает массив favoriteMovies из состояния MoviesState.
 
 export const selectFavoriteMovies = createSelector(
     selectMoviesState,

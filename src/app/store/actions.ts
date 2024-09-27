@@ -10,6 +10,11 @@ import { movieDB } from '../models/api-movie-db';
 
 //=======================================================================================
 
+// export const loadCategories = createAction('[Movies] Load Categories');
+export const setSelectedCategory = createAction('[Movies] Set Selected Category', props<{ category: string }>());
+
+//=======================================================================================
+
 // Действия для добавления и удаления фильмов из избранного
 export const addMovieToFavorites = createAction('[Movies] Add Movie To Favorites', props<{ movie: movieDB }>());
 export const removeMovieFromFavorites = createAction('[Movies] Remove Movie From Favorites', props<{ movie: movieDB }>());

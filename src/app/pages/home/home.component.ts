@@ -27,13 +27,15 @@ export class HomeComponent {
   imageUrlBackdrop: string = '';
 
   constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
-    this.trendMovies$ = this.store.select(selectTrendMovies); 
+    this.trendMovies$ = this.store.select(selectTrendMovies);
     this.currentPage$ = this.store.select(selectTrendCurrentPage);
     this.isLoading$ = this.store.select(selectTrendLoading);
   }
 
   ngOnInit(): void {
-    this.dataHandlerService.changeCategory('Home');
+    // this.dataHandlerService.changeCategory('Home');
+    this.store.dispatch(MoviesActions.setSelectedCategory({ category: 'Home' }));
+    this.store.dispatch(MoviesActions.loadTrendMovies())
   }
 
 
@@ -50,7 +52,7 @@ export class HomeComponent {
       const randomIndex = minV + Math.floor(Math.random() * (maxV - minV));
       const randomMovie = movies[randomIndex];
 
-     // We check if this film is already in the array
+      // We check if this film is already in the array
       if (!moviesForSlider.some(movie => movie.id === randomMovie.id)) {
         moviesForSlider.push(randomMovie);
       }

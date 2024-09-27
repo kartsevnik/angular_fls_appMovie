@@ -2,6 +2,10 @@ import { Component, ViewChild, ElementRef, OnInit, Input } from '@angular/core';
 import { DataHandlerService } from '../../services/data-handler.service';
 import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store/state';
+import { selectSelectedCategory } from '../../store/selectors';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-header',
@@ -20,8 +24,9 @@ export class HeaderComponent implements OnInit {
   filterText = '';
 
   private scrollListenerAdded = false;
-
-  constructor(public dataHandlerService: DataHandlerService, private router: Router) {
+  private subscriptions: Subscription = new Subscription(); 
+  
+  constructor(public dataHandlerService: DataHandlerService, private router: Router,    private store: Store<AppState>) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -32,9 +37,17 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.dataHandlerService.selectedCategory$.subscribe(category => {
+    // Подписка на selectedCategory из Store
+    const categorySubscription = this.store.pipe(
+      select(selectSelectedCategory)
+    ).subscribe(category => {
       this.selectedCategory = category;
+      console.log('Текущая категория:', this.selectedCategory);
+      // Вы можете выполнять дополнительные действия при изменении категории
     });
+
+    this.subscriptions.add(categorySubscription); 
+
     if (!this.scrollListenerAdded && this.wrapper) {
       this.addScrollListener();
     }

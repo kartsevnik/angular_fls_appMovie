@@ -26,7 +26,8 @@ export class UpcomingComponent {
   }
 
   ngOnInit() {
-    this.dataHandlerService.changeCategory('Up Coming');
+    // this.dataHandlerService.changeCategory('Up Coming');
+    this.store.dispatch(MoviesActions.setSelectedCategory({ category: 'Up Coming' }));
     this.store.dispatch(MoviesActions.resetUpComingCurrentPage());
   }
 

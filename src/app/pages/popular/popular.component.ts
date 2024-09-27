@@ -25,7 +25,8 @@ export class PopularComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataHandlerService.changeCategory('Popular');
+    // this.dataHandlerService.changeCategory('Popular');
+    this.store.dispatch(MoviesActions.setSelectedCategory({ category: 'Popular' }));
     this.store.dispatch(MoviesActions.resetPopularCurrentPage());
   }
 

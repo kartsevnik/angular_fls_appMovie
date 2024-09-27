@@ -2,9 +2,6 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { movieDB, moviesResponse } from '../models/api-movie-db';
-import { categoryList } from '../mock-data/mock-data';
-// import { favoriteMovies } from '../mock-data/mock-data';
-// import { toWatchMovies } from '../mock-data/mock-data';
 
 @Injectable({
   providedIn: 'root'
@@ -27,10 +24,7 @@ export class DataService {
   getAccountId() {
     return this.accountId;
   }
-  // Get a list of all categories
-  getCategoryList() {
-    return categoryList;
-  }
+
 
   //get Movies From API
   getMoviesTrending(page: number = 1): Observable<moviesResponse> {

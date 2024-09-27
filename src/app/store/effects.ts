@@ -1,13 +1,21 @@
-// Effects (Эффекты): Используются для выполнения побочных эффектов (например, HTTP-запросов) в ответ на действия.
+// src/app/store/effects.ts
+
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import { DataService } from '../services/data.service';
 import * as MoviesActions from './actions';
-import { catchError, map, mergeMap, of, withLatestFrom } from 'rxjs';
+import { catchError, map, mergeMap, switchMap, withLatestFrom } from 'rxjs/operators';
 import { moviesResponse } from '../models/api-movie-db';
+import { of } from 'rxjs';
 import { Store, select } from '@ngrx/store';
-import { AppState } from './state';  
-import { selectMoviesState } from './selectors';
+import { AppState } from './state';
+import {
+  selectTrendCurrentPage,
+  selectNowPlayingCurrentPage,
+  selectPopularCurrentPage,
+  selectTopRateCurrentPage,
+  selectUpComingCurrentPage
+} from './selectors';
 
 @Injectable()
 export class MoviesEffects {
@@ -17,76 +25,96 @@ export class MoviesEffects {
     private dataService: DataService,
     private store: Store<AppState>
   ) { }
-  //=======================================================================================
 
-  // Эффект для загрузкиTrend Movies
+  // Эффект для загрузки Trend Movies
   loadTrendMovies$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(MoviesActions.loadTrendMovies),  // ofType: Фильтрует поток действий, чтобы эффект сработал только для указанных действий.
-      mergeMap(() => this.dataService.getMoviesTrending().pipe( //mergeMap: Создает новый поток Observable и подписывается на него. Используется для выполнения HTTP-запросов.
-        map((response: moviesResponse) => MoviesActions.loadTrendMoviesSuccess({ movies: response.results })),  
-        catchError(error => of(MoviesActions.loadTrendMoviesFailure({ error: error.message })))  
-      ))
+      ofType(MoviesActions.loadTrendMovies),
+      withLatestFrom(this.store.pipe(select(selectTrendCurrentPage))),
+      mergeMap(([action, currentPage]) =>
+        this.dataService.getMoviesTrending(currentPage).pipe(
+          map((response: moviesResponse) => MoviesActions.loadTrendMoviesSuccess({ movies: response.results })),
+          catchError(error => of(MoviesActions.loadTrendMoviesFailure({ error: error.message })))
+        )
+      )
     )
   );
 
-  //=======================================================================================
-
-  // Эффект для загрузки NowPlaying фильмов
+  // Эффект для загрузки Now Playing Movies
   loadNowPlayingMovies$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(MoviesActions.loadNowPlayingMovies),  // Слушаем действие loadNowPlayingMovies
-      withLatestFrom(this.store.pipe(select(selectMoviesState))),  // withLatestFrom: Объединяет поток действий с потоком состояния из хранилища. Используется для доступа к состоянию внутри эффекта
-      mergeMap(([action, state]) =>
-        this.dataService.getMoviesNowPlaying(state.nowPlayingCurrentPage).pipe(
-          map((response: moviesResponse) => MoviesActions.loadNowPlayingMoviesSuccess({ movies: response.results })),  
-          catchError((error) => of(MoviesActions.loadNowPlayingMoviesFailure({ error: error.message })))  
+      ofType(MoviesActions.loadNowPlayingMovies),
+      withLatestFrom(this.store.pipe(select(selectNowPlayingCurrentPage))),
+      mergeMap(([action, currentPage]) =>
+        this.dataService.getMoviesNowPlaying(currentPage).pipe(
+          map((response: moviesResponse) => MoviesActions.loadNowPlayingMoviesSuccess({ movies: response.results })),
+          catchError((error) => of(MoviesActions.loadNowPlayingMoviesFailure({ error: error.message })))
         )
       )
     )
   );
 
-  //=======================================================================================
-
-  // Эффект для загрузки Popular фильмов
+  // Эффект для загрузки Popular Movies
   loadPopularMovies$ = createEffect(() =>
     this.actions$.pipe(
-      ofType(MoviesActions.loadPopularMovies),  // Слушаем действие loadPopularMovies
-      withLatestFrom(this.store.pipe(select(selectMoviesState))),  // withLatestFrom: Объединяет поток действий с потоком состояния из хранилища. Используется для доступа к состоянию внутри эффекта
-      mergeMap(([action, state]) =>
-        this.dataService.getMoviesPopular(state.popularCurrentPage).pipe(
-          map((response: moviesResponse) => MoviesActions.loadPopularMoviesSuccess({ movies: response.results })),  
-          catchError((error) => of(MoviesActions.loadPopularMoviesFailure({ error: error.message })))  
+      ofType(MoviesActions.loadPopularMovies),
+      withLatestFrom(this.store.pipe(select(selectPopularCurrentPage))),
+      mergeMap(([action, currentPage]) =>
+        this.dataService.getMoviesPopular(currentPage).pipe(
+          map((response: moviesResponse) => MoviesActions.loadPopularMoviesSuccess({ movies: response.results })),
+          catchError((error) => of(MoviesActions.loadPopularMoviesFailure({ error: error.message })))
         )
       )
     )
   );
 
-  //=======================================================================================
-  // Эффект для загрузки TopRated фильмов
+  // Эффект для загрузки Top Rated Movies
   loadTopRatedMovies$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadTopRateMovies),
-      withLatestFrom(this.store.pipe(select(selectMoviesState))),
-      mergeMap(([action, state]) =>
-        this.dataService.getMoviesTopRated(state.topRateCurrentPage).pipe(
+      withLatestFrom(this.store.pipe(select(selectTopRateCurrentPage))),
+      mergeMap(([action, currentPage]) =>
+        this.dataService.getMoviesTopRated(currentPage).pipe(
           map((response: moviesResponse) => MoviesActions.loadTopRateMoviesSuccess({ movies: response.results })),
           catchError((error) => of(MoviesActions.loadTopRateMoviesFailure({ error: error.message })))
         ))
     )
-  )
+  );
 
-  //=======================================================================================
-  // Эффект для загрузки Up Coming фильмов
+  // Эффект для загрузки Up Coming Movies
   loadUpComingMovies$ = createEffect(() =>
     this.actions$.pipe(
       ofType(MoviesActions.loadUpComingMovies),
-      withLatestFrom(this.store.pipe(select(selectMoviesState))),
-      mergeMap(([action, state]) =>
-        this.dataService.getMoviesUpcoming(state.upComingCurrentPage).pipe(
+      withLatestFrom(this.store.pipe(select(selectUpComingCurrentPage))),
+      mergeMap(([action, currentPage]) =>
+        this.dataService.getMoviesUpcoming(currentPage).pipe(
           map((response: moviesResponse) => MoviesActions.loadUpComingSuccess({ movies: response.results })),
           catchError((error) => of(MoviesActions.loadUpComingFailure({ error: error.message })))
         ))
     )
-  )
+  );
+
+  // эффект для автоматической загрузки фильмов при смене категории
+  // loadMoviesOnCategoryChange$ = createEffect(() =>
+  //   this.actions$.pipe(
+  //     ofType(MoviesActions.setSelectedCategory),
+  //     switchMap(({ category }) => {
+  //       switch (category) {
+  //         case 'Home':
+  //           return of(MoviesActions.loadTrendMovies());
+  //         case 'Now playing':
+  //           return of(MoviesActions.loadNowPlayingMovies());
+  //         case 'Popular':
+  //           return of(MoviesActions.loadPopularMovies());
+  //         case 'Top rate':
+  //           return of(MoviesActions.loadTopRateMovies());
+  //         case 'Upcoming':
+  //           return of(MoviesActions.loadUpComingMovies());
+  //         default:
+  //           return of();
+  //       }
+  //     })
+  //   )
+  // );
+
 }

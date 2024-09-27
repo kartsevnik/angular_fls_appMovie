@@ -25,12 +25,12 @@ export class NowPlayingComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.dataHandlerService.changeCategory('Now playing');
+    // this.dataHandlerService.changeCategory('Now playing');
+    this.store.dispatch(MoviesActions.setSelectedCategory({ category: 'Now playing' }));
     this.store.dispatch(MoviesActions.resetNowPlayingCurrentPage());
   }
 
   loadNextPage() {
     this.store.dispatch(MoviesActions.loadNowPlayingMovies())
-
   }
 }

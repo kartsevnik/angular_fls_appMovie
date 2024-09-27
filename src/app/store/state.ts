@@ -4,22 +4,15 @@ import { ActionReducerMap, MetaReducer, ActionReducer } from '@ngrx/store';
 import { moviesReducer } from './reducer';
 import { movieDB } from '../models/api-movie-db';
 import { localStorageSync } from 'ngrx-store-localstorage';
+import { Category } from '../models/category';
 
-// Определяем глобальное состояние приложения
-// AppState: Интерфейс, описывающий глобальное состояние приложения. 
-// Здесь хранится состояние всех разделов приложения, таких как movies.
 export interface AppState {
-    movies: MoviesState; // Добавляем раздел состояния фильмов
+    movies: MoviesState; 
 }
 
-// Определение состояния фильмов
-// MoviesState: Интерфейс, описывающий структуру состояния фильмов. 
-// Он определяет, какие данные хранятся в состоянии
-// (например, массивы фильмов, текущая страница, флаги загрузки).
 export interface MoviesState {
     favoriteMovies: movieDB[];
     toWatchMovies: movieDB[];
-    loading: boolean;
     error: string | null;
 
     trendMovies: movieDB[];
@@ -41,11 +34,11 @@ export interface MoviesState {
     upComingMovies: movieDB[];
     upComingCurrentPage: number;
     upComingLoading: boolean;
+
+    categories: Category[],
+    selectedCategory: string
 }
 
-// Соединяем все редьюсеры
-// appReducers: Карта редьюсеров, которая связывает каждый раздел состояния с соответствующим редьюсером. 
-// NgRx Store использует эту карту, чтобы обновлять состояние приложения при каждом действии.
 export const appReducers: ActionReducerMap<AppState> = {
     movies: moviesReducer,
 };

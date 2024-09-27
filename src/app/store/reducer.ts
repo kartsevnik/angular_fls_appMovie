@@ -1,18 +1,20 @@
 // Reducers (Редьюсеры): Функции, которые принимают текущее состояние и действие и возвращают новое состояние.
-
-// Редьюсер для управления состоянием фильмов
-// createReducer: Функция, создающая редьюсер.
-// Она принимает начальное состояние и множество обработчиков(handlers) для различных действий.
-
 import { createReducer, on } from '@ngrx/store';
 import * as MoviesActions from './actions';
-import { movieDB } from '../models/api-movie-db';
 import { MoviesState } from './state';
+import { Category } from '../models/category';
+
+export const categoryList: Category[] = [
+    { name: "Home", code: 'Home' },
+    { name: "Now playing", code: 'Now playing' },
+    { name: "Popular", code: 'Popular' },
+    { name: "Top rate", code: 'Top rate' },
+    { name: "Upcoming", code: 'Upcoming' },
+];
 
 export const initialState: MoviesState = {
     favoriteMovies: [],
     toWatchMovies: [],
-    loading: false,
     error: null,
 
     trendMovies: [],
@@ -34,10 +36,25 @@ export const initialState: MoviesState = {
     upComingMovies: [],
     upComingCurrentPage: 1,
     upComingLoading: false,
+
+    categories: categoryList, 
+    selectedCategory: 'Home',
 };
+
 export const moviesReducer = createReducer(
     initialState,
+    on(MoviesActions.setSelectedCategory, (state, { category }) => ({
+        ...state,
+        //=====================Categories===============================
+        selectedCategory: category,
+        trendMovies: category === 'Home' ? [] : state.trendMovies,
+        nowPlayingMovies: category === 'Now playing' ? [] : state.nowPlayingMovies,
+        popularMovies: category === 'Popular' ? [] : state.popularMovies,
+        topRateMovies: category === 'Top rate' ? [] : state.topRateMovies,
+        upComingMovies: category === 'Upcoming' ? [] : state.upComingMovies,
+    })),
     //=====================Favorites===============================
+    
     on(MoviesActions.addMovieToFavorites, (state, { movie }) => ({
         ...state,
         favoriteMovies: [...state.favoriteMovies, movie]
@@ -46,7 +63,9 @@ export const moviesReducer = createReducer(
         ...state,
         favoriteMovies: state.favoriteMovies.filter(m => m.id !== movie.id)
     })),
+
     //=======================Watchlist=============================
+ 
     on(MoviesActions.addMovieToWatchlist, (state, { movie }) => ({
         ...state,
         toWatchMovies: [...state.toWatchMovies, movie]
@@ -57,8 +76,6 @@ export const moviesReducer = createReducer(
     })),
 
     //==================Trend Home==================================
-    // on: Функция, определяющая, что делать при определенном действии.
-    // Например, при MoviesActions.loadTrendMovies устанавливается флаг загрузки в true, а ошибка сбрасывается в null.
 
     on(MoviesActions.loadTrendMovies, (state) => ({
         ...state,
@@ -152,6 +169,7 @@ export const moviesReducer = createReducer(
         upComingLoading: false,
         error
     })),
+    
     //==================RESET PAGE==================================
     // Обработчики действий для сброса currentPage
     on(MoviesActions.resetTrendCurrentPage, (state) => ({
