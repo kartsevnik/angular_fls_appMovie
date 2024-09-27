@@ -1,60 +1,112 @@
-// Reducers (Редьюсеры): Функции, которые принимают текущее состояние и действие и возвращают новое состояние.
 import { createReducer, on } from '@ngrx/store';
 import * as MoviesActions from './actions';
 import { MoviesState } from './state';
-import { Category } from '../models/category';
-
-export const categoryList: Category[] = [
-    { name: "Home", code: 'Home' },
-    { name: "Now playing", code: 'Now playing' },
-    { name: "Popular", code: 'Popular' },
-    { name: "Top rate", code: 'Top rate' },
-    { name: "Upcoming", code: 'Upcoming' },
-];
+import { categoryList } from '../models/category';
+import { MovieCategory } from '../models/movie-category.enum';
 
 export const initialState: MoviesState = {
+    error: null,
+    categories: categoryList,
+    selectedCategory: MovieCategory.Home,
+    genres: [],
     favoriteMovies: [],
     toWatchMovies: [],
-    error: null,
 
-    trendMovies: [],
-    trendCurrentPage: 1,
-    trendLoading: false,
-
-    nowPlayingMovies: [],
-    nowPlayingCurrentPage: 1,
-    nowPlayingLoading: false,
-
-    popularMovies: [],
-    popularCurrentPage: 1,
-    popularLoading: false,
-
-    topRateMovies: [],
-    topRateCurrentPage: 1,
-    topRateLoading: false,
-
-    upComingMovies: [],
-    upComingCurrentPage: 1,
-    upComingLoading: false,
-
-    categories: categoryList, 
-    selectedCategory: 'Home',
+    moviesByCategory: {
+        [MovieCategory.Home]: {
+            movies: [],
+            currentPage: 1,
+            loading: false,
+        },
+        [MovieCategory.NowPlaying]: {
+            movies: [],
+            currentPage: 1,
+            loading: false,
+        },
+        [MovieCategory.Popular]: {
+            movies: [],
+            currentPage: 1,
+            loading: false,
+        },
+        [MovieCategory.TopRate]: {
+            movies: [],
+            currentPage: 1,
+            loading: false,
+        },
+        [MovieCategory.Upcoming]: {
+            movies: [],
+            currentPage: 1,
+            loading: false,
+        },
+    },
 };
 
 export const moviesReducer = createReducer(
     initialState,
+
+    // Обработка загрузки категорий
+    on(MoviesActions.loadGenresSuccess, (state, { genres }) => ({
+        ...state,
+        genres: [...genres] // Сохраняем загруженные жанры в состоянии
+    })),
+
+
+    // Что происходит в setSelectedCategory:
+    // Обновляется свойство selectedCategory в состоянии на значение MovieCategory.Home.
+    // Сбрасывается список фильмов и текущая страница для категории Home:
+    // movies устанавливается как пустой массив [].
+    // currentPage устанавливается на 1.
     on(MoviesActions.setSelectedCategory, (state, { category }) => ({
         ...state,
-        //=====================Categories===============================
         selectedCategory: category,
-        trendMovies: category === 'Home' ? [] : state.trendMovies,
-        nowPlayingMovies: category === 'Now playing' ? [] : state.nowPlayingMovies,
-        popularMovies: category === 'Popular' ? [] : state.popularMovies,
-        topRateMovies: category === 'Top rate' ? [] : state.topRateMovies,
-        upComingMovies: category === 'Upcoming' ? [] : state.upComingMovies,
+        moviesByCategory: {
+            ...state.moviesByCategory,
+            [category]: {
+                ...state.moviesByCategory[category],
+                movies: [],
+                currentPage: 1,
+            },
+        },
     })),
-    //=====================Favorites===============================
-    
+
+    // Обработка загрузки фильмов
+    on(MoviesActions.loadMovies, (state, { category }) => ({
+        ...state,
+        moviesByCategory: {
+            ...state.moviesByCategory,
+            [category]: {
+                ...state.moviesByCategory[category],
+                loading: true,
+            },
+        },
+    })),
+
+    // Обработка успешной загрузки фильмов
+    on(MoviesActions.loadMoviesSuccess, (state, { category, movies }) => ({
+        ...state,
+        moviesByCategory: {
+            ...state.moviesByCategory,
+            [category]: {
+                movies: [...state.moviesByCategory[category].movies, ...movies],
+                currentPage: state.moviesByCategory[category].currentPage + 1,
+                loading: false,
+            },
+        },
+    })),
+
+    // Обработка ошибки загрузки фильмов
+    on(MoviesActions.loadMoviesFailure, (state, { category, error }) => ({
+        ...state,
+        error,
+        moviesByCategory: {
+            ...state.moviesByCategory,
+            [category]: {
+                ...state.moviesByCategory[category],
+                loading: false,
+            },
+        },
+    })),
+
     on(MoviesActions.addMovieToFavorites, (state, { movie }) => ({
         ...state,
         favoriteMovies: [...state.favoriteMovies, movie]
@@ -65,7 +117,7 @@ export const moviesReducer = createReducer(
     })),
 
     //=======================Watchlist=============================
- 
+
     on(MoviesActions.addMovieToWatchlist, (state, { movie }) => ({
         ...state,
         toWatchMovies: [...state.toWatchMovies, movie]
@@ -75,126 +127,5 @@ export const moviesReducer = createReducer(
         toWatchMovies: state.toWatchMovies.filter(m => m.id !== movie.id)
     })),
 
-    //==================Trend Home==================================
 
-    on(MoviesActions.loadTrendMovies, (state) => ({
-        ...state,
-        trendLoading: true,
-        error: null
-    })),
-    on(MoviesActions.loadTrendMoviesSuccess, (state, { movies }) => ({
-        ...state,
-        trendMovies: [...state.trendMovies, ...movies],
-        trendCurrentPage: state.trendCurrentPage + 1,
-        trendLoading: false
-    })),
-    on(MoviesActions.loadTrendMoviesFailure, (state, { error }) => ({
-        ...state,
-        trendLoading: false,
-        error
-    })),
-
-    //==================Now playing==================================
-
-    on(MoviesActions.loadNowPlayingMovies, (state) => ({
-        ...state,
-        nowPlayingLoading: true,
-        error: null
-    })),
-    on(MoviesActions.loadNowPlayingMoviesSuccess, (state, { movies }) => ({
-        ...state,
-        nowPlayingMovies: [...state.nowPlayingMovies, ...movies],
-        nowPlayingCurrentPage: state.nowPlayingCurrentPage + 1,
-        nowPlayingLoading: false
-    })),
-    on(MoviesActions.loadNowPlayingMoviesFailure, (state, { error }) => ({
-        ...state,
-        nowPlayingLoading: false,
-        error
-    })),
-
-    //==================POPULAR==================================
-
-    on(MoviesActions.loadPopularMovies, (state) => ({
-        ...state,
-        popularLoading: true,
-        error: null
-    })),
-    on(MoviesActions.loadPopularMoviesSuccess, (state, { movies }) => ({
-        ...state,
-        popularMovies: [...state.popularMovies, ...movies],
-        popularCurrentPage: state.popularCurrentPage + 1,
-        popularLoading: false
-    })),
-    on(MoviesActions.loadPopularMoviesFailure, (state, { error }) => ({
-        ...state,
-        popularLoading: false,
-        error
-    })),
-
-    //==================Top Rate==================================
-
-    on(MoviesActions.loadTopRateMovies, (state) => ({
-        ...state,
-        topRateLoading: true,
-        error: null
-    })),
-    on(MoviesActions.loadTopRateMoviesSuccess, (state, { movies }) => ({
-        ...state,
-        topRateMovies: [...state.topRateMovies, ...movies],
-        topRateCurrentPage: state.topRateCurrentPage + 1,
-        topRateLoading: false
-    })),
-    on(MoviesActions.loadTopRateMoviesFailure, (state, { error }) => ({
-        ...state,
-        topRateLoading: false,
-        error
-    })),
-
-    //==================UPCOMING==================================
-
-    on(MoviesActions.loadUpComingMovies, (state) => ({
-        ...state,
-        upComingLoading: true,
-        error: null
-    })),
-    on(MoviesActions.loadUpComingSuccess, (state, { movies }) => ({
-        ...state,
-        upComingMovies: [...state.upComingMovies, ...movies],
-        upComingCurrentPage: state.upComingCurrentPage + 1,
-        upComingLoading: false
-    })),
-    on(MoviesActions.loadUpComingFailure, (state, { error }) => ({
-        ...state,
-        upComingLoading: false,
-        error
-    })),
-    
-    //==================RESET PAGE==================================
-    // Обработчики действий для сброса currentPage
-    on(MoviesActions.resetTrendCurrentPage, (state) => ({
-        ...state,
-        trendCurrentPage: 1,
-        trendMovies: [] // Опционально очищаем список фильмов
-    })),
-    on(MoviesActions.resetNowPlayingCurrentPage, (state) => ({
-        ...state,
-        nowPlayingCurrentPage: 1,
-        nowPlayingMovies: [] // Опционально очищаем список фильмов
-    })),
-    on(MoviesActions.resetPopularCurrentPage, (state) => ({
-        ...state,
-        popularCurrentPage: 1,
-        popularMovies: [] // Опционально очищаем список фильмов
-    })),
-    on(MoviesActions.resetTopRateCurrentPage, (state) => ({
-        ...state,
-        topRateCurrentPage: 1,
-        topRateMovies: [] // Опционально очищаем список фильмов
-    })),
-    on(MoviesActions.resetUpComingCurrentPage, (state) => ({
-        ...state,
-        upComingCurrentPage: 1,
-        upComingMovies: [] // Опционально очищаем список фильмов
-    })),
 );

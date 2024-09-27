@@ -9,18 +9,18 @@ import { TopRateComponent } from './pages/top-rate/top-rate.component';
 import { UpcomingComponent } from './pages/upcoming/upcoming.component';
 import { HomeComponent } from './pages/home/home.component';
 import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.component';
-import { MoviesResolver } from './guards/movie.resolver';
+// import { MoviesResolver } from './guards/movie.resolver';
 import { ErrorComponent } from './pages/error/error.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'favorites', component: SavedMoviesComponent, canActivate: [MovieGuard] },
   { path: 'watch-list', component: SavedMoviesComponent, canActivate: [MovieGuard] },
-  { path: 'home', component: HomeComponent, resolve: { movies: MoviesResolver } },
-  { path: 'now-playing', component: NowPlayingComponent, canActivate: [MovieGuard], resolve: { movies: MoviesResolver } },
-  { path: 'popular', component: PopularComponent, canActivate: [MovieGuard], resolve: { movies: MoviesResolver } },
-  { path: 'top-rate', component: TopRateComponent, canActivate: [MovieGuard], resolve: { movies: MoviesResolver } },
-  { path: 'upcoming', component: UpcomingComponent, canActivate: [MovieGuard], resolve: { movies: MoviesResolver } },
+  { path: 'home', component: HomeComponent},
+  { path: 'now-playing', component: NowPlayingComponent, canActivate: [MovieGuard] },
+  { path: 'popular', component: PopularComponent, canActivate: [MovieGuard] },
+  { path: 'top-rate', component: TopRateComponent, canActivate: [MovieGuard] },
+  { path: 'upcoming', component: UpcomingComponent, canActivate: [MovieGuard] },
   { path: 'error', component: ErrorComponent }
 ];
 

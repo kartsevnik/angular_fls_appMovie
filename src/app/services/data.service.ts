@@ -25,6 +25,15 @@ export class DataService {
     return this.accountId;
   }
 
+  getAllGenres(): Observable<any> {
+    const url = `${this.apiBaseURL}/genre/movie/list?language=en`; // Убедитесь, что URL правильный
+    const headers = {
+      'Authorization': `Bearer ${this.apiToken}`, // Токен должен быть корректным
+      'Accept': 'application/json' // Используйте правильный header
+    };
+    return this.HttpClient.get<any>(url, { headers });
+  }
+  
 
   //get Movies From API
   getMoviesTrending(page: number = 1): Observable<moviesResponse> {

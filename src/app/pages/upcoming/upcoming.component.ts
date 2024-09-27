@@ -1,12 +1,17 @@
 import { Component } from '@angular/core';
-import { movieDB } from '../../models/api-movie-db';
-import { DataService } from '../../services/data.service';
-import { DataHandlerService } from '../../services/data-handler.service';
 import { Observable } from 'rxjs';
+
+import { movieDB } from '../../models/api-movie-db';
+import { MovieCategory } from '../../models/movie-category.enum';
+
+import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/state';
-import { selectUpComingCurrentPage, selectUpComingLoading, selectUpComingMovies } from '../../store/selectors';
-import { Store } from '@ngrx/store';
 import * as MoviesActions from '../../store/actions';
+import {
+  selectCurrentCategoryMovies,
+  selectCurrentCategoryLoading,
+  selectCurrentCategoryCurrentPage
+} from '../../store/selectors';
 
 @Component({
   selector: 'app-upcoming',
@@ -15,23 +20,21 @@ import * as MoviesActions from '../../store/actions';
 })
 export class UpcomingComponent {
 
-  upComingMovies$: Observable<movieDB[]>;
+  movies$: Observable<movieDB[]>;
   isLoading$: Observable<boolean>;
   currentPage$: Observable<number>;
 
-  constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
-    this.upComingMovies$ = this.store.select(selectUpComingMovies);
-    this.currentPage$ = this.store.select(selectUpComingCurrentPage);
-    this.isLoading$ = this.store.select(selectUpComingLoading);
+  constructor(private store: Store<AppState>) {
+    this.movies$ = this.store.pipe(select(selectCurrentCategoryMovies));
+    this.isLoading$ = this.store.pipe(select(selectCurrentCategoryLoading));
+    this.currentPage$ = this.store.pipe(select(selectCurrentCategoryCurrentPage));
   }
 
   ngOnInit() {
-    // this.dataHandlerService.changeCategory('Up Coming');
-    this.store.dispatch(MoviesActions.setSelectedCategory({ category: 'Up Coming' }));
-    this.store.dispatch(MoviesActions.resetUpComingCurrentPage());
+    this.store.dispatch(MoviesActions.setSelectedCategory({ category: MovieCategory.NowPlaying }));
   }
 
   loadNextPage() {
-    this.store.dispatch(MoviesActions.loadUpComingMovies());
+    this.store.dispatch(MoviesActions.loadMovies({ category: MovieCategory.NowPlaying }));
   }
 }

@@ -1,5 +1,5 @@
 <div class="main-title">Now <span class="main-color">playing</span></div>
 
-<div *ngIf="(nowPlayingMovies$ | async) as movies">
+<div *ngIf="(movies$ | async) as movies">
     <app-movie-list [movies]="movies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
 </div>

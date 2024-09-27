@@ -1,12 +1,13 @@
 import { Component } from '@angular/core';
-import { DataHandlerService } from '../../services/data-handler.service';
+import { map, Observable } from 'rxjs';
+
 import { movieDB } from '../../models/api-movie-db';
-import { DataService } from '../../services/data.service';
-import { Store } from '@ngrx/store';
-import { Observable } from 'rxjs';
-import { AppState } from '../../store/state';
+import { MovieCategory } from '../../models/movie-category.enum';
+
+import { select, Store } from '@ngrx/store';
 import * as MoviesActions from '../../store/actions';
-import { selectTrendCurrentPage, selectTrendLoading, selectTrendMovies } from '../../store/selectors';
+import { AppState } from '../../store/state';
+import { selectCurrentCategoryCurrentPage, selectCurrentCategoryLoading, selectCurrentCategoryMovies, selectGenres } from '../../store/selectors';
 
 @Component({
   selector: 'app-home',
@@ -14,10 +15,7 @@ import { selectTrendCurrentPage, selectTrendLoading, selectTrendMovies } from '.
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  // movies: movieDB[] = []
-  // currentPage = 1;
-
-  trendMovies$: Observable<movieDB[]>;
+  movies$: Observable<movieDB[]>;
   isLoading$: Observable<boolean>;
   currentPage$: Observable<number>;
 
@@ -26,16 +24,29 @@ export class HomeComponent {
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
 
-  constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
-    this.trendMovies$ = this.store.select(selectTrendMovies);
-    this.currentPage$ = this.store.select(selectTrendCurrentPage);
-    this.isLoading$ = this.store.select(selectTrendLoading);
+  genres$: Observable<any[]>
+
+  constructor(private store: Store<AppState>) {
+    this.movies$ = this.store.pipe(select(selectCurrentCategoryMovies));
+    this.isLoading$ = this.store.pipe(select(selectCurrentCategoryLoading));
+    this.currentPage$ = this.store.pipe(select(selectCurrentCategoryCurrentPage));
+
+    this.genres$ = this.store.pipe(select(selectGenres));
   }
 
   ngOnInit(): void {
-    // this.dataHandlerService.changeCategory('Home');
-    this.store.dispatch(MoviesActions.setSelectedCategory({ category: 'Home' }));
-    this.store.dispatch(MoviesActions.loadTrendMovies())
+    this.store.dispatch(MoviesActions.loadGenres());
+    // В методе ngOnInit() компонента HomeComponent вы вызываете действие setSelectedCategory, чтобы установить выбранную категорию на MovieCategory.Home.
+    // Действие, которое отправляется: setSelectedCategory с параметром { category: MovieCategory.Home }
+
+    this.store.dispatch(MoviesActions.setSelectedCategory({ category: MovieCategory.Home }));
+    this.randomMovies$ = this.movies$.pipe(
+      map(movies => this.getRandomMoviesForSlider(movies, 5))
+    );
+
+    this.genres$.subscribe(genres => {
+      console.log('Жанры:', genres);
+    });
   }
 
 

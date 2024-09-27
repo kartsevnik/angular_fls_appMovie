@@ -5,38 +5,26 @@ import { moviesReducer } from './reducer';
 import { movieDB } from '../models/api-movie-db';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { Category } from '../models/category';
+import { MovieCategory } from '../models/movie-category.enum';
 
 export interface AppState {
-    movies: MoviesState; 
+    movies: MoviesState;
 }
 
 export interface MoviesState {
+    error: string | null;
+    categories: Category[];
+    selectedCategory: MovieCategory;
+    genres: any[];
     favoriteMovies: movieDB[];
     toWatchMovies: movieDB[];
-    error: string | null;
-
-    trendMovies: movieDB[];
-    trendCurrentPage: number;
-    trendLoading: boolean;
-
-    nowPlayingMovies: movieDB[];
-    nowPlayingCurrentPage: number;
-    nowPlayingLoading: boolean;
-
-    popularMovies: movieDB[];
-    popularCurrentPage: number;
-    popularLoading: boolean;
-
-    topRateMovies: movieDB[];
-    topRateCurrentPage: number;
-    topRateLoading: boolean;
-
-    upComingMovies: movieDB[];
-    upComingCurrentPage: number;
-    upComingLoading: boolean;
-
-    categories: Category[],
-    selectedCategory: string
+    moviesByCategory: {
+        [key in MovieCategory]: {
+            movies: movieDB[];
+            currentPage: number;
+            loading: boolean;
+        };
+    };
 }
 
 export const appReducers: ActionReducerMap<AppState> = {

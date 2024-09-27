@@ -1,11 +1,17 @@
 import { Component, OnInit } from '@angular/core';
-import { Store } from '@ngrx/store';
 import { Observable } from 'rxjs';
+
 import { movieDB } from '../../models/api-movie-db';
+import { MovieCategory } from '../../models/movie-category.enum';
+
+import { select, Store } from '@ngrx/store';
 import * as MoviesActions from '../../store/actions';
-import { selectPopularMovies, selectPopularLoading, selectPopularCurrentPage } from '../../store/selectors';
 import { AppState } from '../../store/state';
-import { DataHandlerService } from '../../services/data-handler.service';
+import {
+  selectCurrentCategoryMovies,
+  selectCurrentCategoryLoading,
+  selectCurrentCategoryCurrentPage
+} from '../../store/selectors';
 
 @Component({
   selector: 'app-popular',
@@ -14,23 +20,21 @@ import { DataHandlerService } from '../../services/data-handler.service';
 })
 export class PopularComponent implements OnInit {
 
-  popularMovies$: Observable<movieDB[]>;
+  movies$: Observable<movieDB[]>;
   isLoading$: Observable<boolean>;
   currentPage$: Observable<number>;
 
-  constructor(private store: Store<AppState>, private dataHandlerService: DataHandlerService) {
-    this.popularMovies$ = this.store.select(selectPopularMovies);
-    this.currentPage$ = this.store.select(selectPopularCurrentPage);
-    this.isLoading$ = this.store.select(selectPopularLoading);
+  constructor(private store: Store<AppState>) {
+    this.movies$ = this.store.pipe(select(selectCurrentCategoryMovies));
+    this.isLoading$ = this.store.pipe(select(selectCurrentCategoryLoading));
+    this.currentPage$ = this.store.pipe(select(selectCurrentCategoryCurrentPage));
   }
 
   ngOnInit() {
-    // this.dataHandlerService.changeCategory('Popular');
-    this.store.dispatch(MoviesActions.setSelectedCategory({ category: 'Popular' }));
-    this.store.dispatch(MoviesActions.resetPopularCurrentPage());
+    this.store.dispatch(MoviesActions.setSelectedCategory({ category: MovieCategory.Popular }));
   }
 
   loadNextPage() {
-    this.store.dispatch(MoviesActions.loadPopularMovies());
+    this.store.dispatch(MoviesActions.loadMovies({ category: MovieCategory.Popular }));
   }
 }

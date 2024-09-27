@@ -1,22 +1,44 @@
-// Selectors (Селекторы): Функции, которые выбирают (извлекают) части состояния из хранилища.
+// src/app/store/selectors.ts
 
-import { createFeatureSelector, createSelector, on } from '@ngrx/store';
+import { createFeatureSelector, createSelector } from '@ngrx/store';
 import { MoviesState } from './state';
-import { AppState } from './state';  // Импорт глобального состояния
-import * as MoviesActions from './actions';
+import { AppState } from './state';
 
 export const selectMoviesState = createFeatureSelector<AppState, MoviesState>('movies');
 
-//==================Category Management============================
-export const selectCategories = createSelector(
+export const selectGenres = createSelector(
     selectMoviesState,
-    (state: MoviesState) => state.categories
+    state => state.genres
 );
 
 export const selectSelectedCategory = createSelector(
     selectMoviesState,
-    (state: MoviesState) => state.selectedCategory
+    state => state.selectedCategory
 );
+
+export const selectMoviesByCategory = createSelector(
+    selectMoviesState,
+    state => state.moviesByCategory
+);
+
+export const selectCurrentCategoryMovies = createSelector(
+    selectMoviesByCategory,
+    selectSelectedCategory,
+    (moviesByCategory, selectedCategory) => moviesByCategory[selectedCategory]?.movies || []
+);
+
+export const selectCurrentCategoryLoading = createSelector(
+    selectMoviesByCategory,
+    selectSelectedCategory,
+    (moviesByCategory, selectedCategory) => moviesByCategory[selectedCategory]?.loading || false
+);
+
+export const selectCurrentCategoryCurrentPage = createSelector(
+    selectMoviesByCategory,
+    selectSelectedCategory,
+    (moviesByCategory, selectedCategory) => moviesByCategory[selectedCategory]?.currentPage || 1
+);
+
 
 //==================FavoriteMovies==================================
 
@@ -30,84 +52,4 @@ export const selectFavoriteMovies = createSelector(
 export const selectToWatchMovies = createSelector(
     selectMoviesState,
     (state: MoviesState) => state.toWatchMovies
-);
-
-//==================TREND home==================================
-export const selectTrendMovies = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.trendMovies
-);
-
-export const selectTrendLoading = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.trendLoading
-);
-
-export const selectTrendCurrentPage = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.trendCurrentPage
-);
-
-//==================Now playing==================================
-export const selectNowPlayingMovies = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.nowPlayingMovies
-);
-
-export const selectNowPlayingLoading = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.nowPlayingLoading
-);
-
-export const selectNowPlayingCurrentPage = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.nowPlayingCurrentPage
-);
-
-//==================POPULAR==================================
-export const selectPopularMovies = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.popularMovies
-);
-
-export const selectPopularLoading = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.popularLoading
-);
-
-export const selectPopularCurrentPage = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.popularCurrentPage
-);
-
-//==================Top Rate==================================
-export const selectTopRateMovies = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.topRateMovies
-);
-
-export const selectTopRateLoading = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.topRateLoading
-);
-
-export const selectTopRateCurrentPage = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.topRateCurrentPage
-);
-
-//==================UpComing==================================
-export const selectUpComingMovies = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.upComingMovies
-);
-
-export const selectUpComingLoading = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.upComingLoading
-);
-
-export const selectUpComingCurrentPage = createSelector(
-    selectMoviesState,
-    (state: MoviesState) => state.upComingCurrentPage
 );
