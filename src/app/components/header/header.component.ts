@@ -26,7 +26,7 @@ export class HeaderComponent implements OnInit {
   private scrollListenerAdded = false;
   private subscriptions: Subscription = new Subscription(); 
   
-  constructor(public dataHandlerService: DataHandlerService, private router: Router,    private store: Store<AppState>) {
+  constructor(public dataHandlerService: DataHandlerService, private router: Router, private store: Store<AppState>) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -42,7 +42,7 @@ export class HeaderComponent implements OnInit {
       select(selectSelectedCategory)
     ).subscribe(category => {
       this.selectedCategory = category;
-      console.log('Текущая категория:', this.selectedCategory);
+      // console.log('Текущая категория:', this.selectedCategory);
       // Вы можете выполнять дополнительные действия при изменении категории
     });
 

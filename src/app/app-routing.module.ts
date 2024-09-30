@@ -16,12 +16,13 @@ const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
   { path: 'favorites', component: SavedMoviesComponent, canActivate: [MovieGuard] },
   { path: 'watch-list', component: SavedMoviesComponent, canActivate: [MovieGuard] },
-  { path: 'home', component: HomeComponent},
+  { path: 'home', component: HomeComponent },
   { path: 'now-playing', component: NowPlayingComponent, canActivate: [MovieGuard] },
   { path: 'popular', component: PopularComponent, canActivate: [MovieGuard] },
   { path: 'top-rate', component: TopRateComponent, canActivate: [MovieGuard] },
   { path: 'upcoming', component: UpcomingComponent, canActivate: [MovieGuard] },
-  { path: 'error', component: ErrorComponent }
+  { path: 'error', component: ErrorComponent },
+  { path: '**', component: ErrorComponent }
 ];
 
 @NgModule({

@@ -40,6 +40,11 @@
                 <div class="movie-detail-card__description">
                     <h2 class="movie-detail-card__title">{{ selectedMovie.title }}</h2>
                     <p><strong>Year:</strong> {{ selectedMovie.release_date }}</p>
+                    <p><strong>Genres:</strong>
+                        <span *ngFor="let genre of genreNames; let last = last">
+                            {{ genre }}<span *ngIf="!last">, </span>
+                        </span>
+                    </p>
                     <p><strong>Rating:</strong> {{ selectedMovie.vote_average }}</p>
                     <p><strong>Description:</strong> {{ selectedMovie.overview }}</p>
                     <p><strong>Language:</strong> {{ selectedMovie.original_language }}</p>

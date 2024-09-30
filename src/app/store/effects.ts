@@ -37,7 +37,7 @@ export class MoviesEffects {
         // Если жанры не загружены, отправляем запрос к API
         return this.dataService.getAllGenres().pipe(
           map(response => {
-            console.log('API Response:', response); // Для отладки
+            // console.log('API Response:', response); 
             return MoviesActions.loadGenresSuccess({ genres: response.genres });
           }),
           catchError(error => {

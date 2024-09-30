@@ -1,5 +1,8 @@
 import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
 import { movieDB } from '../../models/api-movie-db';
+import { select, Store } from '@ngrx/store';
+import { AppState } from '../../store/state';
+import { selectSelectedCategory } from '../../store/selectors';
 
 @Component({
   selector: 'app-movie-list',
@@ -12,14 +15,21 @@ export class MovieListComponent implements OnInit {
   @ViewChild('anchor') anchor!: ElementRef; // anchor to track the end of the list
   private observer!: IntersectionObserver;
 
-  // selectedCategory: string = '';
+  selectedCategory: string = '';
   selectedMovies: movieDB[] = [];
 
   isLoading = false;
 
-  constructor() { }
+  constructor(private store: Store<AppState>) { }
 
   ngOnInit(): void {
+    const categorySubscription = this.store.pipe(
+      select(selectSelectedCategory)
+    ).subscribe(category => {
+      this.selectedCategory = category;
+      // console.log('Текущая категория:', this.selectedCategory);
+      // Вы можете выполнять дополнительные действия при изменении категории
+    });
   }
 
   ngAfterViewInit(): void {
@@ -31,16 +41,17 @@ export class MovieListComponent implements OnInit {
   }
 
   private setupObserver() {
-    this.observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting && !this.isLoading) {
-          this.isLoading = true;
-          this.loadNextPage();
-          this.isLoading = false;
-        }
+    if (this.selectedCategory != 'Home') {
+      this.observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting && !this.isLoading) {
+            this.isLoading = true;
+            this.loadNextPage();
+            this.isLoading = false;
+          }
+        });
       });
-    });
-
-    this.observer.observe(this.anchor.nativeElement);
+      this.observer.observe(this.anchor.nativeElement);
+    }
   }
 }

@@ -24,18 +24,14 @@ export class HomeComponent {
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
 
-  genres$: Observable<any[]>
-
   constructor(private store: Store<AppState>) {
     this.movies$ = this.store.pipe(select(selectCurrentCategoryMovies));
     this.isLoading$ = this.store.pipe(select(selectCurrentCategoryLoading));
     this.currentPage$ = this.store.pipe(select(selectCurrentCategoryCurrentPage));
 
-    this.genres$ = this.store.pipe(select(selectGenres));
   }
 
   ngOnInit(): void {
-    this.store.dispatch(MoviesActions.loadGenres());
     // В методе ngOnInit() компонента HomeComponent вы вызываете действие setSelectedCategory, чтобы установить выбранную категорию на MovieCategory.Home.
     // Действие, которое отправляется: setSelectedCategory с параметром { category: MovieCategory.Home }
 
@@ -43,10 +39,6 @@ export class HomeComponent {
     this.randomMovies$ = this.movies$.pipe(
       map(movies => this.getRandomMoviesForSlider(movies, 5))
     );
-
-    this.genres$.subscribe(genres => {
-      console.log('Жанры:', genres);
-    });
   }
 
 

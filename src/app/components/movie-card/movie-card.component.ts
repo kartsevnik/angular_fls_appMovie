@@ -3,7 +3,7 @@ import { movieDB } from '../../models/api-movie-db';
 import { Store, select } from '@ngrx/store';
 import { Observable } from 'rxjs';
 import { AppState } from '../../store/state';
-import { selectFavoriteMovies, selectToWatchMovies } from '../../store/selectors';
+import { selectFavoriteMovies, selectGenres, selectToWatchMovies } from '../../store/selectors';
 import { map, take } from 'rxjs/operators';
 import * as MoviesActions from '../../store/actions';
 
@@ -19,6 +19,9 @@ export class MovieCardComponent implements OnInit, OnChanges {
   isFavorite$!: Observable<boolean>;
   isToWatch$!: Observable<boolean>;
 
+  genres$: Observable<any[]>
+  genreNames: string[] = []
+
   visible: boolean = false;
   selectedMovie: Partial<movieDB> | null = null;
   scrollPosition = 0; // to maintain the position of the scroll
@@ -27,11 +30,13 @@ export class MovieCardComponent implements OnInit, OnChanges {
   imageUrlBackdrop: string = '';
 
   constructor(private store: Store<AppState>) {
+    this.genres$ = this.store.pipe(select(selectGenres));
   }
 
   ngOnInit() {
     this.setImageUrl();
     this.initializeObservables();
+
   }
 
   ngOnChanges(changes: SimpleChanges) {
@@ -61,11 +66,23 @@ export class MovieCardComponent implements OnInit, OnChanges {
     }
   }
 
+  getNamesGenres(movie: movieDB): void {
+    this.genres$.pipe(take(1)).subscribe(genres => {
+      this.genreNames = movie.genre_ids.map(id => {
+        const genre = genres.find(g => g.id === id);
+        return genre ? genre.name : '';
+      }).filter(name => name !== '');
+      // console.log('Жанры фильма:', this.genreNames);
+    });
+  }
+
+
   showDialog() {
     if (this.movie) {
       this.saveScrollPosition(); // Save the position of the scroll before the opening
       this.selectedMovie = this.movie;
       this.visible = true;
+      const genres = this.getNamesGenres(this.movie)
     }
   }
 
@@ -93,7 +110,7 @@ export class MovieCardComponent implements OnInit, OnChanges {
       });
     }
   }
-  
+
   toggleFavoritesList() {
     if (this.movie) {
       this.isFavorite$.pipe(take(1)).subscribe(isInFavorites => {
@@ -105,6 +122,6 @@ export class MovieCardComponent implements OnInit, OnChanges {
       });
     }
   }
-  
+
 
 }
