@@ -98,41 +98,83 @@
         padding: 0 5px 10px 5px;
 
         button {
-            padding: 10px 5px;
-            // opacity: 0.5;
+            padding: 3px // opacity: 0.5;
         }
     }
 
     // .movie-card__addToFavorite
     &__addToFavorite {
-        background: #003cff9d;
-        box-shadow: 0 5px 0 #0026ff5d;
+        border: #0f5ae6 3px solid;
+        box-shadow: 0 3px 0 #0f5ae680;
     }
 
     // .movie-card__addToWatch
     &__addToWatch {
-        background: #ff000080;
-        box-shadow: 0 5px 0 #ff000065;
+        border: #ff0000cc 3px solid;
+        box-shadow: 0 3px 0 #ff000065;
     }
 }
 
-.btn-card {
-    border: none;
+.card-button {
+    display: grid;
+    grid-template-columns: 30% 70%;
+    align-items: center;
+
     border-radius: 10px;
-    text-decoration: none;
-    color: white;
-    transition: 500ms ease;
     font-weight: 600;
+    transition: 800ms ease;
+
+    // .card-button__ico
+    &__ico {
+        padding: 3px;
+        border-radius: 5px 0 0 5px;
+        display: flex;
+        justify-content: center;
+
+        img {
+            max-width: 24px;
+        }
+    }
+
+    // .card-button__text
+    &__text {
+        text-align: center;
+    }
 }
 
-.btn-card:hover {
-    background: var(--maincolor);
+.movie-card__addToFavorite .card-button__ico {
+    background: #0f5ae6;
+}
+
+.movie-card__addToFavorite.card-button:hover {
+    background: #0f5ae6;
     box-shadow: none;
     position: relative;
-    color: #000000;
-
-    top: 5px;
+    // color: #000000;
+    top: 3px;
 }
+
+.movie-card__addToWatch .card-button__ico {
+    background: #ff0000cc;
+}
+
+.movie-card__addToWatch.card-button:hover {
+    background: #ff0000cc;
+    box-shadow: none;
+    position: relative;
+    // color: #000000;
+    top: 3px;
+}
+
+.selected-favorite {
+    background-color: #0f5ae6;
+}
+
+.selected-toWatch {
+    background-color: #ff0000cc;
+}
+
+
 
 .movie-card__item-duration::before {
     content: url(/assets/icons/clock.svg);
@@ -154,13 +196,7 @@
     z-index: 5;
 }
 
-.selected-favorite {
-    background-color: var(--maincolor);
-}
 
-.selected-toWatch {
-    background-color: var(--maincolor);
-}
 
 .movie-card__image::before {
     content: '';

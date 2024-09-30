@@ -20,10 +20,22 @@
             </div>
         </div>
         <div class="movie-card__buttons">
-            <button class="movie-card__addToFavorite btn-card" [ngClass]="{'selected-favorite' : (isFavorite$ | async)}"
-                (click)="toggleFavoritesList()">Favorites</button>
-            <button class="movie-card__addToWatch btn-card" [ngClass]="{'selected-toWatch' : (isToWatch$ | async) }"
-                (click)="toggleWatchList()"> Watchlist </button>
+            <button class="movie-card__addToWatch card-button" [ngClass]="{'selected-toWatch' : (isToWatch$ | async)}"
+                (click)="toggleWatchList()">
+                <div class="card-button__ico"><img
+                        [src]="(isToWatch$ | async) ? '../../../assets/icons/play-selected.png' : '../../../assets/icons/play2.png'"
+                        alt=""></div>
+                <div class="card-button__text">Watchlist</div>
+            </button>
+            <button class="movie-card__addToFavorite card-button"
+                [ngClass]="{'selected-favorite' : (isFavorite$ | async)}" (click)="toggleFavoritesList()">
+
+                <div class="card-button__ico"><img
+                        [src]="(isFavorite$ | async) ? '../../../assets/icons/favorite-selected.png' : '../../../assets/icons/favorite.svg'"
+                        alt=""></div>
+                <div class="card-button__text">Favorite</div>
+
+            </button>
         </div>
 
     </div>

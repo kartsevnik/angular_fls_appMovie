@@ -1,0 +1,9 @@
+<svg version="1.2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 96 96" width="96" height="96">
+	<title>favorite_24dp_E8EAED_FILL0_wght400_GRAD0_opsz24</title>
+	<defs>
+		<image  width="80" height="74" id="img1" href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAFAAAABKAQMAAAAWkkETAAAAAXNSR0IB2cksfwAAAAZQTFRFAAAA6OrteLy9dAAAAAJ0Uk5TAP9bkSK1AAABEklEQVR4nM2SMW7DMAxFP20D8RbfwN56jLjIwWwfrEB0jGzRDeKtRu2o5JcEaGjRtYSGBw6PFEkBLu8z5KuBoN6PBpebGwXnJ5blhbUTTcBddxyNYJqx9k+EShCA7e0BiNQ7cFxvgJPTJxCWGfBEhhd1xVilfyTcRLUxjhK1QozwCwbk+Bf4Z78F/vzjYiQFFjMrJlmgTZ3hRF4JlxKRuxTujS1U3Cbr6jZTua3lullM151q+MHuIVbQe0jiZRYkseYQxaEypPiwM4rirTWkeO0MKfaDIcVuNKRYT0YQxcJnYtUSVaxaoopVS1SxaokqVi1RxaolqtguUfjxmDGcpipjf28znn2X8XQfMtYfY8a4x2+yx4fobeap4AAAAABJRU5ErkJggg=="/>
+	</defs>
+	<style>
+	</style>
+	<use id="Background" href="#img1" x="8" y="10"/>
+</svg>
