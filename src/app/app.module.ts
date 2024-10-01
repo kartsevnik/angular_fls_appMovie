@@ -46,6 +46,7 @@ import { localStorageSync } from 'ngrx-store-localstorage';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 import { environment } from '../environments/environments';
 import { StoreModule, MetaReducer } from '@ngrx/store';
+import { SearchComponent } from './pages/search/search.component';
 // export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
 //   return localStorageSync({ keys: ['movies'], rehydrate: true })(reducer);
 // }
@@ -65,7 +66,8 @@ import { StoreModule, MetaReducer } from '@ngrx/store';
     HomeComponent,
     SidebarComponent,
     SavedMoviesComponent,
-    ErrorComponent
+    ErrorComponent,
+    SearchComponent
   ],
   imports: [
     BrowserModule,

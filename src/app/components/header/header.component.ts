@@ -8,6 +8,7 @@ import { selectSelectedCategory } from '../../store/selectors';
 import { Subscription } from 'rxjs';
 import { merge } from 'rxjs';
 import { map } from 'rxjs/operators';
+import { DataService } from '../../services/data.service';
 
 
 @Component({
@@ -29,7 +30,7 @@ export class HeaderComponent implements OnInit {
   private scrollListenerAdded = false;
   private subscriptions: Subscription = new Subscription();
 
-  constructor(public dataHandlerService: DataHandlerService, private router: Router, private store: Store<AppState>) {
+  constructor(public dataHandlerService: DataHandlerService, public dataService: DataService, private router: Router, private store: Store<AppState>) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -45,7 +46,7 @@ export class HeaderComponent implements OnInit {
       select(selectSelectedCategory)
     ).subscribe(category => {
       this.selectedCategory = category;
-      console.log('Текущая категория из Store:', this.selectedCategory);
+      // console.log('Текущая категория из Store:', this.selectedCategory);
       // Дополнительная логика при изменении категории
     });
 
@@ -99,7 +100,7 @@ export class HeaderComponent implements OnInit {
   }
 
   search(searchText: string) {
-    this.dataHandlerService.fillListByFind(searchText);
+    this.dataService.getSearchMovie(searchText);
   }
 
   private clearSearchInput() {

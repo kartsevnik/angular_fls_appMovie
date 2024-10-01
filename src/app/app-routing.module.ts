@@ -11,6 +11,7 @@ import { HomeComponent } from './pages/home/home.component';
 import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.component';
 // import { MoviesResolver } from './guards/movie.resolver';
 import { ErrorComponent } from './pages/error/error.component';
+import { SearchComponent } from './pages/search/search.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
@@ -21,6 +22,7 @@ const routes: Routes = [
   { path: 'popular', component: PopularComponent, canActivate: [MovieGuard] },
   { path: 'top-rate', component: TopRateComponent, canActivate: [MovieGuard] },
   { path: 'upcoming', component: UpcomingComponent, canActivate: [MovieGuard] },
+  { path: 'search', component: SearchComponent, canActivate: [MovieGuard] },
   { path: 'error', component: ErrorComponent },
   { path: '**', component: ErrorComponent }
 ];

@@ -73,9 +73,9 @@ export class HomeComponent {
 
     return moviesForSlider;
   }
-  // loadNextPage() {
-  //   this.store.dispatch(MoviesActions.loadTrendMovies());
-  // }
+  
+  loadNextPage() {
+  }
 
   getMovieImageUrl(movie: movieDB): string {
     return `https://image.tmdb.org/t/p/w500${movie.poster_path}`;

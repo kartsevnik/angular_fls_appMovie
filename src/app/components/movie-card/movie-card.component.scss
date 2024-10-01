@@ -324,7 +324,13 @@
     display: flex;
     flex-direction: column;
     gap: 20px;
-    height: 80vh;
+    height: 100%;
+    padding: 10px;
+    justify-content: space-between;
+}
+
+.movie-detail-card__container {
+    height: 80%;
 }
 
 .movie-detail-card__button {

@@ -42,8 +42,8 @@
 </div>
 
 <div class="movie-detail-card">
-    <p-dialog class="detail-view" header="Movie Details" [modal]="true" [(visible)]="visible" (onHide)="hideDialog()"
-        [style]="{ width: '90rem', height: '100vh'}" (onHide)="hideDialog()">
+    <p-dialog class="detail-view" header="Movie Details" [draggable]="false" [(visible)]="visible"
+        (onHide)="hideDialog()" [style]="{ width: '100vw', height: '100vh'}" (onHide)="hideDialog()">
         <div class="movie-detail-card__flex-column">
             <div *ngIf="selectedMovie" class="movie-detail-card__container">
                 <div class="movie-detail-card__image">

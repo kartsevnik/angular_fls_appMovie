@@ -10,7 +10,7 @@
                 <input #searchInput (input)="search(filterText)" [(ngModel)]="filterText" placeholder="Search..."
                     type="text" class="search-input" name="search" id="search"
                     [ngClass]="{'fadeinleft': isSearchVisible, 'fadeoutleft': !isSearchVisible}"
-                    [style.display]="isSearchVisible ? 'block' : 'none'">
+                    [style.display]="isSearchVisible ? 'block' : 'none'" [routerLink]="'search'">
             </div>
             <div>
                 <label for="search" (click)="toggleSearch()" class="ramka-3">
