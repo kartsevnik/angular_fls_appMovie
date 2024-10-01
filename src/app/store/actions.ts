@@ -15,16 +15,15 @@ export const loadGenresFailure = createAction('[Genres] Load genres Failure', pr
 
 // Обобщенное действие для загрузки фильмов
 export const loadMovies = createAction('[Movies] Load Movies', props<{ category: MovieCategory }>());
-
-// Действия для успешной и неуспешной загрузки фильмов
 export const loadMoviesSuccess = createAction('[Movies] Load Movies Success', props<{ category: MovieCategory; movies: movieDB[] }>());
-
 export const loadMoviesFailure = createAction('[Movies] Load Movies Failure', props<{ category: MovieCategory; error: string }>());
 
-// Действия для добавления и удаления фильмов из избранного
+// Действия для загрузки, добавления и удаления фильмов из избранного
+export const loadFavoritesMovies = createAction('[Movies] Load Favorites Movies', props<{ movies: movieDB[] }>());
 export const addMovieToFavorites = createAction('[Movies] Add Movie To Favorites', props<{ movie: movieDB }>());
 export const removeMovieFromFavorites = createAction('[Movies] Remove Movie From Favorites', props<{ movie: movieDB }>());
 
-// Действия для добавления и удаления фильмов из списка просмотра
+// Действия для загрузки, добавления и удаления фильмов из списка просмотра
+export const loadWatchListMovies = createAction('[Movies] Load Watch List Movies', props<{ movies: movieDB[] }>());
 export const addMovieToWatchlist = createAction('[Movies] Add Movie To Watchlist', props<{ movie: movieDB }>());
 export const removeMovieFromWatchlist = createAction('[Movies] Remove Movie From Watchlist', props<{ movie: movieDB }>());

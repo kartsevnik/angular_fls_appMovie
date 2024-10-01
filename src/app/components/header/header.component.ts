@@ -6,6 +6,9 @@ import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/state';
 import { selectSelectedCategory } from '../../store/selectors';
 import { Subscription } from 'rxjs';
+import { merge } from 'rxjs';
+import { map } from 'rxjs/operators';
+
 
 @Component({
   selector: 'app-header',
@@ -24,8 +27,8 @@ export class HeaderComponent implements OnInit {
   filterText = '';
 
   private scrollListenerAdded = false;
-  private subscriptions: Subscription = new Subscription(); 
-  
+  private subscriptions: Subscription = new Subscription();
+
   constructor(public dataHandlerService: DataHandlerService, private router: Router, private store: Store<AppState>) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
@@ -37,21 +40,23 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Подписка на selectedCategory из Store
+    // Подписка только на изменения из Store, так как DataHandlerService теперь отправляет действия в Store
     const categorySubscription = this.store.pipe(
       select(selectSelectedCategory)
     ).subscribe(category => {
       this.selectedCategory = category;
-      // console.log('Текущая категория:', this.selectedCategory);
-      // Вы можете выполнять дополнительные действия при изменении категории
+      console.log('Текущая категория из Store:', this.selectedCategory);
+      // Дополнительная логика при изменении категории
     });
 
-    this.subscriptions.add(categorySubscription); 
+    this.subscriptions.add(categorySubscription);
 
+    // Добавление слушателя прокрутки, если он ещё не добавлен
     if (!this.scrollListenerAdded && this.wrapper) {
       this.addScrollListener();
     }
   }
+
 
 
   addScrollListener(): void {

@@ -2,7 +2,7 @@
     <div class="home-block__carousel">
         <div *ngIf="(randomMovies$ |async) as randomMovies">
             <p-carousel [value]="randomMovies" [numVisible]="1" [numScroll]="1" [circular]="true"
-                [autoplayInterval]="4000">
+                [autoplayInterval]="5000">
                 <ng-template let-movie pTemplate="item">
                     <div class="home-block__container">
                         <div class="home-block__titles">
@@ -18,11 +18,11 @@
                                 </div>
                                 <div class="home-block__item-overview">{{ movie.overview }}</div>
                             </div>
-                            <ng-container *ngIf="movie.video == true">
+                            <ng-container *ngIf="movie">
                                 <div class="home-block__button">
                                     <button class="btn_sign-in" tooltipPosition="bottom"
                                         pTooltip="This feature is coming soon!">
-                                        Play trailer
+                                        Play
                                     </button>
                                 </div>
                             </ng-container>

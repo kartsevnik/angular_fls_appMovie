@@ -104,13 +104,13 @@
 
     // .movie-card__addToFavorite
     &__addToFavorite {
-        border: #0f5ae6 3px solid;
+        border: #0f5ae6 2px solid;
         box-shadow: 0 3px 0 #0f5ae680;
     }
 
     // .movie-card__addToWatch
     &__addToWatch {
-        border: #ff0000cc 3px solid;
+        border: #ff0000cc 2px solid;
         box-shadow: 0 3px 0 #ff000065;
     }
 }
@@ -262,7 +262,7 @@
         img {
             width: 100%;
             height: 100%;
-            object-fit: cover;
+            object-fit: scale-down;
             /* Заполняет контейнер, сохраняя пропорции */
             object-position: center;
             opacity: 0.5;
@@ -294,17 +294,30 @@
     }
 }
 
-.btn-test {
+
+// detail-view
+
+.btn-close {
     border: var(--maincolor) 1px solid;
     border-radius: 5px;
     padding: 10px 10px;
     width: 50px;
     align-self: center;
     margin-bottom: 25px;
+    font-weight: 700;
+    font-size: 18px;
 }
 
-// detail-view
+.btn-close:hover {
+    background-color: var(--maincolor);
+    border-radius: 5px;
+    padding: 10px 10px;
+    width: 50px;
+    align-self: center;
+    margin-bottom: 25px;
 
+    transition: 800ms ease;
+}
 
 
 .movie-detail-card__flex-column {

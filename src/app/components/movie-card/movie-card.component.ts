@@ -6,6 +6,8 @@ import { AppState } from '../../store/state';
 import { selectFavoriteMovies, selectGenres, selectToWatchMovies } from '../../store/selectors';
 import { map, take } from 'rxjs/operators';
 import * as MoviesActions from '../../store/actions';
+import { DataService } from '../../services/data.service';
+import { DataHandlerService } from '../../services/data-handler.service';
 
 
 @Component({
@@ -19,8 +21,10 @@ export class MovieCardComponent implements OnInit, OnChanges {
   isFavorite$!: Observable<boolean>;
   isToWatch$!: Observable<boolean>;
 
-  genres$: Observable<any[]>
-  genreNames: string[] = []
+  genres: any[] = []
+
+  // genres$: Observable<any[]>
+  // genreNames: string[] = []
 
   visible: boolean = false;
   selectedMovie: Partial<movieDB> | null = null;
@@ -29,8 +33,8 @@ export class MovieCardComponent implements OnInit, OnChanges {
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
 
-  constructor(private store: Store<AppState>) {
-    this.genres$ = this.store.pipe(select(selectGenres));
+  constructor(private store: Store<AppState>, private dataHandler: DataHandlerService) {
+    // this.genres$ = this.store.pipe(select(selectGenres));
   }
 
   ngOnInit() {
@@ -66,15 +70,15 @@ export class MovieCardComponent implements OnInit, OnChanges {
     }
   }
 
-  getNamesGenres(movie: movieDB): void {
-    this.genres$.pipe(take(1)).subscribe(genres => {
-      this.genreNames = movie.genre_ids.map(id => {
-        const genre = genres.find(g => g.id === id);
-        return genre ? genre.name : '';
-      }).filter(name => name !== '');
-      // console.log('Жанры фильма:', this.genreNames);
-    });
-  }
+  // getNamesGenres(movie: movieDB): void {
+  //   this.genres$.pipe(take(1)).subscribe(genres => {
+  //     this.genreNames = movie.genre_ids.map(id => {
+  //       const genre = genres.find(g => g.id === id);
+  //       return genre ? genre.name : '';
+  //     }).filter(name => name !== '');
+  //     // console.log('Жанры фильма:', this.genreNames);
+  //   });
+  // }
 
 
   showDialog() {
@@ -82,9 +86,14 @@ export class MovieCardComponent implements OnInit, OnChanges {
       this.saveScrollPosition(); // Save the position of the scroll before the opening
       this.selectedMovie = this.movie;
       this.visible = true;
-      const genres = this.getNamesGenres(this.movie)
+
+      // Подписываемся на Observable, чтобы получить жанры
+      this.dataHandler.getNamesGenres(this.movie).pipe(take(1)).subscribe(genres => {
+        this.genres = genres;
+      });
     }
   }
+
 
   hideDialog() {
     this.visible = false;

@@ -38,6 +38,16 @@ export const initialState: MoviesState = {
             currentPage: 1,
             loading: false,
         },
+        [MovieCategory.Favorites]: {
+            movies: [],
+            currentPage: 1,
+            loading: false,
+        },
+        [MovieCategory.WatchList]: {
+            movies: [],
+            currentPage: 1,
+            loading: false,
+        },
     },
 };
 
@@ -106,7 +116,11 @@ export const moviesReducer = createReducer(
             },
         },
     })),
-
+    //=======================Favorites=============================
+    on(MoviesActions.loadFavoritesMovies, (state, { movies }) => ({
+        ...state,
+        favoriteMovies: movies,
+    })),
     on(MoviesActions.addMovieToFavorites, (state, { movie }) => ({
         ...state,
         favoriteMovies: [...state.favoriteMovies, movie]
@@ -117,7 +131,10 @@ export const moviesReducer = createReducer(
     })),
 
     //=======================Watchlist=============================
-
+    on(MoviesActions.loadWatchListMovies, (state, { movies }) => ({
+        ...state,
+        toWatchMovies: movies,
+    })),
     on(MoviesActions.addMovieToWatchlist, (state, { movie }) => ({
         ...state,
         toWatchMovies: [...state.toWatchMovies, movie]

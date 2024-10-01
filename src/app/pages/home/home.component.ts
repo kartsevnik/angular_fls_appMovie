@@ -20,9 +20,11 @@ export class HomeComponent {
   currentPage$: Observable<number>;
 
   randomMovies$: Observable<movieDB[]> | undefined;
-
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
+
+  movie: movieDB | undefined;
+  visible = false
 
   constructor(private store: Store<AppState>) {
     this.movies$ = this.store.pipe(select(selectCurrentCategoryMovies));
@@ -37,13 +39,16 @@ export class HomeComponent {
 
     this.store.dispatch(MoviesActions.setSelectedCategory({ category: MovieCategory.Home }));
     this.randomMovies$ = this.movies$.pipe(
-      map(movies => this.getRandomMoviesForSlider(movies, 5))
+      map(movies => this.getRandomMoviesForSlider(movies, 3))
     );
   }
 
 
   getRandomMoviesForSlider(movies: movieDB[], quantityOfMovies: number): movieDB[] {
     const minV = 0;
+    // movies = movies.filter(movie => movie.video == true)
+    // console.log(movies);
+
     const maxV = movies.length;
     let moviesForSlider: movieDB[] = [];
 

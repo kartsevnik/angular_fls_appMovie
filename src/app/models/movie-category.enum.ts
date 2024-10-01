@@ -4,4 +4,6 @@ export enum MovieCategory {
     Popular = 'Popular',
     TopRate = 'Top rate',
     Upcoming = 'Upcoming',
+    Favorites = 'Favorites',
+    WatchList = 'Watch list',
 }

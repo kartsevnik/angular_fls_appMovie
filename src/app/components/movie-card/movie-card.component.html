@@ -53,7 +53,7 @@
                     <h2 class="movie-detail-card__title">{{ selectedMovie.title }}</h2>
                     <p><strong>Year:</strong> {{ selectedMovie.release_date }}</p>
                     <p><strong>Genres:</strong>
-                        <span *ngFor="let genre of genreNames; let last = last">
+                        <span *ngFor="let genre of genres; let last = last">
                             {{ genre }}<span *ngIf="!last">, </span>
                         </span>
                     </p>
@@ -63,7 +63,7 @@
                 </div>
             </div>
             <div class="movie-detail-card__button">
-                <p-button label="Close" (onClick)="hideDialog()" class="btn-test" />
+                <p-button label="Close" (onClick)="hideDialog()" class="btn-close" />
             </div>
         </div>
     </p-dialog>
