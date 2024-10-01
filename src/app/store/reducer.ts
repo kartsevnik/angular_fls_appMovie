@@ -48,7 +48,17 @@ export const initialState: MoviesState = {
             currentPage: 1,
             loading: false,
         },
+        [MovieCategory.Search]: {
+            movies: [],
+            currentPage: 1,
+            loading: false,
+        },
     },
+    searchResults: [], //Массив результатов поиска.
+    searchLoading: false, //Флаг загрузки для состояния поиска.
+    searchError: null, //Сообщение об ошибке при поиске
+    currentSearchPage: 1, //Текущий номер страницы поиска.
+    currentSearchQuery: '', //Текущий поисковый запрос.
 };
 
 export const moviesReducer = createReducer(
@@ -144,5 +154,37 @@ export const moviesReducer = createReducer(
         toWatchMovies: state.toWatchMovies.filter(m => m.id !== movie.id)
     })),
 
+    //=======================Search=============================
+    // Обработка начала поиска
+    on(MoviesActions.searchMovies, (state, { query, page }) => {
+        console.log('Reducer - searchMovies:', query);
+        return {
+            ...state,
+            searchLoading: true,
+            searchError: null,
+            currentSearchQuery: query,
+            currentSearchPage: page,
+            searchResults: page === 1 ? [] : state.searchResults,
+        };
+    }),
 
+
+    // Обработка успешного поиска
+    on(MoviesActions.searchMoviesSuccess, (state, { movies }) => ({
+        ...state,
+        searchLoading: false,
+        searchResults: [...state.searchResults, ...movies],
+    })),
+
+    // Обработка ошибки поиска
+    on(MoviesActions.searchMoviesFailure, (state, { error }) => ({
+        ...state,
+        searchLoading: false,
+        searchError: error,
+    })),
+
+    on(MoviesActions.updateSearchQuery, (state, { query }) => ({
+        ...state,
+        currentSearchQuery: query
+    })),
 );

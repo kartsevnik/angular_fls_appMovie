@@ -13,4 +13,5 @@ export const categoryList: Category[] = [
     { name: MovieCategory.Upcoming, code: 'Upcoming' },
     { name: MovieCategory.Favorites, code: 'Favorites' },
     { name: MovieCategory.WatchList, code: 'Watch list' },
+    { name: MovieCategory.Search, code: 'Search' },
 ];

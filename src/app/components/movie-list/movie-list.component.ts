@@ -33,6 +33,9 @@ export class MovieListComponent implements OnInit {
   }
 
   ngAfterViewInit(): void {
+    if (this.observer) {
+      this.observer.disconnect();
+    }
     this.setupObserver();
   }
 
@@ -41,7 +44,7 @@ export class MovieListComponent implements OnInit {
   }
 
   private setupObserver() {
-    if (this.selectedCategory != 'Home') {
+    // if (this.selectedCategory != 'Home') {
       this.observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
           if (entry.isIntersecting && !this.isLoading) {
@@ -53,5 +56,5 @@ export class MovieListComponent implements OnInit {
       });
       this.observer.observe(this.anchor.nativeElement);
     }
-  }
+  // }
 }

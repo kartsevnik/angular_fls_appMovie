@@ -1,13 +1,14 @@
 import { Injectable } from '@angular/core';
 import { Actions, createEffect, ofType } from '@ngrx/effects';
 import * as MoviesActions from './actions';
-import { switchMap, withLatestFrom, map, catchError } from 'rxjs/operators';
+import { switchMap, withLatestFrom, map, catchError, debounceTime } from 'rxjs/operators';
 import { DataService } from '../services/data.service';
 import { of } from 'rxjs';
 import { Store } from '@ngrx/store';
 import { AppState } from './state';
 import { MovieCategory } from '../models/movie-category.enum';
 import { selectGenres } from './selectors';
+import { movieDB } from '../models/api-movie-db';
 
 @Injectable()
 export class MoviesEffects {
@@ -49,8 +50,6 @@ export class MoviesEffects {
     )
   );
 
-
-
   // Обобщенный эффект для загрузки фильмов
   loadMovies$ = createEffect(() =>
     this.actions$.pipe(
@@ -89,6 +88,24 @@ export class MoviesEffects {
     )
   );
 
-
+  searchMovies$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.searchMovies),
+      debounceTime(300), // Добавляет задержку в 300 мс
+      switchMap(action => {
+        console.log('Effect: Searching movies:', action.query, 'page:', action.page);
+        return this.dataService.getSearchMovieObservable(action.query, action.page).pipe(
+          map((movies: movieDB[]) => {
+            console.log('Effect: Search success:', movies.length, 'movies');
+            return MoviesActions.searchMoviesSuccess({ movies });
+          }),
+          catchError((error) => {
+            console.error('Effect: Search failure:', error);
+            return of(MoviesActions.searchMoviesFailure({ error: error.message }));
+          })
+        )
+      })
+    )
+  );
 
 }

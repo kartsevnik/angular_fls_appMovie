@@ -38,5 +38,5 @@
 </div>
 <div class="main-title">Movies <span class="main-color">trends</span></div>
 <div *ngIf="(movies$ | async) as movies">
-    <app-movie-list [movies]="movies"></app-movie-list>
+    <app-movie-list [movies]="movies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
 </div>

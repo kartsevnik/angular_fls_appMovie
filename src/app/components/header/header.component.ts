@@ -4,12 +4,10 @@ import { Router, NavigationEnd } from '@angular/router';
 import { filter } from 'rxjs/operators';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/state';
-import { selectSelectedCategory } from '../../store/selectors';
+import { selectCurrentSearchQuery, selectSelectedCategory } from '../../store/selectors';
 import { Subscription } from 'rxjs';
-import { merge } from 'rxjs';
-import { map } from 'rxjs/operators';
 import { DataService } from '../../services/data.service';
-
+import * as MoviesActions from '../../store/actions';
 
 @Component({
   selector: 'app-header',
@@ -56,9 +54,17 @@ export class HeaderComponent implements OnInit {
     if (!this.scrollListenerAdded && this.wrapper) {
       this.addScrollListener();
     }
+
+    this.store.pipe(select(selectCurrentSearchQuery)).subscribe(query => {
+      console.log('HeaderComponent - currentSearchQuery:', query);
+      this.filterText = query;
+    });
+    console.log(this.filterText);
+
   }
-
-
+  ngOnDestroy() {
+    console.log('HeaderComponent destroyed');
+  }
 
   addScrollListener(): void {
     if (this.wrapper) {
@@ -99,13 +105,29 @@ export class HeaderComponent implements OnInit {
     }
   }
 
+  test: string = ''
+
   search(searchText: string) {
-    this.dataService.getSearchMovie(searchText);
+    if (searchText && searchText.trim() !== '') {
+      this.test = searchText
+      // Диспетчеризуем обновление поискового запроса
+      this.store.dispatch(MoviesActions.updateSearchQuery({ query: searchText }));
+
+      // Диспетчеризуем поиск фильмов
+      this.store.dispatch(MoviesActions.searchMovies({ query: searchText, page: 1 }));
+
+      // Navigate to the search page
+      this.router.navigate(['/search']);
+    }
+    this.filterText = searchText;
   }
 
+
   private clearSearchInput() {
-    if (this.searchInput && this.searchInput.nativeElement) {
-      this.searchInput.nativeElement.value = '';
+    if (!this.router.url.includes('/search')) {
+      if (this.searchInput && this.searchInput.nativeElement) {
+        this.searchInput.nativeElement.value = '';
+      }
     }
   }
 }

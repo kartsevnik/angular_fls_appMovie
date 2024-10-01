@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
+import { BehaviorSubject, map, Observable } from 'rxjs';
 import { movieDB, moviesResponse } from '../models/api-movie-db';
 
 @Injectable({
@@ -58,29 +58,21 @@ export class DataService {
     return this.HttpClient.get<moviesResponse>(`${this.apiBaseURL}/movie/upcoming${this.apiKey}&page=${page}`);
   }
 
-  getSearchMovie(searchText: string) {
-    console.log(searchText);
-
+  getSearchMovieObservable(searchText: string, page: number = 1): Observable<movieDB[]> {
     const url = `${this.apiBaseURL}/search/movie`;
-    const params = {
-      query: searchText,
-      include_adult: 'false',
-      language: 'en-US',
-      page: '1'
-    };
-    const headers = new HttpHeaders({
-      'Accept': 'application/json',
-      'Authorization': `Bearer ${this.apiToken}` // Replace with your actual token
-    });
+    const params = new HttpParams()
+      .set('query', searchText)
+      .set('include_adult', 'false')
+      .set('language', 'en-US')
+      .set('page', page.toString())
+  const headers = new HttpHeaders({
+    'Accept': 'application/json',
+    'Authorization': `Bearer ${this.apiToken}`
+  });
 
-    this.HttpClient.get(url, { headers, params })
-      .subscribe({
-        next: (json: any) =>
-          this.moviesSearchSubject.next(json.results),
-        error: (err: any) => console.error('error:', err)
-      });
-    console.log(this.moviesSearchSubject);
-
+    return this.HttpClient.get<any>(url, { headers, params }).pipe(
+    map(response => response.results as movieDB[])
+  );
   }
 }
 

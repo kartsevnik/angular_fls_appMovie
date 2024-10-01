@@ -6,4 +6,5 @@ export enum MovieCategory {
     Upcoming = 'Upcoming',
     Favorites = 'Favorites',
     WatchList = 'Watch list',
+    Search = 'Search'
 }

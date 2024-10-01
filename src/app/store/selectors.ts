@@ -53,3 +53,28 @@ export const selectToWatchMovies = createSelector(
     selectMoviesState,
     (state: MoviesState) => state.toWatchMovies
 );
+
+//==================Search==================================
+export const selectSearchResults = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.searchResults
+);
+
+export const selectSearchLoading = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.searchLoading
+);
+
+export const selectSearchError = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.searchError
+);
+
+export const selectCurrentSearchPage = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.currentSearchPage
+)
+export const selectCurrentSearchQuery = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.currentSearchQuery
+)

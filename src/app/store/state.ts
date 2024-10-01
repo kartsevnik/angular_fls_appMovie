@@ -25,6 +25,11 @@ export interface MoviesState {
             loading: boolean;
         };
     };
+    searchResults: movieDB[];
+    searchLoading: boolean;
+    searchError: string | null;
+    currentSearchPage: number;
+    currentSearchQuery: string;
 }
 
 export const appReducers: ActionReducerMap<AppState> = {

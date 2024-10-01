@@ -27,3 +27,10 @@ export const removeMovieFromFavorites = createAction('[Movies] Remove Movie From
 export const loadWatchListMovies = createAction('[Movies] Load Watch List Movies', props<{ movies: movieDB[] }>());
 export const addMovieToWatchlist = createAction('[Movies] Add Movie To Watchlist', props<{ movie: movieDB }>());
 export const removeMovieFromWatchlist = createAction('[Movies] Remove Movie From Watchlist', props<{ movie: movieDB }>());
+
+
+export const searchMovies = createAction('[Search] Search Movies', props<{ query: string; page: number }>());
+export const searchMoviesSuccess = createAction('[Search] Search Movies Success', props<{ movies: movieDB[] }>());
+export const searchMoviesFailure = createAction('[Search] Search Movies Failure', props<{ error: string }>());
+export const updateSearchQuery = createAction('[Search] Update Search Query', props<{ query: string }>());
+

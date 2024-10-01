@@ -7,10 +7,17 @@
 
         <div class="header-icon-block__search search">
             <div>
-                <input #searchInput (input)="search(filterText)" [(ngModel)]="filterText" placeholder="Search..."
-                    type="text" class="search-input" name="search" id="search"
-                    [ngClass]="{'fadeinleft': isSearchVisible, 'fadeoutleft': !isSearchVisible}"
-                    [style.display]="isSearchVisible ? 'block' : 'none'" [routerLink]="'search'">
+                <input #searchInput
+                (keydown.enter)="search(filterText)"
+                [(ngModel)]="filterText"
+                placeholder="Search..."
+                type="text"
+                class="search-input"
+                name="search"
+                id="search"
+                [ngClass]="{'fadeinleft': isSearchVisible, 'fadeoutleft': !isSearchVisible}"
+                [style.display]="isSearchVisible ? 'block' : 'none'">
+              
             </div>
             <div>
                 <label for="search" (click)="toggleSearch()" class="ramka-3">

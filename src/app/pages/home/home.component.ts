@@ -73,8 +73,9 @@ export class HomeComponent {
 
     return moviesForSlider;
   }
-  
+
   loadNextPage() {
+    // this.store.dispatch(MoviesActions.setSelectedCategory({ category: MovieCategory.Home }));
   }
 
   getMovieImageUrl(movie: movieDB): string {

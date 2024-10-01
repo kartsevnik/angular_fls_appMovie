@@ -1,2 +1,4 @@
-<div class="main-title">Search <span class="main-color">result</span>:</div>
-<app-movie-list [movies]="movies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+<div *ngIf="movies$ | async as movies">
+    <div class="main-title">Search <span class="main-color">result</span>: {{filterText}}</div>
+    <app-movie-list [movies]="movies" [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+</div>
