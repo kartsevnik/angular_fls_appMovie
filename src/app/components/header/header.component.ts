@@ -9,6 +9,7 @@ import { Subscription } from 'rxjs';
 import { DataService } from '../../services/data.service';
 import * as MoviesActions from '../../store/actions';
 
+
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -21,9 +22,12 @@ export class HeaderComponent implements OnInit {
 
   @ViewChild('searchInput') searchInput!: ElementRef<HTMLInputElement>;
   @Input() wrapper!: HTMLElement;
-
   selectedCategory: string = '';
+
   filterText = '';
+  include_adult_chk: boolean = false
+  year: Date | null = null
+  filteredSuggestions: string[] = [];
 
   private scrollListenerAdded = false;
   private subscriptions: Subscription = new Subscription();
@@ -39,31 +43,31 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Подписка только на изменения из Store, так как DataHandlerService теперь отправляет действия в Store
+    // Подписка на изменения выбранной категории из Store
     const categorySubscription = this.store.pipe(
       select(selectSelectedCategory)
     ).subscribe(category => {
       this.selectedCategory = category;
-      // console.log('Текущая категория из Store:', this.selectedCategory);
-      // Дополнительная логика при изменении категории
     });
 
     this.subscriptions.add(categorySubscription);
 
-    // Добавление слушателя прокрутки, если он ещё не добавлен
+    // Добавление слушателя прокрутки
     if (!this.scrollListenerAdded && this.wrapper) {
       this.addScrollListener();
     }
 
-    this.store.pipe(select(selectCurrentSearchQuery)).subscribe(query => {
-      console.log('HeaderComponent - currentSearchQuery:', query);
-      this.filterText = query;
-    });
-    console.log(this.filterText);
-
+    // Подписка на текущий поисковый запрос
+    this.store
+      .pipe(select(selectCurrentSearchQuery))
+      .subscribe(query => {
+        console.log('HeaderComponent - currentSearchQuery:', query);
+        this.filterText = query;
+      });
   }
+
   ngOnDestroy() {
-    console.log('HeaderComponent destroyed');
+    this.subscriptions.unsubscribe();
   }
 
   addScrollListener(): void {
@@ -79,16 +83,8 @@ export class HeaderComponent implements OnInit {
   onWindowScroll() {
     if (this.wrapper) {
       const currentScroll = this.wrapper.scrollTop;
-
-      if (currentScroll > this.lastScrollTop) {
-        this.isHeaderHidden = true;
-      } else if (currentScroll < this.lastScrollTop) {
-        this.isHeaderHidden = false;
-      }
-
+      this.isHeaderHidden = currentScroll > this.lastScrollTop;
       this.lastScrollTop = currentScroll <= 0 ? 0 : currentScroll;
-    } else {
-      console.error('Wrapper is not defined during scroll event.');
     }
   }
 
@@ -105,16 +101,19 @@ export class HeaderComponent implements OnInit {
     }
   }
 
-  test: string = ''
-
   search(searchText: string) {
     if (searchText && searchText.trim() !== '') {
-      this.test = searchText
+      const yearInString = this.year ? this.year.getFullYear().toString() : '';
+
       // Диспетчеризуем обновление поискового запроса
-      this.store.dispatch(MoviesActions.updateSearchQuery({ query: searchText }));
+      this.store.dispatch(MoviesActions.updateSearchParams({
+        query: searchText,
+        include_adult: this.include_adult_chk,
+        year: yearInString
+      }));
 
       // Диспетчеризуем поиск фильмов
-      this.store.dispatch(MoviesActions.searchMovies({ query: searchText, page: 1 }));
+      this.store.dispatch(MoviesActions.searchMovies({ query: searchText, include_adult: this.include_adult_chk, year: yearInString, page: 1 }));
 
       // Navigate to the search page
       this.router.navigate(['/search']);
@@ -122,12 +121,32 @@ export class HeaderComponent implements OnInit {
     this.filterText = searchText;
   }
 
-
-  private clearSearchInput() {
+  clearSearchInput() {
     if (!this.router.url.includes('/search')) {
       if (this.searchInput && this.searchInput.nativeElement) {
         this.searchInput.nativeElement.value = '';
       }
+    }
+  }
+
+  clearFilters() {
+    this.filterText = '';
+    this.include_adult_chk = false;
+    this.year = null;
+    this.filteredSuggestions = [];
+  }
+
+  searchMovieTitles(event: any) {
+    const query = event.query;
+    const yearInString = this.year ? this.year.getFullYear().toString() : '';
+    if (query && query.trim() !== '') {
+      // Вызовите метод в DataService для получения предложений на основе запроса
+      this.dataService.getMovieTitles(query, this.include_adult_chk, yearInString, 1).subscribe(suggestions => {
+        this.filteredSuggestions = suggestions;
+      });
+    } else {
+      // Если ввода нет, очистите список предложений
+      this.filteredSuggestions = [];
     }
   }
 }

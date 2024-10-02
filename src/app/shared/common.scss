@@ -11,3 +11,23 @@
 .p-dialog-mask {
     height: auto;
 }
+
+.search-form .p-autocomplete {
+    width: 100% !important;
+}
+.search-form .p-inputtext {
+    background: transparent !important;
+    border: var(--maincolor) 1px solid;
+    border-radius: 5px;
+    color: white;
+    width: 100% !important;
+}
+
+.search-form .tgl-btn {
+    background: var(--maincolor) !important;
+}
+
+.search-form .tgl-btn::after,
+.search-form .tgl-btn::before {
+    color: black !important;
+}

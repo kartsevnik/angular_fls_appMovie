@@ -78,3 +78,13 @@ export const selectCurrentSearchQuery = createSelector(
     selectMoviesState,
     (state: MoviesState) => state.currentSearchQuery
 )
+
+export const selectCurrentSearchAdult = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.currentSearchAdult
+)
+
+export const selectCurrentSearchYear = createSelector(
+    selectMoviesState,
+    (state: MoviesState) => state.currentSearchYear
+)

@@ -93,8 +93,8 @@ export class MoviesEffects {
       ofType(MoviesActions.searchMovies),
       debounceTime(300), // Добавляет задержку в 300 мс
       switchMap(action => {
-        console.log('Effect: Searching movies:', action.query, 'page:', action.page);
-        return this.dataService.getSearchMovieObservable(action.query, action.page).pipe(
+        console.log('Effect: Searching movies:', action.query, 'include_adult', action.include_adult, 'year:', action.year, 'page:', action.page);
+        return this.dataService.getSearchMovieObservable(action.query, action.include_adult, action.year, action.page).pipe(
           map((movies: movieDB[]) => {
             console.log('Effect: Search success:', movies.length, 'movies');
             return MoviesActions.searchMoviesSuccess({ movies });
@@ -107,5 +107,23 @@ export class MoviesEffects {
       })
     )
   );
+
+  // Добавьте этот эффект в ваш файл effects.ts
+  updateSearchParams$ = createEffect(() =>
+    this.actions$.pipe(
+      ofType(MoviesActions.updateSearchParams),
+      switchMap(action => {
+        const { query, include_adult, year } = action;
+        // Инициируем действие поиска фильмов с обновленными параметрами
+        return of(MoviesActions.searchMovies({
+          query,
+          include_adult,
+          year,
+          page: 1
+        }));
+      })
+    )
+  );
+
 
 }

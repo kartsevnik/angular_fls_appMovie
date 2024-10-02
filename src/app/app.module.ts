@@ -19,6 +19,9 @@ import { ButtonModule } from 'primeng/button';
 import { InputTextModule } from 'primeng/inputtext';
 import { SidebarModule } from 'primeng/sidebar';
 import { CarouselModule } from 'primeng/carousel';
+import { CheckboxModule } from 'primeng/checkbox';
+import { CalendarModule } from 'primeng/calendar';
+import { AutoCompleteModule } from 'primeng/autocomplete';
 
 //pipes
 import { TrasformTimeDuration } from './pipes/trasformTimeDuration.pipe';
@@ -85,6 +88,9 @@ import { SearchComponent } from './pages/search/search.component';
     ScrollingModule,
     HttpClientModule,
     CarouselModule,
+    CheckboxModule,
+    CalendarModule,
+    AutoCompleteModule,
     StoreModule.forRoot(appReducers, { metaReducers }),
     EffectsModule.forRoot([MoviesEffects]),
     StoreDevtoolsModule.instrument({

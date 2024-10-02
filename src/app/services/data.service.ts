@@ -36,7 +36,6 @@ export class DataService {
     return this.HttpClient.get<any>(url, { headers });
   }
 
-
   //get Movies From API
   getMoviesTrending(page: number = 1): Observable<moviesResponse> {
     return this.HttpClient.get<moviesResponse>(`${this.apiBaseURL}/trending/movie/day${this.apiKey}&page=${page}`);
@@ -58,21 +57,40 @@ export class DataService {
     return this.HttpClient.get<moviesResponse>(`${this.apiBaseURL}/movie/upcoming${this.apiKey}&page=${page}`);
   }
 
-  getSearchMovieObservable(searchText: string, page: number = 1): Observable<movieDB[]> {
+  getSearchMovieObservable(searchText: string, include_adult: boolean, year: string, page: number = 1): Observable<movieDB[]> {
     const url = `${this.apiBaseURL}/search/movie`;
     const params = new HttpParams()
       .set('query', searchText)
-      .set('include_adult', 'false')
+      .set('include_adult', include_adult)
+      .set('primary_release_year', year)
       .set('language', 'en-US')
       .set('page', page.toString())
-  const headers = new HttpHeaders({
-    'Accept': 'application/json',
-    'Authorization': `Bearer ${this.apiToken}`
-  });
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${this.apiToken}`
+    });
 
     return this.HttpClient.get<any>(url, { headers, params }).pipe(
-    map(response => response.results as movieDB[])
-  );
+      map(response => response.results as movieDB[])
+    );
+  }
+
+  getMovieTitles(searchText: string, include_adult: boolean, year: string, page: number = 1): Observable<string[]> {
+    const url = `${this.apiBaseURL}/search/movie`;
+    const params = new HttpParams()
+      .set('query', searchText)
+      .set('include_adult', include_adult)
+      .set('primary_release_year', year)
+      .set('language', 'en-US')
+      .set('page', page.toString())
+    const headers = new HttpHeaders({
+      'Accept': 'application/json',
+      'Authorization': `Bearer ${this.apiToken}`
+    });
+
+    return this.HttpClient.get<any>(url, { headers, params }).pipe(
+      map(response => response.results.map((movie: any) => movie.title))
+    );
   }
 }
 

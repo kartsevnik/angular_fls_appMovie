@@ -30,6 +30,8 @@ export interface MoviesState {
     searchError: string | null;
     currentSearchPage: number;
     currentSearchQuery: string;
+    currentSearchAdult: boolean;
+    currentSearchYear: string | null;
 }
 
 export const appReducers: ActionReducerMap<AppState> = {

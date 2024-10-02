@@ -59,6 +59,8 @@ export const initialState: MoviesState = {
     searchError: null, //Сообщение об ошибке при поиске
     currentSearchPage: 1, //Текущий номер страницы поиска.
     currentSearchQuery: '', //Текущий поисковый запрос.
+    currentSearchAdult: false, //Текущее значение чекбокса поиска фильма для взрослых
+    currentSearchYear: '' //Текущее значение года поиска фильма 
 };
 
 export const moviesReducer = createReducer(
@@ -157,13 +159,11 @@ export const moviesReducer = createReducer(
     //=======================Search=============================
     // Обработка начала поиска
     on(MoviesActions.searchMovies, (state, { query, page }) => {
-        console.log('Reducer - searchMovies:', query);
         return {
             ...state,
             searchLoading: true,
             searchError: null,
             currentSearchQuery: query,
-            currentSearchPage: page,
             searchResults: page === 1 ? [] : state.searchResults,
         };
     }),
@@ -173,6 +173,7 @@ export const moviesReducer = createReducer(
     on(MoviesActions.searchMoviesSuccess, (state, { movies }) => ({
         ...state,
         searchLoading: false,
+        currentSearchPage: state.currentSearchPage + 1,
         searchResults: [...state.searchResults, ...movies],
     })),
 
@@ -183,8 +184,25 @@ export const moviesReducer = createReducer(
         searchError: error,
     })),
 
-    on(MoviesActions.updateSearchQuery, (state, { query }) => ({
+    // on(MoviesActions.updateSearchQuery, (state, { query }) => ({
+    //     ...state,
+    //     currentSearchQuery: query
+    // })),
+
+    // on(MoviesActions.updateSearchAdult, (state, { include_adult }) => ({
+    //     ...state,
+    //     currentSearchAdult: include_adult
+    // })),
+
+    // on(MoviesActions.updateSearchYear, (state, { year }) => ({
+    //     ...state,
+    //     currentSearchYear: year
+    // })),
+
+    on(MoviesActions.updateSearchParams, (state, { query, include_adult, year }) => ({
         ...state,
-        currentSearchQuery: query
+        currentSearchQuery: query,
+        currentSearchAdult: include_adult,
+        currentSearchYear: year,
     })),
 );
