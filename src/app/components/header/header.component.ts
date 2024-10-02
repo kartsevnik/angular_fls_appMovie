@@ -43,6 +43,8 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+
+
     // Подписка на изменения выбранной категории из Store
     const categorySubscription = this.store.pipe(
       select(selectSelectedCategory)
