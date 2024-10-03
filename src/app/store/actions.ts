@@ -32,10 +32,8 @@ export const removeMovieFromWatchlist = createAction('[Movies] Remove Movie From
 export const searchMovies = createAction('[Search] Search Movies', props<{ query: string; include_adult: boolean, year: string, page: number }>());
 export const searchMoviesSuccess = createAction('[Search] Search Movies Success', props<{ movies: movieDB[] }>());
 export const searchMoviesFailure = createAction('[Search] Search Movies Failure', props<{ error: string }>());
-
-// export const updateSearchQuery = createAction('[Search] Update Search Query', props<{ query: string }>());
-// export const updateSearchAdult = createAction('[Search] Update Search Adult', props<{ include_adult: boolean }>());
-// export const updateSearchYear = createAction('[Search] Update Search Year', props<{ year: number }>());
-
 export const updateSearchParams = createAction('[Search] Update Search Params', props<{ query: string; include_adult: boolean; year: string }>());
 
+// src/app/store/actions.ts
+export const loadFavoritesMoviesSuccess = createAction('[Movies] Load Favorites Movies Success', props<{ movies: movieDB[] }>());
+export const loadFavoritesMoviesFailure = createAction('[Movies] Load Favorites Movies Failure', props<{ error: string }>());

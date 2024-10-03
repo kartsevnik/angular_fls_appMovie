@@ -8,7 +8,8 @@ import { selectCurrentSearchQuery, selectSelectedCategory } from '../../store/se
 import { Subscription } from 'rxjs';
 import { DataService } from '../../services/data.service';
 import * as MoviesActions from '../../store/actions';
-
+import { AuthService } from '../../services/auth.service';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 @Component({
   selector: 'app-header',
@@ -16,6 +17,12 @@ import * as MoviesActions from '../../store/actions';
   styleUrl: './header.component.scss'
 })
 export class HeaderComponent implements OnInit {
+  currentUser: any = undefined
+  userMenu: any[] = [
+    { label: 'Log Out', value: 'logout' }
+  ];
+
+
   lastScrollTop = 0;
   isHeaderHidden = false;
   isSearchVisible = false;
@@ -32,7 +39,7 @@ export class HeaderComponent implements OnInit {
   private scrollListenerAdded = false;
   private subscriptions: Subscription = new Subscription();
 
-  constructor(public dataHandlerService: DataHandlerService, public dataService: DataService, private router: Router, private store: Store<AppState>) {
+  constructor(public dataHandlerService: DataHandlerService, public dataService: DataService, private router: Router, private store: Store<AppState>, private authService: AuthService, private confirmationService: ConfirmationService, private messageService: MessageService) {
     this.router.events
       .pipe(filter(event => event instanceof NavigationEnd))
       .subscribe(() => {
@@ -43,6 +50,16 @@ export class HeaderComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.authService.getCurrentUser().subscribe(user => {
+      if (user) {
+        this.currentUser = user;
+        console.log('User:', user);
+        console.log('User Name:', user.email);
+      } else {
+        // Если пользователь не авторизован
+        this.currentUser = null;
+      }
+    });
 
 
     // Подписка на изменения выбранной категории из Store
@@ -151,4 +168,37 @@ export class HeaderComponent implements OnInit {
       this.filteredSuggestions = [];
     }
   }
+
+  confirmLogout(event: Event) {
+    this.confirmationService.confirm({
+      target: event.target as EventTarget,
+      message: 'Are you sure that you want to Log Out?',
+      header: 'Confirmation',
+      icon: 'pi pi-exclamation-triangle',
+      acceptIcon: "none",
+      rejectIcon: "none",
+      rejectButtonStyleClass: "p-button-text",
+      accept: () => {
+        this.messageService.add({
+          severity: 'error',
+          summary: 'Confirmed',
+          detail: 'You have been logged out of your account.',
+          life: 3000
+        });
+        this.authService.logout().then(() => {
+          this.currentUser = null; // Обновляем состояние текущего пользователя
+          this.router.navigate(['/']); // Перенаправляем на главную страницу или страницу входа
+        });
+      },
+      reject: () => {
+        this.messageService.add({
+          severity: 'info',
+          summary: 'Rejected',
+          detail: 'You remained logged in.',
+          life: 3000
+        });
+      }
+    });
+  }
+
 }

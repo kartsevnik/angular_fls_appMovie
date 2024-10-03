@@ -77,3 +77,23 @@ a {
     transition-duration: 300ms;
     transform: scale(1.05);
 }
+
+button {
+    all: unset;
+    display: inline-block;
+    cursor: pointer;
+    text-align: center;
+    font-family: inherit;
+    font-size: inherit;
+    line-height: inherit;
+    color: inherit;
+    background: transparent;
+    border: none;
+    padding: 0;
+    margin: 0;
+    outline: none;
+    box-sizing: border-box;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+}

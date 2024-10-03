@@ -22,6 +22,9 @@ import { CarouselModule } from 'primeng/carousel';
 import { CheckboxModule } from 'primeng/checkbox';
 import { CalendarModule } from 'primeng/calendar';
 import { AutoCompleteModule } from 'primeng/autocomplete';
+import { ConfirmDialogModule } from 'primeng/confirmdialog';
+import { ToastModule } from 'primeng/toast';
+import { ConfirmationService, MessageService } from 'primeng/api';
 
 //pipes
 import { TrasformTimeDuration } from './pipes/trasformTimeDuration.pipe';
@@ -41,15 +44,27 @@ import { UpcomingComponent } from './pages/upcoming/upcoming.component';
 import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.component';
 import { ErrorComponent } from './pages/error/error.component';
 
+//passes
+import { environment } from '../environments/environments';
+
 //store
 import { appReducers, AppState, metaReducers } from './store/state';
 import { EffectsModule } from '@ngrx/effects';
 import { MoviesEffects } from './store/effects';
 import { localStorageSync } from 'ngrx-store-localstorage';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { environment } from '../environments/environments';
 import { StoreModule, MetaReducer } from '@ngrx/store';
 import { SearchComponent } from './pages/search/search.component';
+
+//Firestone
+import { AngularFireModule } from '@angular/fire/compat';
+import { AngularFireAuthModule } from '@angular/fire/compat/auth';
+import { AngularFirestoreModule } from '@angular/fire/compat/firestore';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
+import { FavoritesComponent } from './pages/favorites/favorites.component';
+import { WatchListComponent } from './pages/watch-list/watch-list.component';
+
 // export function localStorageSyncReducer(reducer: ActionReducer<any>): ActionReducer<any> {
 //   return localStorageSync({ keys: ['movies'], rehydrate: true })(reducer);
 // }
@@ -70,7 +85,11 @@ import { SearchComponent } from './pages/search/search.component';
     SidebarComponent,
     SavedMoviesComponent,
     ErrorComponent,
-    SearchComponent
+    SearchComponent,
+    RegisterComponent,
+    LoginComponent,
+    FavoritesComponent,
+    WatchListComponent
   ],
   imports: [
     BrowserModule,
@@ -91,14 +110,19 @@ import { SearchComponent } from './pages/search/search.component';
     CheckboxModule,
     CalendarModule,
     AutoCompleteModule,
+    ConfirmDialogModule,
+    ToastModule,
     StoreModule.forRoot(appReducers, { metaReducers }),
     EffectsModule.forRoot([MoviesEffects]),
     StoreDevtoolsModule.instrument({
       maxAge: 25, // Хранить последние 25 состояний
       logOnly: environment.production, // В продакшене не разрешаем изменять состояние через DevTools
     }),
+    AngularFireModule.initializeApp(environment.firebaseConfig),
+    AngularFireAuthModule,
+    AngularFirestoreModule,
   ],
-  providers: [],
+  providers: [ConfirmationService, MessageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

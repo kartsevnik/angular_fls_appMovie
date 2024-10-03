@@ -1,0 +1,6 @@
+<app-movie-list *ngIf="favoriteMovies as movies" [movies]="movies"
+    [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+
+<h4 class="empty-list" *ngIf="favoriteMovies?.length==0">
+    You haven't added movies to this list yet
+</h4>

@@ -125,5 +125,17 @@ export class MoviesEffects {
     )
   );
 
+// src/app/store/effects.ts
+loadFavorites$ = createEffect(() =>
+  this.actions$.pipe(
+    ofType(MoviesActions.loadFavoritesMovies),
+    switchMap(() => {
+      return this.dataService.getFavorites().pipe(
+        map(movies => MoviesActions.loadFavoritesMoviesSuccess({ movies })),
+        catchError(error => of(MoviesActions.loadFavoritesMoviesFailure({ error: error.message })))
+      );
+    })
+  )
+);
 
 }

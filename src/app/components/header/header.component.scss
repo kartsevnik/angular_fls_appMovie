@@ -26,7 +26,7 @@ li {
         gap: 5px;
         // padding: 0 10px;
         display: grid;
-        grid-template-columns: 50px 1fr 500px;
+        grid-template-columns: 50px 3fr 1fr;
         justify-content: space-between;
     }
 
@@ -86,7 +86,7 @@ li {
         text-align: end;
         font-size: 18px;
         font-weight: 700;
-        width: 200px;
+        width: 180px;
         // border: #fff 1px solid;
         text-align: center;
     }
@@ -415,4 +415,83 @@ li {
     content: "Yes";
     left: 4px;
     color: #fff;
+}
+
+// btn log out
+
+.user-menu {
+    position: relative;
+
+    // Контейнер для всей области наведения
+    &__container {
+        display: inline-block;
+        /* Позволяет контейнеру подстраиваться под содержимое */
+        position: relative;
+        /* Относительное позиционирование для кнопки */
+        padding: 5px;
+        /* Увеличиваем область наведения */
+    }
+
+    // .user-menu__name
+    &__name {
+        cursor: pointer;
+        padding: 5px;
+        /* Увеличиваем область наведения */
+    }
+
+    // .user-menu__btn
+    &__btn {
+        position: absolute;
+        left: 0;
+        /* Располагаем кнопку относительно контейнера */
+        top: 100%;
+        /* Располагаем кнопку под текстом */
+        border: var(--maincolor) 1px solid;
+        width: 100%;
+        padding: 10px 0;
+        background-color: #000;
+        font-weight: 800;
+        transition: all 180ms ease;
+        opacity: 0;
+        /* Скрыто по умолчанию */
+        pointer-events: none;
+        /* Отключаем возможность клика */
+        transform: translateY(10px);
+        /* Сдвигаем вниз для анимации */
+        visibility: hidden;
+        /* Полностью скрываем */
+    }
+
+    &_btn:hover {
+        background-color: var(--maincolor);
+        color: #000;
+    }
+
+    // Показываем кнопку при наведении на .user-menu__container
+    &__container:hover .user-menu__btn {
+        opacity: 1;
+        /* Показываем элемент */
+        pointer-events: auto;
+        /* Включаем возможность клика */
+        transform: translateY(0);
+        /* Возвращаем на место для анимации */
+        visibility: visible;
+        /* Отображаем элемент */
+    }
+}
+
+.btn_logout:hover {
+    background-color: var(--maincolor);
+    color: #000;
+    border: #000 2px solid;
+
+}
+
+.card-confirm .p-dialog {
+    width: 30% !important;
+    transform: translate(0px, 100px) !important;
+}
+
+.card-confirm .p-dialog .p-dialog-content {
+    padding: 10px !important;
 }

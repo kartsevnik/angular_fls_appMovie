@@ -31,3 +31,14 @@
 .search-form .tgl-btn::before {
     color: black !important;
 }
+
+.btn {
+
+    // .btn_standart
+    &_standart {
+        white-space: nowrap;
+        border: var(--maincolor) 1px solid;
+        border-radius: 5px;
+        padding: 10px 15px;
+    }
+}

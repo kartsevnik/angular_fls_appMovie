@@ -13,7 +13,7 @@ import { DataHandlerService } from '../../services/data-handler.service';
 @Component({
   selector: 'app-movie-card',
   templateUrl: './movie-card.component.html',
-  styleUrl: './movie-card.component.scss'
+  styleUrl: './movie-card.component.scss',
 })
 export class MovieCardComponent implements OnInit, OnChanges {
 

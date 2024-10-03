@@ -1,6 +1,6 @@
 @import "primeicons/primeicons.css";
 @import url(https://fonts.googleapis.com/css?family=Imprima:regular);
-@import url(./app/shared/common.scss);
+
 
 
 :root {
@@ -119,35 +119,12 @@ button.p-ripple.p-element.p-button.p-component {
     width: 100%;
 }
 
-.p-dialog-header {
-    background-color: #312e2d;
-    color: #fff;
-}
-
-.p-dialog-content {
-    border: var(--maincolor) 1px solid;
-    // background-image: linear-gradient(195deg, #f1a156 0%, #FF7A00 100%);
-    background-image: linear-gradient(195deg, #242323 0%, #000 100%);
-    color: #fff;
-    // padding-right: 20px;
-}
-
-.p-dialog .p-dialog-content {
-    padding: 0;
-}
-
 .btn-close button.p-ripple.p-element.p-button.p-component {
     width: 200px;
 }
 
-
 .dropdown-categories {
     z-index: 1000;
-}
-
-.p-sidebar {
-    background-color: #ff8100;
-    // color: #000000;
 }
 
 .cdk-virtual-scroll-content-wrapper {
@@ -157,6 +134,73 @@ button.p-ripple.p-element.p-button.p-component {
     justify-content: center;
 }
 
+
+// Перезапись диалогового окна movie card
+.p-dialog-header {
+    background-color: #312e2d;
+    color: #fff;
+}
+
+.p-dialog .p-dialog-content {
+    border: var(--maincolor) 1px solid;
+    // background-image: linear-gradient(195deg, #f1a156 0%, #FF7A00 100%);
+    background-image: linear-gradient(195deg, #242323 0%, #000 100%);
+    color: #fff;
+    padding: 0;
+}
+
+// Перезапись для сайдбара
 .p-component-overlay {
     height: auto !important;
 }
+
+.p-sidebar {
+    background-color: #ff8100;
+    // color: #000000;
+}
+
+// Перезапись для выхода пользователя
+.card-confirm .p-dialog {
+    width: 30% !important;
+    transform: translate(0px, 100px) !important;
+}
+
+.card-confirm .p-dialog .p-dialog-content {
+    padding: 10px !important;
+}
+
+.card-confirm .p-dialog .p-dialog-footer {
+    display: flex;
+    gap: 20px;
+    padding: 10px;
+}
+
+.card-confirm .p-dialog .p-dialog-footer .p-element {
+    padding: 15px;
+    border: #000 1px solid;
+    color: #fff;
+    font-size: 24px;
+    font-weight: 700;
+}
+
+.card-confirm .p-dialog .p-dialog-footer .p-element:first-child:hover {
+    background-color: var(--maincolor);
+}
+
+.card-confirm .p-dialog .p-dialog-footer .p-element:last-child:hover {
+    background-color: var(--maincolor);
+}
+
+.card-confirm .p-dialog .p-dialog-footer .p-element:first-child {
+    background-color: #123049;
+    transition: 300ms ease-in-out;
+}
+
+.card-confirm .p-dialog .p-dialog-footer .p-element:last-child {
+    background-color: #491212;
+    transition: 300ms ease-in-out;
+}
+
+// imports
+@import url(./app/shared/common.scss);
+@import url(./app/shared/login.scss);

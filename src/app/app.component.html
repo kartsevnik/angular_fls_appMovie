@@ -1,5 +1,6 @@
-<div #wrapperRef class="wrapper">
+<div *ngIf="!isLoginRoute" #wrapperRef class="wrapper">
     <div class="wrapper__main-block">
+        <!-- Основное содержание сайта -->
         <div class="wrapper__header">
             <app-header [wrapper]="wrapperRef"></app-header>
         </div>
@@ -7,4 +8,9 @@
             <router-outlet></router-outlet>
         </div>
     </div>
+</div>
+
+<!-- Полноэкранный компонент логина или регистрации -->
+<div *ngIf="isLoginRoute" class="login-fullscreen">
+    <router-outlet name="login"></router-outlet>
 </div>

@@ -64,8 +64,26 @@
                 <img src="/assets/icons/favorite_header.png" alt="">
             </button>
             <div class="header-icon-block__login">
-                <button class="btn_standart" tooltipPosition="bottom" pTooltip="This feature is coming soon!">Sign
-                    in</button>
+                <!-- Кнопка "Sign up" отображается, если пользователь не авторизован -->
+                <button *ngIf="!currentUser" class="btn_standart" [routerLink]="[{outlets: {login: ['login']}}]">
+                    <span>Log in</span>
+                </button>
+
+                <!-- Блок с кнопкой "Log Out" отображается только если пользователь авторизован -->
+                <div *ngIf="currentUser" class="card-confirm card flex justify-content-center gap-2">
+                    <p-toast></p-toast>
+                    <p-confirmDialog></p-confirmDialog>
+                    <div class="user-menu">
+                        <div class="user-menu__container">
+                            <p class="user-menu__name">{{currentUser?.email}}</p>
+                            <button pButton class="user-menu__btn btn_logout" (click)="confirmLogout($event)"
+                                label="Log out">
+                            </button>
+                        </div>
+                    </div>
+
+
+                </div>
             </div>
             <div class="header__logo animation-icons_0-5" routerLink="home">
                 <img src="assets/icons/logo.svg" alt="Logo">
@@ -73,4 +91,5 @@
             </div>
         </div>
     </div>
+    <!-- <p-confirmDialog></p-confirmDialog> -->
 </header>

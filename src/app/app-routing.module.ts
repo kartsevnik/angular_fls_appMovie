@@ -12,11 +12,19 @@ import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.componen
 // import { MoviesResolver } from './guards/movie.resolver';
 import { ErrorComponent } from './pages/error/error.component';
 import { SearchComponent } from './pages/search/search.component';
+import { FavoritesComponent } from './pages/favorites/favorites.component';
+import { RegisterComponent } from './components/register/register.component';
+import { LoginComponent } from './components/login/login.component';
+import { WatchListComponent } from './pages/watch-list/watch-list.component';
 
 const routes: Routes = [
   { path: '', redirectTo: '/home', pathMatch: 'full' },
+  { path: 'registration', component: RegisterComponent, canActivate: [MovieGuard], outlet: 'login' },
+  { path: 'login', component: LoginComponent, canActivate: [MovieGuard], outlet: 'login' },
   { path: 'favorites', component: SavedMoviesComponent, canActivate: [MovieGuard] },
   { path: 'watch-list', component: SavedMoviesComponent, canActivate: [MovieGuard] },
+  // { path: 'favorites', component: FavoritesComponent, canActivate: [MovieGuard] },
+  // { path: 'watch-list', component: WatchListComponent, canActivate: [MovieGuard] },
   { path: 'home', component: HomeComponent },
   { path: 'now-playing', component: NowPlayingComponent, canActivate: [MovieGuard] },
   { path: 'popular', component: PopularComponent, canActivate: [MovieGuard] },
