@@ -1,35 +1,36 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, map, Observable, of, switchMap } from 'rxjs';
+import { BehaviorSubject, firstValueFrom, map, Observable, of, switchMap } from 'rxjs';
 import { movieDB, moviesResponse } from '../models/api-movie-db';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AuthService } from './auth.service';
 import { Router } from '@angular/router';
+import { apiKeys } from '../../environments/environments';
 
 @Injectable({
   providedIn: 'root'
 })
 export class DataService {
 
-  accountId: number | null = null;
+  // accountId: number | null = null;
   private moviesSearchSubject = new BehaviorSubject<movieDB[]>([])
   moviesSearch$ = this.moviesSearchSubject.asObservable()
 
   // moveiAPI connection settings 
-  apiBaseURL = 'https://api.themoviedb.org/3'
-  apiKey = '?api_key=fd8429ffaad200356d0b20c56812f7e5'
-  apiToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZDg0MjlmZmFhZDIwMDM1NmQwYjIwYzU2ODEyZjdlNSIsIm5iZiI6MTcyNDE2MDU0MC44MjYsInN1YiI6IjY2YzM1NjZhMTVlMzIzZjQ4OGEyOGNiYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EocVzPT_kLDOwV-lNfCGHUhsmJNTt74zlJ_tICcAqqA'
+  apiBaseURL = apiKeys.apiBaseURL
+  apiKey = apiKeys.apiKey
+  apiToken = apiKeys.apiToken
 
   constructor(private HttpClient: HttpClient, private firestore: AngularFirestore, private authService: AuthService, private router: Router
   ) { }
 
-  setAccountId(id: number) {
-    this.accountId = id;
-  }
+  // setAccountId(id: number) {
+  //   this.accountId = id;
+  // }
 
-  getAccountId() {
-    return this.accountId;
-  }
+  // getAccountId() {
+  //   return this.accountId;
+  // }
 
   getAllGenres(): Observable<any> {
     const url = `${this.apiBaseURL}/genre/movie/list?language=en`; // Убедитесь, что URL правильный
@@ -100,32 +101,27 @@ export class DataService {
   // ==================================== Favorites
 
   // Сохранение фильма в избранное
-  addToFavorites(movie: any) {
-    return this.authService.getCurrentUser().pipe(
-      switchMap(user => {
-        if (user) {
-          const userId = user.uid;
-          return this.firestore.collection('favorites').doc(userId).collection('movies').doc(movie.id.toString()).set(movie);
-        } else {
-          throw new Error('Пользователь не авторизован');
-        }
-      })
-    ).toPromise();
+  async addToFavorites(movie: any): Promise<void> {
+    const user = await firstValueFrom(this.authService.getCurrentUser());
+    if (user) {
+      const userId = user.uid;
+      await this.firestore.collection('favorites').doc(userId).collection('movies').doc(movie.id.toString()).set(movie);
+    } else {
+      throw new Error('Пользователь не авторизован');
+    }
+  }
+  // Удаление фильма из избранного
+  async removeFromFavorites(movieId: number): Promise<void> {
+    const user = await firstValueFrom(this.authService.getCurrentUser())
+    if (user) {
+      const userId = user.uid;
+      return this.firestore.collection('favorites').doc(userId).collection('movies').doc(movieId.toString()).delete();
+    } else {
+      throw new Error('The user is not authorized');
+    }
   }
 
-  // Удаление фильма из избранного
-  removeFromFavorites(movieId: number) {
-    return this.authService.getCurrentUser().pipe(
-      switchMap(user => {
-        if (user) {
-          const userId = user.uid;
-          return this.firestore.collection('favorites').doc(userId).collection('movies').doc(movieId.toString()).delete();
-        } else {
-          throw new Error('Пользователь не авторизован');
-        }
-      })
-    ).toPromise();
-  }
+
 
   // Получение списка избранного
   getFavorites(): Observable<any[]> {
@@ -149,33 +145,27 @@ export class DataService {
   // ==================================== to watch
 
   // Сохранение фильма в избранное
-  addToWatchList(movie: any) {
-    return this.authService.getCurrentUser().pipe(
-      switchMap(user => {
-        if (user) {
-          const userId = user.uid;
-          return this.firestore.collection('watchList').doc(userId).collection('movies').doc(movie.id.toString()).set(movie);
-        } else {
-          // this.router.navigate([{ outlets: { login: ['registration'] } }]);
-          throw new Error('Пользователь не авторизован');
-        }
-      })
-    ).toPromise();
+  async addToWatchList(movie: any) {
+    const user = await firstValueFrom(this.authService.getCurrentUser());
+    if (user) {
+      const userId = user.uid;
+      return this.firestore.collection('watchList').doc(userId).collection('movies').doc(movie.id.toString()).set(movie);
+    } else {
+      throw new Error('Пользователь не авторизован');
+    }
   }
 
   // Удаление фильма из избранного
-  removeFromWatchList(movieId: number) {
-    return this.authService.getCurrentUser().pipe(
-      switchMap(user => {
-        if (user) {
-          const userId = user.uid;
-          return this.firestore.collection('watchList').doc(userId).collection('movies').doc(movieId.toString()).delete();
-        } else {
-          // this.router.navigate([{ outlets: { login: ['registration'] } }]);
-          throw new Error('Пользователь не авторизован');
-        }
-      })
-    ).toPromise();
+  async removeFromWatchList(movieId: number) {
+    const user = await firstValueFrom(this.authService.getCurrentUser());
+    if (user) {
+      const userId = user.uid;
+      return this.firestore.collection('watchList').doc(userId).collection('movies').doc(movieId.toString()).delete();
+    } else {
+      throw new Error('Пользователь не авторизован');
+    }
+
+
   }
 
   // Получение списка избранного
@@ -191,7 +181,6 @@ export class DataService {
           const userId = user.uid;
           return this.firestore.collection('watchList').doc(userId).collection('movies').valueChanges();
         } else {
-          // this.router.navigate(['/home']);
           return of([]);
         }
       })

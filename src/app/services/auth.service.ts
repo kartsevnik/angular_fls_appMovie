@@ -26,8 +26,8 @@ export class AuthService {
       this.isAuthenticatedSubject.next(!!user);
     });
   }
-  
-   isUserAuthenticated(): boolean {
+
+  isUserAuthenticated(): boolean {
     return this.isAuthenticatedSubject.value;
   }
   // ========================================= API TMDB

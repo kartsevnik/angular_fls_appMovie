@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { movieDB } from '../../models/api-movie-db';
-import { DataService } from '../../services/data.service';
 import { combineLatest, distinctUntilChanged, Observable, skip, take } from 'rxjs';
 import { select, Store } from '@ngrx/store';
 import { AppState } from '../../store/state';
@@ -54,7 +53,7 @@ export class SearchComponent implements OnInit {
     });
   }
 
-  
+
 
   loadNextPage() {
     if (this.isLoading) {

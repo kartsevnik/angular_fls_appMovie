@@ -127,7 +127,8 @@ export class HeaderComponent implements OnInit {
       this.store.dispatch(MoviesActions.updateSearchParams({
         query: searchText,
         include_adult: this.include_adult_chk,
-        year: yearInString
+        year: yearInString,
+        page: 1
       }));
 
       // Диспетчеризуем поиск фильмов

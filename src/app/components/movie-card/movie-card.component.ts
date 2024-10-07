@@ -21,20 +21,18 @@ export class MovieCardComponent implements OnInit, OnChanges, OnDestroy {
 
   genres: any[] = []
 
-  visible: boolean = false;
-  selectedMovie: Partial<movieDB> | null = null;
+  visible: boolean = false; //Управляет видимостью модального окна с деталями фильма.
+  selectedMovie: Partial<movieDB> | null = null; //Выбранный фильм для отображения в модальном окне.
   scrollPosition = 0; // to maintain the position of the scroll
 
-  imageUrlPoster: string = '';
-  imageUrlBackdrop: string = '';
+  imageUrlPoster: string = ''; //URL изображения постера фильма
+  imageUrlBackdrop: string = ''; //URL изображения заднего плана фильма.
 
   visiblePopUpLogin: boolean = false;
 
   private destroy$ = new Subject<void>();
 
-  constructor(private dataHandler: DataHandlerService, private dataService: DataService, private authService: AuthService, private router: Router) {
-    // this.genres$ = this.store.pipe(select(selectGenres));
-  }
+  constructor(private dataHandler: DataHandlerService, private dataService: DataService, private authService: AuthService, private router: Router) { }
 
   ngOnInit() {
     this.setImageUrl();
@@ -44,7 +42,7 @@ export class MovieCardComponent implements OnInit, OnChanges, OnDestroy {
 
   ngOnChanges(changes: SimpleChanges) {
     if (changes['movie'] && this.movie) {
-      this.setImageUrl();
+      // this.setImageUrl();
       this.initializeObservables();
     }
   }
@@ -109,7 +107,6 @@ export class MovieCardComponent implements OnInit, OnChanges, OnDestroy {
     }
   }
 
-
   hideDialog() {
     this.visible = false;
     this.restoreScrollPosition(); // Restore the position of the scroll after closing
@@ -124,7 +121,6 @@ export class MovieCardComponent implements OnInit, OnChanges, OnDestroy {
   }
 
   toggleWatchList() {
-
     if (!this.authService.isUserAuthenticated()) {
       this.showDialogPopUpLogin()
     } else {

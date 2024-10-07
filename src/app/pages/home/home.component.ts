@@ -7,7 +7,7 @@ import { MovieCategory } from '../../models/movie-category.enum';
 import { select, Store } from '@ngrx/store';
 import * as MoviesActions from '../../store/actions';
 import { AppState } from '../../store/state';
-import { selectCurrentCategoryCurrentPage, selectCurrentCategoryLoading, selectCurrentCategoryMovies, selectGenres } from '../../store/selectors';
+import { selectCurrentCategoryCurrentPage, selectCurrentCategoryLoading, selectCurrentCategoryMovies} from '../../store/selectors';
 
 @Component({
   selector: 'app-home',
@@ -23,7 +23,6 @@ export class HomeComponent {
   imageUrlPoster: string = '';
   imageUrlBackdrop: string = '';
 
-  movie: movieDB | undefined;
   visible = false
 
   constructor(private store: Store<AppState>) {
@@ -46,9 +45,6 @@ export class HomeComponent {
 
   getRandomMoviesForSlider(movies: movieDB[], quantityOfMovies: number): movieDB[] {
     const minV = 0;
-    // movies = movies.filter(movie => movie.video == true)
-    // console.log(movies);
-
     const maxV = movies.length;
     let moviesForSlider: movieDB[] = [];
 

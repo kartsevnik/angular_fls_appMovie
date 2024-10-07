@@ -15,3 +15,9 @@ export const environment = {
   }
 };
 
+export const apiKeys = {
+  apiBaseURL: 'https://api.themoviedb.org/3',
+  apiKey: '?api_key=fd8429ffaad200356d0b20c56812f7e5',
+  apiToken: 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZDg0MjlmZmFhZDIwMDM1NmQwYjIwYzU2ODEyZjdlNSIsIm5iZiI6MTcyNDE2MDU0MC44MjYsInN1YiI6IjY2YzM1NjZhMTVlMzIzZjQ4OGEyOGNiYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EocVzPT_kLDOwV-lNfCGHUhsmJNTt74zlJ_tICcAqqA'
+}
+

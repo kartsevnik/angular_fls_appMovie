@@ -199,10 +199,12 @@ export const moviesReducer = createReducer(
     //     currentSearchYear: year
     // })),
 
-    on(MoviesActions.updateSearchParams, (state, { query, include_adult, year }) => ({
+    on(MoviesActions.updateSearchParams, (state, { query, include_adult, year, page }) => ({
         ...state,
         currentSearchQuery: query,
         currentSearchAdult: include_adult,
         currentSearchYear: year,
+        currentSearchPage: page === 1 ? 1 : state.currentSearchPage, // Сброс на 1 при новом поиске
+        searchResults: page === 1 ? [] : state.searchResults, // Очищение результатов поиска при новом запросе
     })),
 );

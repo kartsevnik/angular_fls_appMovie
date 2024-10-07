@@ -10,7 +10,6 @@ import { AppState } from '../store/state';
 })
 export class DataHandlerService {
 
-  setAccountId: number = 0
   genres$: Observable<any[]>
 
   private selectedCategorySubject = new BehaviorSubject<string>(''); // Создаём BehaviorSubject
@@ -35,9 +34,5 @@ export class DataHandlerService {
         }).filter(name => name !== '')
       )
     );
-  }
-
-  fillListByFind(searchText: string): void {
-
   }
 }

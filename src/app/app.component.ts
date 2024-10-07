@@ -1,45 +1,49 @@
-import { Component, OnInit,  } from '@angular/core';
+import { Component, OnDestroy, OnInit, } from '@angular/core';
 import { Router, NavigationEnd } from '@angular/router';
-import { AuthService } from './services/auth.service';
-import { DataService } from './services/data.service';
 import { Store } from '@ngrx/store';
 import { AppState } from './store/state';
 import { loadGenres } from './store/actions';
-import { filter } from 'rxjs';
+import { filter, Subscription } from 'rxjs';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit {
+export class AppComponent implements OnInit, OnDestroy {
   title = 'Movie Pulse';
-  // selectedCategory = 'All Movies';  
-  isLoginRoute: boolean = false;
+  isLoginRoute: boolean = false; //Булево значение, используемое для определения, находится ли пользователь на странице входа или регистрации.
+  private routerSubscription!: Subscription;
 
-  constructor(private dataService: DataService, private authService: AuthService, private store: Store<AppState>, private router: Router) { }
-
-  // onCategoryChange(event: { nameOfCategory: string }) {
-  //   this.selectedCategory = event.nameOfCategory;
-  // }
+  constructor(private store: Store<AppState>, private router: Router) { }
 
   ngOnInit() {
-    this.authService.authenticateAndGetAccountId().subscribe(
-      accountId => {
-        this.dataService.setAccountId(accountId);
-        console.log('Account ID:', accountId);
-      },
-      error => {
-        console.error('Authentication failed:', error);
-      }
-    );
+    
+    // метод для получения accountId из API TMDB
+    // this.authService.authenticateAndGetAccountId().subscribe(
+    //   accountId => {
+    //     this.dataService.setAccountId(accountId);
+    //     console.log('Account ID:', accountId);
+    //   },
+    //   error => {
+    //     console.error('Authentication failed:', error);
+    //   }
+    // );
+
     this.store.dispatch(loadGenres());
 
-    // Подписка на события роутинга
-    this.router.events.pipe(filter(event => event instanceof NavigationEnd)).subscribe((event: any) => {
-      // Проверка маршрута
-      this.isLoginRoute = ['login', 'registration'].some(route => event.url.includes(route));
-    });
+    this.routerSubscription = this.router.events
+      .pipe(filter(event => event instanceof NavigationEnd))
+      .subscribe((event: any) => {
+        this.isLoginRoute = ['login', 'registration'].some(route => event.url.includes(route));
+      });
+  }
 
+  ngOnDestroy(): void {
+    if (this.routerSubscription) {
+      this.routerSubscription.unsubscribe()
+    }
   }
 
 }
