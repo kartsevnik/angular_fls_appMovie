@@ -1,6 +1,8 @@
 // Пример для компонента избранного
 import { Component, OnInit } from '@angular/core';
 import { DataService } from '../../services/data.service';
+import { AuthService } from '../../services/auth.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-favorites',
@@ -10,25 +12,18 @@ import { DataService } from '../../services/data.service';
 export class FavoritesComponent implements OnInit {
   favoriteMovies: any[] = [];
 
-  constructor(private dataService: DataService) { }
+  constructor(private dataService: DataService, private authService: AuthService, private router: Router) { }
 
   ngOnInit(): void {
-    this.dataService.getFavorites().subscribe(movies => {
-      this.favoriteMovies = movies;
-    });
-  }
-
-  remove(movieId: number) {
-    this.dataService.removeFromFavorites(movieId)
-      .then(() => {
-        console.log('Movie removed from favorites');
-      })
-      .catch(error => {
-        console.error('Error removing movie:', error);
+    if (this.authService.isUserAuthenticated()) {
+      this.dataService.getFavorites().subscribe(movies => {
+        this.favoriteMovies = movies;
       });
+    } else {
+      this.router.navigate([{ outlets: { login: ['login'] } }]);
+    }
   }
 
   loadNextPage() {
-    // this.store.dispatch(MoviesActions.setSelectedCategory({ category: MovieCategory.Home }));
   }
 }

@@ -13,8 +13,8 @@ export interface movieDB {
     video: boolean;
     vote_average: number;
     vote_count: number;
-    favorite?: boolean
-    toWatch?: boolean
+    // favorite?: boolean
+    // toWatch?: boolean
 }
 
 export interface moviesResponse {

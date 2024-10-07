@@ -1,7 +1,0 @@
-<div class="main-title">{{nameOfCategory}}</div>
-<app-movie-list *ngIf="savedMovies$ | async as movies" [movies]="movies"
-    [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
-
-<h4 class="empty-list" *ngIf="(savedMovies$ | async)?.length==0">
-    You haven't added movies to this {{nameOfCategory}} list yet
-</h4>

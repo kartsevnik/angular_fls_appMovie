@@ -337,3 +337,103 @@
     padding: 25px;
     text-align: center;
 }
+
+// modal PopUpLogin
+
+/* Оверлей для затемнения экрана */
+.overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    /* Полупрозрачный черный фон */
+    z-index: 999;
+    /* Оверлей поднимается выше всех остальных элементов */
+    animation: fadeIn 0.3s ease-in-out;
+    /* Анимация появления */
+}
+
+/* Стиль для модального окна */
+.PopUpLogin {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border: #ffffff 1px solid;
+    background-color: var(--maincolor);
+    padding: 20px;
+    z-index: 1000;
+    /* Модальное окно выше оверлея */
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    width: 90%;
+    max-width: 35rem;
+    animation: slideIn 0.3s ease-in-out;
+    color: #000000;
+    border-radius: 5px;
+
+    h4 {
+        font-size: 24px;
+        text-align: center;
+        color: #000000;
+    }
+}
+
+.PopUpLogin__buttons {
+    display: flex;
+    width: 100%;
+    justify-content: center;
+    gap: 30px;
+
+    button {
+        border: #000 1px solid;
+        font-size: 18px;
+        font-weight: 900;
+        letter-spacing: 1px;
+        white-space: nowrap;
+        border-radius: 5px;
+        padding: 10px 15px;
+        color: #000;
+        background-color: #ffffff;
+        width: 150px;
+        transition: 300ms ease-out;
+
+    }
+}
+
+.PopUpLogin__buttons button:first-child:hover {
+    background-color: #491212;
+    color: #ffffff;
+}
+
+.PopUpLogin__buttons button:last-child:hover {
+    background-color: #123049;
+    color: #ffffff;
+}
+
+
+
+/* Анимация появления оверлея */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+    }
+
+    to {
+        opacity: 1;
+    }
+}
+
+/* Анимация появления модального окна */
+@keyframes slideIn {
+    from {
+        transform: translate(-50%, -60%);
+        opacity: 0;
+    }
+
+    to {
+        transform: translate(-50%, -50%);
+        opacity: 1;
+    }
+}

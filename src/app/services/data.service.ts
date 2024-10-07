@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
-import { BehaviorSubject, map, Observable, switchMap } from 'rxjs';
+import { BehaviorSubject, map, Observable, of, switchMap } from 'rxjs';
 import { movieDB, moviesResponse } from '../models/api-movie-db';
 import { AngularFirestore } from '@angular/fire/compat/firestore';
 import { AuthService } from './auth.service';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +20,7 @@ export class DataService {
   apiKey = '?api_key=fd8429ffaad200356d0b20c56812f7e5'
   apiToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiJmZDg0MjlmZmFhZDIwMDM1NmQwYjIwYzU2ODEyZjdlNSIsIm5iZiI6MTcyNDE2MDU0MC44MjYsInN1YiI6IjY2YzM1NjZhMTVlMzIzZjQ4OGEyOGNiYSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.EocVzPT_kLDOwV-lNfCGHUhsmJNTt74zlJ_tICcAqqA'
 
-  constructor(private HttpClient: HttpClient, private firestore: AngularFirestore, private authService: AuthService
+  constructor(private HttpClient: HttpClient, private firestore: AngularFirestore, private authService: AuthService, private router: Router
   ) { }
 
   setAccountId(id: number) {
@@ -96,6 +97,8 @@ export class DataService {
     );
   }
 
+  // ==================================== Favorites
+
   // Сохранение фильма в избранное
   addToFavorites(movie: any) {
     return this.authService.getCurrentUser().pipe(
@@ -126,13 +129,70 @@ export class DataService {
 
   // Получение списка избранного
   getFavorites(): Observable<any[]> {
+    if (!this.authService.isUserAuthenticated()) {
+      // Пользователь не аутентифицирован, возвращаем пустой массив
+      return of([]);
+    }
+
     return this.authService.getCurrentUser().pipe(
       switchMap(user => {
         if (user) {
           const userId = user.uid;
           return this.firestore.collection('favorites').doc(userId).collection('movies').valueChanges();
         } else {
+          return of([]);
+        }
+      })
+    );
+  }
+
+  // ==================================== to watch
+
+  // Сохранение фильма в избранное
+  addToWatchList(movie: any) {
+    return this.authService.getCurrentUser().pipe(
+      switchMap(user => {
+        if (user) {
+          const userId = user.uid;
+          return this.firestore.collection('watchList').doc(userId).collection('movies').doc(movie.id.toString()).set(movie);
+        } else {
+          // this.router.navigate([{ outlets: { login: ['registration'] } }]);
           throw new Error('Пользователь не авторизован');
+        }
+      })
+    ).toPromise();
+  }
+
+  // Удаление фильма из избранного
+  removeFromWatchList(movieId: number) {
+    return this.authService.getCurrentUser().pipe(
+      switchMap(user => {
+        if (user) {
+          const userId = user.uid;
+          return this.firestore.collection('watchList').doc(userId).collection('movies').doc(movieId.toString()).delete();
+        } else {
+          // this.router.navigate([{ outlets: { login: ['registration'] } }]);
+          throw new Error('Пользователь не авторизован');
+        }
+      })
+    ).toPromise();
+  }
+
+  // Получение списка избранного
+  getWatchList(): Observable<any[]> {
+    if (!this.authService.isUserAuthenticated()) {
+      // Пользователь не аутентифицирован, возвращаем пустой массив
+      return of([]);
+    }
+
+    return this.authService.getCurrentUser().pipe(
+      switchMap(user => {
+        if (user) {
+          const userId = user.uid;
+          return this.firestore.collection('watchList').doc(userId).collection('movies').valueChanges();
+        } else {
+          // this.router.navigate(['/home']);
+          return of([]);
         }
       })
     );

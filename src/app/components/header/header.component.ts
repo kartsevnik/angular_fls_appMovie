@@ -53,8 +53,7 @@ export class HeaderComponent implements OnInit {
     this.authService.getCurrentUser().subscribe(user => {
       if (user) {
         this.currentUser = user;
-        console.log('User:', user);
-        console.log('User Name:', user.email);
+        // console.log('User Name:', user.email);
       } else {
         // Если пользователь не авторизован
         this.currentUser = null;
@@ -187,7 +186,8 @@ export class HeaderComponent implements OnInit {
         });
         this.authService.logout().then(() => {
           this.currentUser = null; // Обновляем состояние текущего пользователя
-          this.router.navigate(['/']); // Перенаправляем на главную страницу или страницу входа
+          // this.router.navigate(['/']); 
+          this.router.navigate(['/home']);
         });
       },
       reject: () => {

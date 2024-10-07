@@ -20,6 +20,7 @@
             </div>
         </div>
         <div class="movie-card__buttons">
+            <!-- <button class="movie-card__addToWatch card-button" [ngClass]="{'selected-toWatch' : (isToWatch$ | async)}" (click)="toggleWatchList()"> -->
             <button class="movie-card__addToWatch card-button" [ngClass]="{'selected-toWatch' : (isToWatch$ | async)}"
                 (click)="toggleWatchList()">
                 <div class="card-button__ico"><img
@@ -68,3 +69,20 @@
         </div>
     </p-dialog>
 </div>
+
+<ng-container *ngIf="visiblePopUpLogin">
+    <!-- Оверлей, который будет затемнять весь экран -->
+    <div class="overlay" (click)="closeModal()"></div>
+    <div header="Edit Profile" class="PopUpLogin animate__fadeIn">
+        <h4 class="p-text-secondary block mb-5">
+            You need to sign in or register
+        </h4>
+        <h4 class="p-text-secondary block mb-5">
+            to add a film to the list
+        </h4>
+        <div class="PopUpLogin__buttons flex justify-content-end gap-2">
+            <button class="" (click)="goToPageLogin()">Sign in</button>
+            <button class="" (click)="goToPageRegister()">Registration </button>
+        </div>
+    </div>
+</ng-container>

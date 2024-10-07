@@ -41,7 +41,6 @@ import { NowPlayingComponent } from './pages/now-playing/now-playing.component';
 import { PopularComponent } from './pages/popular/popular.component';
 import { TopRateComponent } from './pages/top-rate/top-rate.component';
 import { UpcomingComponent } from './pages/upcoming/upcoming.component';
-import { SavedMoviesComponent } from './pages/saved-movies/saved-movies.component';
 import { ErrorComponent } from './pages/error/error.component';
 
 //passes
@@ -83,7 +82,6 @@ import { WatchListComponent } from './pages/watch-list/watch-list.component';
     UpcomingComponent,
     HomeComponent,
     SidebarComponent,
-    SavedMoviesComponent,
     ErrorComponent,
     SearchComponent,
     RegisterComponent,

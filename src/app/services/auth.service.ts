@@ -1,9 +1,10 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, throwError } from 'rxjs';
 import { catchError, map, switchMap } from 'rxjs/operators';
 import { environment } from '../../environments/environments';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { DataService } from './data.service';
 
 
 
@@ -11,13 +12,24 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
   providedIn: 'root'
 })
 export class AuthService {
+  // data for API Movie
   private apiUrl = 'https://api.themoviedb.org/3';
   private apiKey: string = environment.API_KEY;
   private username: string = environment.USERNAME;
   private password: string = environment.PASSWORD;
 
-  constructor(private http: HttpClient, private afAuth: AngularFireAuth) { }
+  private isAuthenticatedSubject = new BehaviorSubject<boolean>(false);
+  isAuthenticated$ = this.isAuthenticatedSubject.asObservable();
 
+  constructor(private http: HttpClient, private afAuth: AngularFireAuth) {
+    this.afAuth.authState.subscribe(user => {
+      this.isAuthenticatedSubject.next(!!user);
+    });
+  }
+  
+   isUserAuthenticated(): boolean {
+    return this.isAuthenticatedSubject.value;
+  }
   // ========================================= API TMDB
 
   // Get the request token

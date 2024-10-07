@@ -1,1 +1,6 @@
-<p>watch-list works!</p>
+<app-movie-list *ngIf="toWatchListMovies as movies" [movies]="movies"
+    [loadNextPage]="loadNextPage.bind(this)"></app-movie-list>
+
+<h4 class="empty-list" *ngIf="toWatchListMovies?.length==0">
+    You haven't added movies to this list yet
+</h4>
