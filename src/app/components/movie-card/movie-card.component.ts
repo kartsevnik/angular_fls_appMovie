@@ -1,31 +1,25 @@
-import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { Component, Input, OnChanges, OnDestroy, OnInit, SimpleChanges } from '@angular/core';
 import { movieDB } from '../../models/api-movie-db';
-import { Store, select } from '@ngrx/store';
-import { Observable, of } from 'rxjs';
-import { AppState } from '../../store/state';
-import { map, take } from 'rxjs/operators';
-import * as MoviesActions from '../../store/actions';
+import { combineLatest, Observable, of, Subject } from 'rxjs';
+import { map, switchMap, take, takeUntil } from 'rxjs/operators';
 import { DataService } from '../../services/data.service';
 import { DataHandlerService } from '../../services/data-handler.service';
 import { AuthService } from '../../services/auth.service';
 import { Router } from '@angular/router';
-import { ConfirmationService, MessageService } from 'primeng/api';
+
 
 @Component({
   selector: 'app-movie-card',
   templateUrl: './movie-card.component.html',
   styleUrl: './movie-card.component.scss',
 })
-export class MovieCardComponent implements OnInit, OnChanges {
+export class MovieCardComponent implements OnInit, OnChanges, OnDestroy {
 
   @Input() movie: movieDB | undefined;
   isFavorite$!: Observable<boolean>;
   isToWatch$!: Observable<boolean>;
 
   genres: any[] = []
-
-  // genres$: Observable<any[]>
-  // genreNames: string[] = []
 
   visible: boolean = false;
   selectedMovie: Partial<movieDB> | null = null;
@@ -36,7 +30,9 @@ export class MovieCardComponent implements OnInit, OnChanges {
 
   visiblePopUpLogin: boolean = false;
 
-  constructor(private store: Store<AppState>, private dataHandler: DataHandlerService, private dataService: DataService, private authService: AuthService, private router: Router, private confirmationService: ConfirmationService, private messageService: MessageService) {
+  private destroy$ = new Subject<void>();
+
+  constructor(private dataHandler: DataHandlerService, private dataService: DataService, private authService: AuthService, private router: Router) {
     // this.genres$ = this.store.pipe(select(selectGenres));
   }
 
@@ -53,6 +49,11 @@ export class MovieCardComponent implements OnInit, OnChanges {
     }
   }
 
+  ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
+
   setImageUrl() {
     if (this.movie) {
       this.imageUrlPoster = `https://image.tmdb.org/t/p/w500${this.movie.poster_path}`;
@@ -61,19 +62,38 @@ export class MovieCardComponent implements OnInit, OnChanges {
   }
 
   initializeObservables() {
-    if (this.movie && this.authService.isUserAuthenticated()) {
-      this.isFavorite$ = this.dataService.getFavorites().pipe(
-        map(favorites => favorites.some((favMovie: any) => favMovie.id === this.movie!.id))
-      );
+    // Используем combineLatest для отслеживания изменений аутентификации и фильма
+    this.isFavorite$ = combineLatest([
+      this.authService.getCurrentUser(),
+      of(this.movie)
+    ]).pipe(
+      switchMap(([user, movie]) => {
+        if (user && movie) {
+          return this.dataService.getFavorites().pipe(
+            map(favorites => favorites.some((favMovie: any) => favMovie.id === movie.id))
+          );
+        } else {
+          return of(false);
+        }
+      }),
+      takeUntil(this.destroy$)
+    );
 
-      this.isToWatch$ = this.dataService.getWatchList().pipe(
-        map(watchlist => watchlist.some((watchMovie: any) => watchMovie.id === this.movie!.id))
-      );
-    } else {
-      // Пользователь не аутентифицирован, устанавливаем значения по умолчанию
-      this.isFavorite$ = of(false);
-      this.isToWatch$ = of(false);
-    }
+    this.isToWatch$ = combineLatest([
+      this.authService.getCurrentUser(),
+      of(this.movie)
+    ]).pipe(
+      switchMap(([user, movie]) => {
+        if (user && movie) {
+          return this.dataService.getWatchList().pipe(
+            map(watchlist => watchlist.some((watchMovie: any) => watchMovie.id === movie.id))
+          );
+        } else {
+          return of(false);
+        }
+      }),
+      takeUntil(this.destroy$)
+    );
   }
 
   showDialog() {
@@ -185,10 +205,12 @@ export class MovieCardComponent implements OnInit, OnChanges {
   }
 
   goToPageLogin() {
+    this.closeModal();
     this.router.navigate([{ outlets: { login: ['login'] } }]);
   }
 
   goToPageRegister() {
+    this.closeModal();
     this.router.navigate([{ outlets: { login: ['registration'] } }]);
   }
 }
