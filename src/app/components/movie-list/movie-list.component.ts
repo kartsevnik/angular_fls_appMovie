@@ -1,4 +1,4 @@
-import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
+import { Component, ElementRef, Input, ViewChild } from '@angular/core';
 import { movieDB } from '../../models/api-movie-db';
 
 @Component({
@@ -6,7 +6,7 @@ import { movieDB } from '../../models/api-movie-db';
   templateUrl: './movie-list.component.html',
   styleUrl: './movie-list.component.scss'
 })
-export class MovieListComponent implements OnInit {
+export class MovieListComponent {
   @Input() movies: movieDB[] = []
   @Input() loadNextPage!: () => void; // Take the method of downloading the next page
   @ViewChild('anchor') anchor!: ElementRef; // anchor to track the end of the list
@@ -15,8 +15,6 @@ export class MovieListComponent implements OnInit {
   isLoading = false;
 
   constructor() { }
-
-  ngOnInit(): void { }
 
   ngAfterViewInit(): void {
     if (this.observer) {

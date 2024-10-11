@@ -47,12 +47,14 @@ import { ErrorComponent } from './pages/error/error.component';
 import { environment } from '../environments/environments';
 
 //store
-import { appReducers, AppState, metaReducers } from './store/state';
+// import { appReducers, AppState, metaReducers } from './store/state';
+import { appReducers, metaReducers } from './store/state';
 import { EffectsModule } from '@ngrx/effects';
 import { MoviesEffects } from './store/effects';
-import { localStorageSync } from 'ngrx-store-localstorage';
+// import { localStorageSync } from 'ngrx-store-localstorage';
 import { StoreDevtoolsModule } from '@ngrx/store-devtools';
-import { StoreModule, MetaReducer } from '@ngrx/store';
+// import { StoreModule, MetaReducer } from '@ngrx/store';
+import { StoreModule } from '@ngrx/store';
 import { SearchComponent } from './pages/search/search.component';
 
 //Firestone

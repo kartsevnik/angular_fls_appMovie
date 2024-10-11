@@ -19,7 +19,7 @@ export class AppComponent implements OnInit, OnDestroy {
   constructor(private store: Store<AppState>, private router: Router) { }
 
   ngOnInit() {
-    
+
     // метод для получения accountId из API TMDB
     // this.authService.authenticateAndGetAccountId().subscribe(
     //   accountId => {
@@ -34,8 +34,13 @@ export class AppComponent implements OnInit, OnDestroy {
     this.store.dispatch(loadGenres());
 
     this.routerSubscription = this.router.events
-      .pipe(filter(event => event instanceof NavigationEnd))
-      .subscribe((event: any) => {
+      .pipe(
+        //Здесь мы используем type predicate (event): event is NavigationEnd, чтобы явно указать TypeScript, 
+        //что после этой фильтрации event является экземпляром NavigationEnd.
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd) // Используем type predicate 
+      )
+      .subscribe(event => { // Теперь TypeScript знает, что event — NavigationEnd
+        console.log(event);
         this.isLoginRoute = ['login', 'registration'].some(route => event.url.includes(route));
       });
   }
