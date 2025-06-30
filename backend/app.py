@@ -5,6 +5,7 @@ import traceback
 import logging
 from urllib.parse import quote_plus
 import requests
+from bs4 import BeautifulSoup
 
 # Настройка логирования
 logging.basicConfig(level=logging.INFO)
@@ -13,24 +14,53 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 CORS(app)  # Разрешает CORS для всех доменов. Настройте при необходимости.
 
-# Вспомогательная функция для парсинга фильмов
-def parse_films(soup):
-    films = []
-    items = soup.select('div.b-content__inline_item-link a')
-    for item in items:
-        film_url = item.get('href')
-        film_name = item.get_text(strip=True)
-        if film_url and film_name:
-            full_film_url = (
-                film_url if film_url.startswith('http')
-                else f"https://rezka.ag{film_url}"
-            )
-            films.append({
-                'name': film_name,
-                'url': full_film_url
-            })
-    return films
+def fetch_html(url):
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36',
+        'Accept-Language': 'ru-RU,ru;q=0.9,en;q=0.8',
+        'Accept': 'text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,image/apng,*/*;q=0.8',
+        'Connection': 'keep-alive',
+        'Upgrade-Insecure-Requests': '1',
+    }
+    response = requests.get(url, headers=headers, timeout=10)
+    response.raise_for_status()
+    return response.text
 
+# Вспомогательная функция для парсинга фильмов
+def parse_films(html):
+    soup = BeautifulSoup(html, 'html.parser')
+    films = []
+    selectors = [
+        '.b-content__inline_item-link a',
+        '.b-content__inline_item a',
+        '.b-content__inline_item-link',
+        '.b-content__inline_item',
+        '.b-content__inline_item-cover a',
+        '.b-content__inline_item-cover'
+    ]
+    for selector in selectors:
+        items = soup.select(selector)
+        for item in items:
+            film_url = item.get('href')
+            film_name = item.get_text(strip=True)
+            if not film_name:
+                img = item.find('img')
+                if img and img.get('alt'):
+                    film_name = img['alt']
+            if film_url and film_name:
+                if not film_url.startswith('http'):
+                    film_url = f"https://rezka.ag{film_url}"
+                # Не добавлять дубликаты
+                if not any(f['url'] == film_url for f in films):
+                    films.append({
+                        'name': film_name,
+                        'url': film_url,
+                        'id': film_url.split('/')[-1]
+                    })
+        if films:
+            break
+    return films
+    
 # Инициализация HdRezkaApi (можно вынести в отдельный сервис)
 def create_rezka_api(url, proxy=None):
     headers = {
@@ -217,24 +247,16 @@ def get_trending_films():
     """
     page = int(request.args.get('page', '1'))
     try:
-        trending_url = (
-            f"https://rezka.ag/films/page/{page}/?filter=watching"
-        )
-        rezka_trending = create_rezka_api(trending_url)
-
+        trending_url = f"https://rezka.ag/films/page/{page}/?filter=watching"
         logger.info(f"Fetching trending films from URL: {trending_url}")
-
-        results = parse_films(rezka_trending.soup)
+        html = fetch_html(trending_url)
+        results = parse_films(html)
         logger.info(f"Found {len(results)} trending films on page {page}")
-
         return jsonify({'results': results, 'page': page})
     except Exception as e:
         error_message = str(e)
         traceback_str = traceback.format_exc()
-        logger.error(
-            f"Error in /api/film/trending: {error_message}\n"
-            f"{traceback_str}"
-        )
+        logger.error(f"Error in /api/film/trending: {error_message}\n{traceback_str}")
         return jsonify({'error': error_message}), 500
 
 @app.route('/api/film/popular', methods=['GET'])
@@ -249,11 +271,9 @@ def get_popular_films():
         popular_url = (
             f"https://rezka.ag/films/page/{page}/?filter=popular"
         )
-        rezka_popular = create_rezka_api(popular_url)
-
         logger.info(f"Fetching popular films from URL: {popular_url}")
-
-        results = parse_films(rezka_popular.soup)
+        html = fetch_html(popular_url)
+        results = parse_films(html)
         logger.info(f"Found {len(results)} popular films on page {page}")
 
         return jsonify({'results': results, 'page': page})
@@ -290,14 +310,13 @@ def search_films():
             f"{encoded_query}&page={page}"
         )
 
-        rezka_search = create_rezka_api(search_url)
-
         logger.info(
             f"Performing search for query: '{query}', page: {page}"
         )
         logger.info(f"Search URL: {search_url}")
 
-        results = parse_films(rezka_search.soup)
+        html = fetch_html(search_url)
+        results = parse_films(html)
         logger.info(
             f"Found {len(results)} results for query '{query}' "
             f"on page {page}"
@@ -325,16 +344,15 @@ def get_all_films():
         # Формируем URL для получения всех фильмов без фильтров
         all_films_url = f"https://rezka.ag/films/page/{page}/"
 
-        rezka_all = create_rezka_api(all_films_url)
-
         logger.info(f"Fetching all films from URL: {all_films_url}")
 
         # Временное сохранение HTML-ответа для отладки
         with open('all_films_response.html', 'w', encoding='utf-8') as f:
-            f.write(rezka_all.soup.prettify())
+            f.write(fetch_html(all_films_url))
         logger.info("Saved all films response to 'all_films_response.html'")
 
-        results = parse_films(rezka_all.soup)
+        html = fetch_html(all_films_url)
+        results = parse_films(html)
         logger.info(f"Found {len(results)} all films on page {page}")
 
         return jsonify({'results': results, 'page': page})
