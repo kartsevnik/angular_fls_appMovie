@@ -1,0 +1,27 @@
+{
+  "name": "rezka-parser-backend",
+  "version": "1.0.0",
+  "description": "Backend for parsing movie data from rezka.ag",
+  "main": "app.js",
+  "scripts": {
+    "start": "node app.js",
+    "dev": "nodemon app.js"
+  },
+  "dependencies": {
+    "axios": "^1.10.0",
+    "cheerio": "^1.1.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  },
+  "keywords": [
+    "movie",
+    "parser",
+    "rezka",
+    "api"
+  ],
+  "author": "",
+  "license": "MIT"
+}

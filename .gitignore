@@ -43,3 +43,5 @@ Thumbs.db
 
 # API keys
 src/environments
+.nx/cache
+.nx/workspace-data

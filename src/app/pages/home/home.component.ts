@@ -46,7 +46,7 @@ export class HomeComponent {
   getRandomMoviesForSlider(movies: movieDB[], quantityOfMovies: number): movieDB[] {
     const minV = 0;
     const maxV = movies.length;
-    let moviesForSlider: movieDB[] = [];
+    const moviesForSlider: movieDB[] = [];
 
     if (maxV === 0) {
       return moviesForSlider; // Return an empty array if there are no films
