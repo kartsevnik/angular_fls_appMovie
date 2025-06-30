@@ -48,11 +48,12 @@ def create_rezka_api(url, proxy=None):
         'Connection': 'keep-alive',
         'Upgrade-Insecure-Requests': '1'
     }
+
     session = requests.Session()
     session.headers.update(headers)
-    response = session.get(url, proxies=proxy)
-    logger.info(f"HTTP Status Code for URL {url}: {response.status_code}")
-    return HdRezkaApi(response.text, proxy=proxy, headers=session.headers)
+
+    logger.info(f"Creating HdRezkaApi with URL: {url}")
+    return HdRezkaApi(url, proxy=proxy, headers=session.headers)
 
 @app.route('/', methods=['GET'])
 def home():

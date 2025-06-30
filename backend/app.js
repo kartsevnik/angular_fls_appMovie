@@ -39,7 +39,7 @@ async function fetchHtml(url, proxy = null) {
 function parseFilms(html) {
   const $ = cheerio.load(html);
   const films = [];
-  
+
   // Попробуем несколько селекторов для поиска фильмов
   const selectors = [
     '.b-content__inline_item-link a',
@@ -49,40 +49,40 @@ function parseFilms(html) {
     '.b-content__inline_item-cover a',
     '.b-content__inline_item-cover'
   ];
-  
+
   let foundFilms = false;
-  
+
   for (const selector of selectors) {
     $(selector).each((index, element) => {
       const $el = $(element);
       let filmUrl = $el.attr('href');
       let filmName = $el.text().trim();
-      
+
       // Если это ссылка без текста, попробуем найти название в дочерних элементах
       if (!filmName) {
-        filmName = $el.find('img').attr('alt') || 
-                   $el.find('.b-content__inline_item-title').text().trim() ||
-                   $el.find('.b-content__inline_item-link').text().trim();
+        filmName = $el.find('img').attr('alt') ||
+          $el.find('.b-content__inline_item-title').text().trim() ||
+          $el.find('.b-content__inline_item-link').text().trim();
       }
-      
+
       // Если URL относительный, сделаем его абсолютным
       if (filmUrl && !filmUrl.startsWith('http')) {
         filmUrl = filmUrl.startsWith('/') ? `https://rezka.ag${filmUrl}` : `https://rezka.ag/${filmUrl}`;
       }
-      
+
       if (filmUrl && filmName && !films.some(f => f.url === filmUrl)) {
-        films.push({ 
-          name: filmName, 
+        films.push({
+          name: filmName,
           url: filmUrl,
           id: filmUrl.split('/').pop() || null
         });
         foundFilms = true;
       }
     });
-    
+
     if (foundFilms) break;
   }
-  
+
   console.log(`Found ${films.length} films using selectors`);
   return films;
 }
@@ -90,7 +90,7 @@ function parseFilms(html) {
 // Функция для парсинга деталей фильма
 function parseFilmDetails(html) {
   const $ = cheerio.load(html);
-  
+
   const filmDetails = {
     name: '',
     originalName: '',
@@ -104,53 +104,63 @@ function parseFilmDetails(html) {
     duration: '',
     poster: '',
     type: 'movie',
-    seriesInfo: null
+    seriesInfo: null,
+    translators: [],
+    playerHtml: ''
   };
-  
+
   try {
     // Название фильма
-    filmDetails.name = $('.b-post__title h1').text().trim() || 
-                      $('.b-post__title').text().trim() ||
-                      $('h1').text().trim();
-    
+    filmDetails.name = $('.b-post__title h1').text().trim() ||
+      $('.b-post__title').text().trim() ||
+      $('h1').text().trim();
+
     // Оригинальное название
     filmDetails.originalName = $('.b-post__origtitle').text().trim();
-    
+
     // Год
     filmDetails.year = $('.b-post__info .item:contains("Год")').text().replace('Год:', '').trim();
-    
+
     // Страна
     filmDetails.country = $('.b-post__info .item:contains("Страна")').text().replace('Страна:', '').trim();
-    
+
     // Жанр
     filmDetails.genre = $('.b-post__info .item:contains("Жанр")').text().replace('Жанр:', '').trim();
-    
+
     // Режиссер
     filmDetails.director = $('.b-post__info .item:contains("Режиссер")').text().replace('Режиссер:', '').trim();
-    
+
     // Актеры
     filmDetails.actors = $('.b-post__info .item:contains("В ролях")').text().replace('В ролях:', '').trim();
-    
+
     // Описание
     filmDetails.description = $('.b-post__description_text').text().trim();
-    
+
     // Рейтинг
     filmDetails.rating = $('.b-post__rating').text().trim();
-    
+
     // Длительность
     filmDetails.duration = $('.b-post__info .item:contains("Время")').text().replace('Время:', '').trim();
-    
+
     // Постер
-    filmDetails.poster = $('.b-post__cover img').attr('src') || 
-                        $('.b-post__cover img').attr('data-src') ||
-                        $('meta[property="og:image"]').attr('content');
+    filmDetails.poster = $('.b-post__cover img').attr('src') ||
+      $('.b-post__cover img').attr('data-src') ||
+      $('meta[property="og:image"]').attr('content');
     
+    // Перевод
+      $('#translators-list .b-translator__item').each((i, el) => {
+        filmDetails.translators.push({
+          name: $(el).text().trim(),
+          translator_id: $(el).attr('data-translator_id'),
+        });
+      });
+
     // Тип (фильм/сериал)
     const typeText = $('.b-post__type').text().toLowerCase();
     if (typeText.includes('сериал') || typeText.includes('tv')) {
       filmDetails.type = 'tv_series';
     }
-    
+
     // Информация о сериях (для сериалов)
     if (filmDetails.type === 'tv_series') {
       const seasons = [];
@@ -158,7 +168,7 @@ function parseFilmDetails(html) {
         const $season = $(element);
         const seasonNumber = $season.find('.b-series__season').text().trim();
         const episodes = [];
-        
+
         $season.find('.b-series__episode').each((epIndex, epElement) => {
           const $episode = $(epElement);
           episodes.push({
@@ -167,26 +177,38 @@ function parseFilmDetails(html) {
             url: $episode.attr('href')
           });
         });
-        
+
         seasons.push({
           number: seasonNumber,
           episodes: episodes
         });
       });
-      
+
       filmDetails.seriesInfo = { seasons };
     }
-    
+
+    // Парсинг переводов
+    $('.b-translators__item').each((i, el) => {
+      const $el = $(el);
+      filmDetails.translators.push({
+        id: $el.attr('data-id') || '',
+        name: $el.text().trim()
+      });
+    });
+
+    // Сохраняем html плеера
+    filmDetails.playerHtml = $('#player').html() || '';
+
   } catch (error) {
     console.error('Error parsing film details:', error);
   }
-  
+
   return filmDetails;
 }
 
 // Главная страница
 app.get('/', (req, res) => {
-  res.json({ 
+  res.json({
     message: 'Express сервер работает!',
     endpoints: {
       '/api/film/trending': 'Трендовые фильмы',
@@ -207,18 +229,35 @@ app.get('/api/film', async (req, res) => {
   try {
     const html = await fetchHtml(url);
     const filmDetails = parseFilmDetails(html);
-    
+
     // Сохраняем HTML для отладки (опционально)
     if (req.query.debug === 'true') {
       fs.writeFileSync('debug_film.html', html, 'utf8');
     }
-    
+
     res.json(filmDetails);
   } catch (error) {
     console.error('Error in /api/film:', error);
     res.status(500).json({ error: error.toString() });
   }
 });
+
+// Получение video
+app.get('/api/film/player-html', async (req, res) => {
+  const url = req.query.url;
+  if (!url) return res.status(400).json({ error: 'URL обязателен' });
+
+  try {
+    const html = await fetchHtml(url);
+    const $ = cheerio.load(html);
+    const playerHtml = $('#player').html();
+    res.json({ playerHtml });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: error.toString() });
+  }
+});
+
 
 // Получение трендовых фильмов
 app.get('/api/film/trending', async (req, res) => {
@@ -289,16 +328,16 @@ app.get('/api/film/all', async (req, res) => {
 app.get('/api/test', async (req, res) => {
   try {
     const html = await fetchHtml('https://rezka.ag/');
-    res.json({ 
-      status: 'success', 
+    res.json({
+      status: 'success',
       message: 'Сайт доступен',
-      htmlLength: html.length 
+      htmlLength: html.length
     });
   } catch (error) {
-    res.status(500).json({ 
-      status: 'error', 
+    res.status(500).json({
+      status: 'error',
       message: 'Сайт недоступен',
-      error: error.message 
+      error: error.message
     });
   }
 });
