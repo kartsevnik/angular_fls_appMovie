@@ -105,8 +105,7 @@ function parseFilmDetails(html) {
     poster: '',
     type: 'movie',
     seriesInfo: null,
-    translators: [],
-    playerHtml: ''
+    translators: []
   };
 
   try {
@@ -196,9 +195,6 @@ function parseFilmDetails(html) {
       });
     });
 
-    // Сохраняем html плеера
-    filmDetails.playerHtml = $('#player').html() || '';
-
   } catch (error) {
     console.error('Error parsing film details:', error);
   }
@@ -242,21 +238,74 @@ app.get('/api/film', async (req, res) => {
   }
 });
 
-// Получение video
-app.get('/api/film/player-html', async (req, res) => {
-  const url = req.query.url;
-  if (!url) return res.status(400).json({ error: 'URL обязателен' });
+// // Получение video
+app.get('/api/film/streams', async (req, res) => {
+  const { url, resolution } = req.query;
 
   try {
-    const html = await fetchHtml(url);
-    const $ = cheerio.load(html);
-    const playerHtml = $('#player').html();
-    res.json({ playerHtml });
+    const response = await axios.get('http://localhost:5000/api/film/streams', {
+      params: { url, resolution }
+    });
+    res.json(response.data);
   } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: error.toString() });
+    console.error('Ошибка при запросе к Python API:', error.message);
+    res.status(500).json({ error: 'Ошибка на стороне сервера Python' });
   }
 });
+
+// app.get('/api/film/stream', async (req, res) => {
+//   const { url, translator_id, resolution } = req.query;
+//   try {
+//     const stream = await getStreamUrl(url, translator_id, resolution || '720p');
+//     res.json({ stream_url: stream });
+//   } catch (e) {
+//     console.error(e);
+//     res.status(500).json({ error: e.message });
+//   }
+// });
+
+// // Получение Url video
+// const getStreamUrl = async (pageUrl, translationId, resolution = '720p') => {
+//   // 1. Получаем HTML страницы
+//   const html = await fetchHtml(pageUrl);
+//   const $ = cheerio.load(html);
+
+//   // 2. Получаем ID фильма (это скрыто в JS-переменной)
+//   const htmlText = html.toString();
+//   const idMatch = htmlText.match(/playerParams\.id\s*=\s*(\d+);/);
+//   const id = idMatch ? idMatch[1] : null;
+//   if (!id) throw new Error('ID фильма не найден');
+
+//   // 3. Отправляем POST-запрос на /ajax/get_cdn_video/
+//   const formData = new URLSearchParams();
+//   formData.append('id', id);
+//   formData.append('translator_id', translationId);
+//   formData.append('is_camrip', 0);
+//   formData.append('is_ads', 0);
+//   formData.append('is_director', 0);
+
+//   const response = await axios.post(
+//     'https://rezka.ag/ajax/get_cdn_video/',
+//     formData.toString(),
+//     {
+//       headers: {
+//         'Content-Type': 'application/x-www-form-urlencoded; charset=UTF-8',
+//         'Referer': pageUrl,
+//         'X-Requested-With': 'XMLHttpRequest',
+//         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
+//       }
+//     }
+//   );
+
+  // 4. В ответе придёт JSON с `file` — там m3u8/MP4-ссылки по разрешениям
+//   const streamData = response.data;
+//   const file = streamData?.url || streamData?.file;
+
+//   if (!file || typeof file !== 'object') throw new Error('Ссылки не найдены');
+
+//   return file[resolution]; // например, 720p
+// };
+
 
 
 // Получение трендовых фильмов
